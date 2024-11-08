@@ -17,12 +17,15 @@ public:
 private:
 	// プレイヤーのグラフィックハンドル
 	int m_handleIdle;
+	int m_handleRun;
 	/*int m_handleJump;
 	int m_handleAtk;
 	int m_handleUpAtk;*/
 
 	// アニメーションのフレーム数を数える
 	int m_animFrame;
+
+	bool m_isRun;
 
 	// プレイヤーの表示位置
 	//Vec3 m_pos;
