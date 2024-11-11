@@ -34,7 +34,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 
 		// ‚±‚±‚ÉƒQ[ƒ€‚Ìˆ—‚ğ‘‚­
-		Pad::Update();
 		player.Update();
 		player.Draw();
 

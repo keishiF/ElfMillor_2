@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "DxLib.h"
 #include <cassert>
-#include "Pad.h"
 
 namespace
 {
@@ -76,7 +75,7 @@ void Player::Update()
 	}
 
 	m_isRun = false;
-	if (Pad::IsPress(PAD_INPUT_LEFT))
+	/*if (Pad::IsPress(PAD_INPUT_LEFT))
 	{
 		m_isRun = true;
 	}
@@ -87,7 +86,7 @@ void Player::Update()
 	else
 	{
 		m_isRun = false;
-	}
+	}*/
 }
 
 void Player::Draw()
