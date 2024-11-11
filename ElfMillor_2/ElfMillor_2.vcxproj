@@ -139,13 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Pad.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
-    <ClInclude Include="Pad.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>
