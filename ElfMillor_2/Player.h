@@ -1,6 +1,8 @@
 #pragma once
 #include "Vec3.h"
 
+class Input;
+
 class Player
 {
 public:
@@ -11,7 +13,7 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update();
+	void Update(Input& input);
 	void Draw();
 
 private:

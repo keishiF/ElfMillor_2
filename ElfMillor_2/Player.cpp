@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "DxLib.h"
 #include <cassert>
+#include "Input.h"
 
 namespace
 {
@@ -58,7 +59,7 @@ void Player::End()
 	DeleteGraph(m_handleIdle);
 }
 
-void Player::Update()
+void Player::Update(Input& input)
 {
 	// アニメーションの更新
 	m_animFrame++;
@@ -75,18 +76,18 @@ void Player::Update()
 	}
 
 	m_isRun = false;
-	/*if (Pad::IsPress(PAD_INPUT_LEFT))
+	if (input.IsPress(PAD_INPUT_LEFT))
 	{
 		m_isRun = true;
 	}
-	else if (Pad::IsPress(PAD_INPUT_RIGHT))
+	else if (input.IsPress(PAD_INPUT_RIGHT))
 	{
 		m_isRun = true;
 	}
 	else
 	{
 		m_isRun = false;
-	}*/
+	}
 }
 
 void Player::Draw()
