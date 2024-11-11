@@ -1,20 +1,16 @@
 #pragma once
+
 class Input
 {
-private:
-	struct PadValue
-	{
-		char value[256];
-	};
-
-	PadValue m_padState;
-
-	PadValue m_lastPadState;
-
 public:
 	Input();
 
 	void Update();
 
-	bool IsTrigger(int id)const;
+	bool IsPress(int button);
+
+	bool IsTrigger(int button);
+private:
+	int m_padInput;
+	int m_lastInput;
 };
