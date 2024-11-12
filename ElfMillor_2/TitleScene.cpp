@@ -36,7 +36,7 @@ void TitleScene::FadeOutUpdate(Input&)
 
 void TitleScene::NormalUpdate(Input& input)
 {
-	if (input.IsPress(PAD_INPUT_LEFT))
+	if (input.IsPress(PAD_INPUT_1))
 	{
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;
@@ -46,10 +46,15 @@ void TitleScene::NormalUpdate(Input& input)
 
 void TitleScene::FadeDraw()
 {
+	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
+	DrawBox(0, 0, 1280, 720, 0xffffff, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void TitleScene::NormalDraw()
 {
+	DrawString(10, 10, "TitleScene", 0xffffff);
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -64,8 +69,10 @@ TitleScene::TitleScene(SceneController& controller):
 
 void TitleScene::Update(Input& input)
 {
+	(this->*m_update)(input);
 }
 
 void TitleScene::Draw()
 {
+	(this->*m_draw)();
 }

@@ -23,18 +23,38 @@ void ResultScene::FadeInUpdate(Input& input)
 
 void ResultScene::FadeOutUpdate(Input& input)
 {
+	if (m_frame++ >= kFadeInterval)
+	{
+		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
+		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
+		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+
+		// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
+		return;
+	}
 }
 
 void ResultScene::NormalUpdate(Input& input)
 {
+	if (input.IsPress(PAD_INPUT_1))
+	{
+		m_update = &ResultScene::FadeOutUpdate;
+		m_draw = &ResultScene::FadeDraw;
+		m_frame = 0;
+	}
 }
 
 void ResultScene::FadeDraw()
 {
+	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
+	DrawBox(0, 0, 1280, 720, 0xffffff, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void ResultScene::NormalDraw()
 {
+	DrawString(10, 10, "ResultScene", 0xffffff);
 }
 
 ResultScene::ResultScene(SceneController& controller):
@@ -49,8 +69,10 @@ ResultScene::ResultScene(SceneController& controller):
 
 void ResultScene::Update(Input& input)
 {
+	(this->*m_update)(input);
 }
 
 void ResultScene::Draw()
 {
+	(this->*m_draw)();
 }
