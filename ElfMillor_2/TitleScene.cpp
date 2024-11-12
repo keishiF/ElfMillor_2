@@ -3,12 +3,16 @@
 #include "Input.h"
 #include "SceneController.h"
 #include "GameScene.h"
+#include "game.h"
 
 #include <memory>
 #include <cassert>
 
 namespace
 {
+	// ‰æ–Ê’†‰›
+	constexpr int kGameScreenHalfWidth = Game::kScreenWidth / 2;
+	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 	constexpr int kFadeInterval = 60;
 }
 
@@ -36,25 +40,26 @@ void TitleScene::FadeOutUpdate(Input&)
 
 void TitleScene::NormalUpdate(Input& input)
 {
-	if (input.IsPress(PAD_INPUT_1))
+	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;
-		m_frame = 0;
 	}
 }
 
 void TitleScene::FadeDraw()
 {
+	DrawRotaGraph(640, 360, 0.2f, 0.0f, m_backHandle, true);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
-	DrawBox(0, 0, 1280, 720, 0xffffff, true);
+	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void TitleScene::NormalDraw()
 {
-	DrawString(10, 10, "TitleScene", 0xffffff);
+	DrawString(kGameScreenHalfWidth, 100, "ResultScene", 0xffffff);
+	DrawRotaGraph(kGameScreenHalfWidth, kGameScreenHalfHeight, 0.2f, 0.0f, m_backHandle, true);
 }
 
 TitleScene::TitleScene(SceneController& controller):

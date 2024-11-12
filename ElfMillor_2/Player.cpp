@@ -1,16 +1,25 @@
 #include "Player.h"
 #include "Input.h"
 #include "DxLib.h"
+#include "game.h"
 
 #include <cassert>
 
 namespace
 {
+	// 画面中央
+	constexpr int kGameScreenHalfWidth = Game::kScreenWidth / 2;
+	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
+
+	// 画面端
+	constexpr int kLeftEndWidth = 0;
+	constexpr int kRightEndWidth = 1280;
+
 	// プレイヤーの初期HP
 	constexpr int kMaxHp = 5;
 
 	// プレイヤーの移動速度
-	constexpr int kSpeed = 1.0f;
+	constexpr int kSpeed = 5.0f;
 
 	// 各アニメーションのコマ数
 	constexpr int kIdleAnimFrame = 11;
@@ -26,14 +35,19 @@ namespace
 	constexpr int kIdleAnimNum = 9;
 	// 走りアニメーションのフレーム数
 	constexpr int kRunAnimNum = 5;
+	// 攻撃アニメーションのフレーム数
+	constexpr int kAtkAnimNum = 12;
 }
 
 Player::Player() :
 	m_handleIdle(-1),
 	m_handleRun(-1),
+	m_handleAtk(-1),
 	m_animFrame(0),
 	m_isRun(false),
-	m_speed(kSpeed),
+	m_isAtk(false),
+	m_pos(kGameScreenHalfWidth,kGameScreenHalfHeight),
+	m_isDirLeft(false),
 	m_isJump(false),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
@@ -44,6 +58,10 @@ Player::Player() :
 
 Player::~Player()
 {
+	// グラフィックの解放
+	DeleteGraph(m_handleIdle);
+	DeleteGraph(m_handleRun);
+	DeleteGraph(m_handleAtk);
 }
 
 void Player::Init()
@@ -54,13 +72,13 @@ void Player::Init()
 
 	m_handleRun = LoadGraph("img/Player/Run.png");
 	assert(m_handleRun != -1);
+
+	m_handleAtk = LoadGraph("img/Player/Atk.png");
+	assert(m_handleAtk != -1);
 }
 
 void Player::End()
-{
-	// グラフィックの解放
-	DeleteGraph(m_handleIdle);
-	DeleteGraph(m_handleRun);
+{	
 }
 
 void Player::Update(Input& input)
@@ -74,6 +92,11 @@ void Player::Update(Input& input)
 		totalFrame = kRunAnimNum * kSingleAnimFrame;
 	}
 
+	if (m_isAtk)
+	{
+		totalFrame = kAtkAnimNum * kSingleAnimFrame;
+	}
+
 	if (m_animFrame >= totalFrame)
 	{
 		m_animFrame = 0;
@@ -83,14 +106,36 @@ void Player::Update(Input& input)
 	if (input.IsPress(PAD_INPUT_LEFT))
 	{
 		m_isRun = true;
+		m_isDirLeft = true;
+		m_pos.x -= kSpeed;
 	}
 	else if (input.IsPress(PAD_INPUT_RIGHT))
 	{
 		m_isRun = true;
+		m_isDirLeft = false;
+		m_pos.x += kSpeed;
 	}
 	else
 	{
 		m_isRun = false;
+	}
+
+	if (input.IsPress(PAD_INPUT_1))
+	{
+		m_isAtk = true;
+	}
+	else
+	{
+		m_isAtk = false;
+	}
+
+	if (m_pos.x <= kLeftEndWidth)
+	{
+		m_pos.x = kRightEndWidth;
+	}
+	else if (m_pos.x >= kRightEndWidth)
+	{
+		m_pos.x = kLeftEndWidth;
 	}
 }
 
@@ -98,18 +143,18 @@ void Player::Draw()
 {
 	int animNo = m_animFrame / kSingleAnimFrame;
 
-	// 仮表示位置
-	int playerPosX = 640;
-	int playerPosY = 360;
-
 	int useHandle = m_handleIdle;
 	if (m_isRun)
 	{
 		useHandle = m_handleRun;
 	}
+	if (m_isAtk)
+	{
+		useHandle = m_handleAtk;
+	}
 
-	DrawRectRotaGraph(playerPosX, playerPosY,
+	DrawRectRotaGraph(m_pos.x, m_pos.y,
 		animNo * kGraphWidth, 0, kGraphWidth, kGraphHeight,
 		2.0f, 0.0f,
-		useHandle, true, false);
+		useHandle, true, m_isDirLeft);
 }
