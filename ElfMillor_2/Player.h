@@ -2,6 +2,7 @@
 #include "Vec3.h"
 
 class Input;
+class Vec3;
 
 class Player
 {
@@ -20,20 +21,22 @@ private:
 	// プレイヤーのグラフィックハンドル
 	int m_handleIdle;
 	int m_handleRun;
-	/*int m_handleJump;
+	//int m_handleJump;
 	int m_handleAtk;
-	int m_handleUpAtk;*/
+	//int m_handleUpAtk;
 
 	// アニメーションのフレーム数を数える
 	int m_animFrame;
 
+	// 各アニメーションに関するフラグ
 	bool m_isRun;
+	bool m_isAtk;
 
 	// プレイヤーの表示位置
-	//Vec3 m_pos;
+	Vec3 m_pos;
 
-	// プレイヤーの移動速度
-	float m_speed;
+	// プレイヤーが左向きかどうか
+	bool m_isDirLeft;
 
 	// ジャンプ
 	bool m_isJump;

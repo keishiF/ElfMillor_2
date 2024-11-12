@@ -1,17 +1,24 @@
 #pragma once
 
 // 3次元ベクトルクラス
-struct Vec3
+class Vec3
 {
+public:
 	float x;
 	float y;
-	float z;
-};
+//	float z;
 
-using Position3 = Vec3;
+public:
+	Vec3()
+	{
+		x = 0.0f;
+		y = 0.0f;
+//		z = 0.0f;
+	}
+	Vec3(float _x, float _y):
+		x(_x),
+		y(_y)
+	{
 
-struct Size
-{
-	int width;
-	int height;
+	}
 };

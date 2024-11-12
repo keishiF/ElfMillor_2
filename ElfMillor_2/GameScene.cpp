@@ -40,7 +40,7 @@ void GameScene::FadeOutUpdate(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_player->Update(input);
-	if (input.IsPress(PAD_INPUT_1))
+	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
@@ -50,10 +50,10 @@ void GameScene::NormalUpdate(Input& input)
 
 void GameScene::FadeDraw()
 {
-	/*float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
-	DrawBox(0, 0, 1280, 720, 0xffffff, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);*/
+	DrawBox(0, 0, 1280, 720, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
 void GameScene::NormalDraw()
