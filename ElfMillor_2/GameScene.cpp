@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "SceneController.h"
 #include "ResultScene.h"
+#include "Player.h"
 
 #include <memory>
 #include <cassert>
@@ -27,6 +28,8 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
+	Player player;
+	player.Init();
 }
 
 void GameScene::FadeDraw()
@@ -49,8 +52,10 @@ GameScene::GameScene(SceneController& controller):
 
 void GameScene::Update(Input& input)
 {
+	(this->*m_update)(input);
 }
 
 void GameScene::Draw()
 {
+	(this->*m_draw)();
 }
