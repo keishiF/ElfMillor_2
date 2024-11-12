@@ -1,9 +1,10 @@
 #include "SceneController.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 
 SceneController::SceneController()
 {
-	ChangeScene(std::make_shared<TitleScene>(*this));
+	ChangeScene(std::make_shared<GameScene>(*this));
 }
 
 void SceneController::Update(Input& input)
