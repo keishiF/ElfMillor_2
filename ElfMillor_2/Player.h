@@ -32,6 +32,9 @@ private:
 	// プレイヤーの表示位置
 	//Vec3 m_pos;
 
+	// プレイヤーの移動速度
+	float m_speed;
+
 	// ジャンプ
 	bool m_isJump;
 

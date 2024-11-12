@@ -10,7 +10,7 @@ namespace
 	constexpr int kMaxHp = 5;
 
 	// プレイヤーの移動速度
-	constexpr int kSpeed = 0.2f;
+	constexpr int kSpeed = 1.0f;
 
 	// 各アニメーションのコマ数
 	constexpr int kIdleAnimFrame = 11;
@@ -22,8 +22,9 @@ namespace
 	constexpr int kGraphWidth = 80;
 	constexpr int kGraphHeight = 80;
 
-	// 各アニメーションのフレーム数
+	// 待機アニメーションのフレーム数
 	constexpr int kIdleAnimNum = 9;
+	// 走りアニメーションのフレーム数
 	constexpr int kRunAnimNum = 5;
 }
 
@@ -32,6 +33,7 @@ Player::Player() :
 	m_handleRun(-1),
 	m_animFrame(0),
 	m_isRun(false),
+	m_speed(kSpeed),
 	m_isJump(false),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
@@ -51,7 +53,7 @@ void Player::Init()
 	assert(m_handleIdle != -1);
 
 	m_handleRun = LoadGraph("img/Player/Run.png");
-	assert(m_handleIdle != -1);
+	assert(m_handleRun != -1);
 }
 
 void Player::End()
@@ -97,8 +99,8 @@ void Player::Draw()
 	int animNo = m_animFrame / kSingleAnimFrame;
 
 	// 仮表示位置
-	int playerPosX = 460;
-	int playerPosY = 345;
+	int playerPosX = 640;
+	int playerPosY = 360;
 
 	int useHandle = m_handleIdle;
 	if (m_isRun)

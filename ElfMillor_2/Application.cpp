@@ -24,20 +24,22 @@ bool Application::Init()
 	// 画面のサイズを変更する
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
 
-	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
+	if (DxLib_Init())		// ＤＸライブラリ初期化処理
 	{
-		return -1;			// エラーが起きたら直ちに終了
+		return false;			// エラーが起きたら直ちに終了
 	}
 
 	// 描画先を裏画面にする
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	return false;
+	return true;
 }
 
 void Application::Run()
 {
 	m_frame = 0;
+
+	// メモリの確保
 	SceneController sceneController;
 	Input input;
 
@@ -76,8 +78,8 @@ void Application::Terminate()
 	DxLib_End();
 }
 
-const Size& Application::GetWindowSize() const
-{
-	return m_windowSize;
-	// TODO: return ステートメントをここに挿入します
-}
+//const Size& Application::GetWindowSize() const
+//{
+//	return m_windowSize;
+//	// TODO: return ステートメントをここに挿入します
+//}
