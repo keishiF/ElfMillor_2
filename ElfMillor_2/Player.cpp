@@ -1,7 +1,8 @@
 #include "Player.h"
-#include "DxLib.h"
-#include <cassert>
 #include "Input.h"
+#include "DxLib.h"
+
+#include <cassert>
 
 namespace
 {
@@ -57,6 +58,7 @@ void Player::End()
 {
 	// グラフィックの解放
 	DeleteGraph(m_handleIdle);
+	DeleteGraph(m_handleRun);
 }
 
 void Player::Update(Input& input)
@@ -103,7 +105,6 @@ void Player::Draw()
 	{
 		useHandle = m_handleRun;
 	}
-
 
 	DrawRectRotaGraph(playerPosX, playerPosY,
 		animNo * kGraphWidth, 0, kGraphWidth, kGraphHeight,

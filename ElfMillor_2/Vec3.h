@@ -7,3 +7,11 @@ struct Vec3
 	float y;
 	float z;
 };
+
+using Position3 = Vec3;
+
+struct Size
+{
+	int width;
+	int height;
+};
