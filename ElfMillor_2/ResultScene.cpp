@@ -51,7 +51,7 @@ void ResultScene::NormalUpdate(Input& input)
 
 void ResultScene::FadeDraw()
 {
-	DrawRotaGraph(640, 360, 0.2f, 0.0f, m_backHandle, true);
+	DrawString(600, 100, "ResultScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -60,8 +60,7 @@ void ResultScene::FadeDraw()
 
 void ResultScene::NormalDraw()
 {
-	DrawString(kGameScreenHalfWidth, 100, "ResultScene", 0xffffff);
-	DrawRotaGraph(kGameScreenHalfWidth, kGameScreenHalfHeight, 0.2f, 0.0f, m_backHandle, true);
+	DrawString(600, 100, "ResultScene", 0xffffff);
 }
 
 ResultScene::ResultScene(SceneController& controller):
@@ -69,8 +68,6 @@ ResultScene::ResultScene(SceneController& controller):
 	m_update(&ResultScene::FadeInUpdate),
 	m_draw(&ResultScene::FadeDraw)
 {
-	m_backHandle = LoadGraph("img/BackGround/zoro.png");
-	assert(m_backHandle != -1);
 	m_frame = kFadeInterval;
 }
 
