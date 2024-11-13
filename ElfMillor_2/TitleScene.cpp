@@ -44,12 +44,13 @@ void TitleScene::NormalUpdate(Input& input)
 	{
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;
+		m_frame = 0;
 	}
 }
 
 void TitleScene::FadeDraw()
 {
-	DrawRotaGraph(640, 360, 0.2f, 0.0f, m_backHandle, true);
+	DrawString(600, 100, "TitleScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -58,8 +59,7 @@ void TitleScene::FadeDraw()
 
 void TitleScene::NormalDraw()
 {
-	DrawString(kGameScreenHalfWidth, 100, "ResultScene", 0xffffff);
-	DrawRotaGraph(kGameScreenHalfWidth, kGameScreenHalfHeight, 0.2f, 0.0f, m_backHandle, true);
+	DrawString(600, 100, "TitleScene", 0xffffff);
 }
 
 TitleScene::TitleScene(SceneController& controller):
@@ -67,8 +67,6 @@ TitleScene::TitleScene(SceneController& controller):
 	m_update(&TitleScene::FadeInUpdate),
 	m_draw(&TitleScene::FadeDraw)
 {
-	m_backHandle = LoadGraph("img/BackGround/chopper.png");
-	assert(m_backHandle != -1);
 	m_frame = kFadeInterval;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Vec3.h"
+#include <DxLib.h>
 
 class Input;
 class Vec3;
@@ -21,9 +22,8 @@ private:
 	// プレイヤーのグラフィックハンドル
 	int m_handleIdle;
 	int m_handleRun;
-	//int m_handleJump;
 	int m_handleAtk;
-	//int m_handleUpAtk;
+	int m_handleDeath;
 
 	// アニメーションのフレーム数を数える
 	int m_animFrame;
@@ -31,6 +31,7 @@ private:
 	// 各アニメーションに関するフラグ
 	bool m_isRun;
 	bool m_isAtk;
+	bool m_isDeath;
 
 	// プレイヤーの表示位置
 	Vec3 m_pos;
@@ -38,17 +39,11 @@ private:
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
 
-	// ジャンプ
-	bool m_isJump;
-
 	// 被弾時の点滅
 	int m_blinkFrame;
 
 	// プレイヤーのHP
 	int m_hp;
-
-	// 死亡演出用のフレーム
-	int m_deadFrame;
 
 	// 無限ジャンプしないように管理する
 	bool m_isLastJump;

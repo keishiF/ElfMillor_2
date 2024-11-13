@@ -5,7 +5,6 @@ class ResultScene :
     public SceneBase
 {
 private:
-	int m_backHandle = 0;
 	int m_frame = 60;
 	using UpdateFunc_t = void (ResultScene::*)(Input& input);
 	using DrawFunc_t = void (ResultScene::*)();

@@ -4,7 +4,6 @@ class TitleScene :
     public SceneBase
 {
 	int m_frame;
-	int m_backHandle;
 
 	using UpdateFunc_t = void(TitleScene::*)(Input&);
 	using DrawFunc_t = void(TitleScene::*)();

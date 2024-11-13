@@ -50,6 +50,7 @@ void GameScene::NormalUpdate(Input& input)
 
 void GameScene::FadeDraw()
 {
+	DrawString(600, 100, "GameScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -59,7 +60,7 @@ void GameScene::FadeDraw()
 void GameScene::NormalDraw()
 {
 	m_player->Draw();
-	DrawString(10, 10, "GameScene", 0xffffff);
+	DrawString(600, 100, "GameScene", 0xffffff);
 }
 
 GameScene::GameScene(SceneController& controller):
