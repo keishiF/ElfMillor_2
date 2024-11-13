@@ -4,6 +4,7 @@
 #include "SceneController.h"
 #include "ResultScene.h"
 #include "Player.h"
+#include "Bullet.h"
 
 #include <memory>
 #include <cassert>
@@ -12,7 +13,6 @@ namespace
 {
 	constexpr int kFadeInterval = 60;
 }
-
 
 void GameScene::FadeInUpdate(Input& input)
 {

@@ -1,5 +1,7 @@
 #pragma once
 #include "Vec3.h"
+#include "Bullet.h"
+
 #include <DxLib.h>
 
 class Input;
@@ -15,7 +17,7 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update(Input& input);
+	void Update(Input& input, Bullet& bullet);
 	void Draw();
 
 private:
@@ -30,11 +32,16 @@ private:
 
 	// 各アニメーションに関するフラグ
 	bool m_isRun;
+	bool m_isJump;
 	bool m_isAtk;
 	bool m_isDeath;
 
+	// ジャンプスピード
+	float m_jumpSpeed;
+
 	// プレイヤーの表示位置
 	Vec3 m_pos;
+	Vec3 m_vec;
 
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
@@ -47,4 +54,5 @@ private:
 
 	// 無限ジャンプしないように管理する
 	bool m_isLastJump;
+	bool m_isLastJumpButton;
 };
