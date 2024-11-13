@@ -15,11 +15,16 @@ namespace
 	constexpr int kLeftEndWidth = 0;
 	constexpr int kRightEndWidth = 1280;
 
+	constexpr int kFieldHeight = 352;
+
 	// プレイヤーの初期HP
 	constexpr int kMaxHp = 5;
 
 	// プレイヤーの移動速度
 	constexpr int kSpeed = 5.0f;
+
+	// 重力
+	constexpr float kGravity = 0.4f;
 
 	// 各アニメーションのコマ数
 	constexpr int kIdleAnimFrame = 11;
@@ -48,13 +53,17 @@ Player::Player() :
 	m_handleDeath(-1),
 	m_animFrame(0),
 	m_isRun(false),
+	m_isJump(false),
 	m_isAtk(false),
 	m_isDeath(false),
+	m_jumpSpeed(0.0f),
 	m_pos(kGameScreenHalfWidth,kGameScreenHalfHeight),
+	m_vec(),
 	m_isDirLeft(false),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
-	m_isLastJump(false)
+	m_isLastJump(false),
+	m_isLastJumpButton(false)
 {
 }
 
@@ -87,7 +96,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input)
+void Player::Update(Input& input, Bullet& bullet)
 {
 	// アニメーションの更新
 	m_animFrame++;
@@ -117,24 +126,69 @@ void Player::Update(Input& input)
 	{
 		m_isRun = true;
 		m_isDirLeft = true;
-		m_pos.x -= kSpeed;
+		m_vec.x -= kSpeed;
 	}
 	// 右走り
 	else if (input.IsPress(PAD_INPUT_RIGHT))
 	{
 		m_isRun = true;
 		m_isDirLeft = false;
-		m_pos.x += kSpeed;
+		m_vec.x += kSpeed;
 	}
 	// 走ってない
 	else
 	{
 		m_isRun = false;
+		m_vec.x = 0;
 	}
+
+	// ジャンプ
+	if (input.IsTrigger(PAD_INPUT_1))
+	{
+		if (!m_isJump)
+		{
+			m_isJump = true;
+			m_jumpSpeed = -8.0f;
+		}
+	}
+	if (m_isJump)
+	{
+		m_pos.y += m_jumpSpeed;
+		m_jumpSpeed += kGravity;
+
+		if (m_jumpSpeed > 0.0f)
+		{
+			if (m_pos.y >= kFieldHeight)
+			{
+				m_isJump = false;
+				m_jumpSpeed = 0.0f;
+			}
+		}
+	}
+	if (input.IsTrigger(PAD_INPUT_1))
+	{
+		m_isLastJumpButton = true;
+	}
+	else
+	{
+		m_isLastJumpButton = false;
+	}
+
+	// 移動処理
+	m_vec = m_vec.GetNormalize() * kSpeed;
+	m_pos += m_vec;
+
 	// 攻撃
-	if (input.IsTrigger(PAD_INPUT_2))
+	if (input.IsPress(PAD_INPUT_2))
 	{
 		m_isAtk = true;
+		if (bullet.m_isShotFlag)
+		{
+			bullet.m_pos.x = m_pos.x;
+			bullet.m_pos.y = m_pos.y;
+
+			bullet.m_isShotFlag = true;
+		}
 	}
 	// 攻撃していない
 	else

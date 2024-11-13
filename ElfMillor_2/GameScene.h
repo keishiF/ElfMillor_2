@@ -3,6 +3,8 @@
 #include <memory>
 
 class Player;
+class Bullet;
+
 class GameScene :
     public SceneBase
 {
