@@ -44,7 +44,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
-		m_frame = 0;
+		m_frame = 1;
 	}
 }
 
