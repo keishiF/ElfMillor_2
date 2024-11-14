@@ -90,13 +90,16 @@ void Player::Init()
 
 	m_handleDeath = LoadGraph("img/Player2/Death.png");
 	assert(m_handleDeath != -1);
+
+	m_pBullet = new Bullet;
+	m_pBullet->Init();
 }
 
 void Player::End()
 {	
+	delete m_pBullet;
 }
 
-//void Player::Update(Input& input, Bullet& bullet)
 void Player::Update(Input& input)
 {
 	// アニメーションの更新
@@ -128,6 +131,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = true;
 		m_vec.x -= kSpeed;
+		m_pBullet->m_isDirLeft = false;
 	}
 	// 右走り
 	else if (input.IsPress(PAD_INPUT_RIGHT))
@@ -135,6 +139,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = false;
 		m_vec.x += kSpeed;
+		m_pBullet->m_isDirLeft = true;;
 	}
 	// 走ってない
 	else
@@ -142,6 +147,8 @@ void Player::Update(Input& input)
 		m_isRun = false;
 		m_vec.x = 0;
 	}
+
+	
 
 	// ジャンプ
 	if (input.IsTrigger(PAD_INPUT_1))
@@ -179,22 +186,23 @@ void Player::Update(Input& input)
 	m_vec = m_vec.GetNormalize() * kSpeed;
 	m_pos += m_vec;
 
+	
+
 	// 攻撃
 	if (input.IsPress(PAD_INPUT_2))
 	{
 		m_isAtk = true;
-		/*if (bullet.m_isShotFlag)
-		{
-			bullet.m_pos.x = m_pos.x;
-			bullet.m_pos.y = m_pos.y;
-
-			bullet.m_isShotFlag = true;
-		}*/
 	}
 	// 攻撃していない
 	else
 	{
 		m_isAtk = false;
+	}
+
+	if (input.IsTrigger(PAD_INPUT_2))
+	{
+		m_pBullet->m_pos = m_pos;
+		m_pBullet->m_isShotFlag = true;
 	}
 
 	// 死亡
@@ -216,6 +224,8 @@ void Player::Update(Input& input)
 	{
 		m_pos.x = kLeftEndWidth;
 	}
+
+	m_pBullet->Draw();
 }
 
 void Player::Draw()

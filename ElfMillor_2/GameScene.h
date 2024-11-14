@@ -1,9 +1,9 @@
 #pragma once
 #include "SceneBase.h"
+#include "Bullet.h"
 #include <memory>
 
 class Player;
-//class Bullet;
 
 class GameScene :
     public SceneBase
@@ -12,7 +12,7 @@ private:
     int m_frame = 60;
 	int m_backHandle;
 	std::shared_ptr<Player> m_player;
-	//std::shared_ptr<Bullet> m_bullet;
+	Bullet m_bullet;
 
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);
