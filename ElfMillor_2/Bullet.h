@@ -11,13 +11,16 @@ public:
 	~Bullet();
 
 	void Init();
-	void Draw(Bullet& bullet);
+	void Draw();
 
 	// 弾が出ているかどうかのフラグ
 	bool m_isShotFlag;
 
 	// 弾の位置座標
 	Vec3 m_pos;
+
+	// 左向きかどうか
+	bool m_isDirLeft;
 
 private:
 	// 弾のグラフィックハンドル
