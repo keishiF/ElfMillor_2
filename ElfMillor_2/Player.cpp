@@ -7,13 +7,13 @@
 
 namespace
 {
-	// 画面中央
-	constexpr int kGameScreenHalfWidth = Game::kScreenWidth / 2;
-	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
+	// 初期位置
+	constexpr int kPlayerPosX = 170;
+	constexpr int kPlayerPosY = 388;
 
 	// 画面端
-	constexpr int kLeftEndWidth = 0;
-	constexpr int kRightEndWidth = 1280;
+	constexpr int kLeftEndWidth = 160;
+	constexpr int kRightEndWidth = 1120;
 
 	constexpr int kFieldHeight = 352;
 
@@ -57,7 +57,7 @@ Player::Player() :
 	m_isAtk(false),
 	m_isDeath(false),
 	m_jumpSpeed(0.0f),
-	m_pos(kGameScreenHalfWidth,kGameScreenHalfHeight),
+	m_pos(kPlayerPosX, kPlayerPosY),
 	m_vec(),
 	m_isDirLeft(false),
 	m_blinkFrame(0),
@@ -96,7 +96,8 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Bullet& bullet)
+//void Player::Update(Input& input, Bullet& bullet)
+void Player::Update(Input& input)
 {
 	// アニメーションの更新
 	m_animFrame++;
@@ -148,7 +149,7 @@ void Player::Update(Input& input, Bullet& bullet)
 		if (!m_isJump)
 		{
 			m_isJump = true;
-			m_jumpSpeed = -8.0f;
+			m_jumpSpeed = -10.0f;
 		}
 	}
 	if (m_isJump)
@@ -158,7 +159,7 @@ void Player::Update(Input& input, Bullet& bullet)
 
 		if (m_jumpSpeed > 0.0f)
 		{
-			if (m_pos.y >= kFieldHeight)
+			if (m_pos.y >= kPlayerPosY)
 			{
 				m_isJump = false;
 				m_jumpSpeed = 0.0f;
@@ -182,19 +183,20 @@ void Player::Update(Input& input, Bullet& bullet)
 	if (input.IsPress(PAD_INPUT_2))
 	{
 		m_isAtk = true;
-		if (bullet.m_isShotFlag)
+		/*if (bullet.m_isShotFlag)
 		{
 			bullet.m_pos.x = m_pos.x;
 			bullet.m_pos.y = m_pos.y;
 
 			bullet.m_isShotFlag = true;
-		}
+		}*/
 	}
 	// 攻撃していない
 	else
 	{
 		m_isAtk = false;
 	}
+
 	// 死亡
 	if (input.IsPress(PAD_INPUT_4))
 	{

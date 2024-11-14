@@ -17,7 +17,8 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update(Input& input, Bullet& bullet);
+	//void Update(Input& input, Bullet& bullet);
+	void Update(Input& input);
 	void Draw();
 
 private:
