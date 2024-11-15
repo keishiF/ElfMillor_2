@@ -31,6 +31,7 @@ namespace
 
 	// アニメーション1コマのフレーム数
 	constexpr int kSingleAnimFrame = 8;
+	constexpr int kAtkAnimFrame = 8;
 
 	// キャラクターのグラフィックのサイズ
 	constexpr int kGraphWidth = 160;
@@ -60,7 +61,7 @@ Player::Player() :
 	m_pos(kPlayerPosX, kPlayerPosY),
 	m_vec(),
 	m_isDirLeft(false),
-	m_isBulletDirRight(false),
+	m_isBulletDirRight(true),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
 	m_isLastJump(false),
@@ -112,7 +113,7 @@ void Player::Update(Input& input)
 	}
 	if (m_isAtk)
 	{
-		totalFrame = kAtkAnimNum * kSingleAnimFrame;
+		totalFrame = kAtkAnimNum * kAtkAnimFrame;
 	}
 	if (m_isDeath)
 	{
@@ -122,6 +123,10 @@ void Player::Update(Input& input)
 	if (m_animFrame >= totalFrame)
 	{
 		m_animFrame = 0;
+		if (m_isAtk)
+		{
+			m_isAtk = false;
+		}
 	}
 
 	// 走り
@@ -185,34 +190,24 @@ void Player::Update(Input& input)
 	m_vec = m_vec.GetNormalize() * kSpeed;
 	m_pos += m_vec;
 
-	// 攻撃
-	if (input.IsPress(PAD_INPUT_2))
-	{
-		m_isAtk = true;
-	}
-	// 攻撃していない
-	else
-	{
-		m_isAtk = false;
-	}
-
 	if (input.IsTrigger(PAD_INPUT_2))
 	{
+		m_isAtk = true;
 		m_pBullet->m_pos = m_pos;
 		m_pBullet->m_isShotFlag = true;
 		m_pBullet->m_isDirLeft = m_isBulletDirRight;
 	}
 
-	// 死亡
-	if (input.IsPress(PAD_INPUT_4))
-	{
-		m_isDeath = true;
-	}
-	// 生きている
-	else
-	{
-		m_isDeath = false;
-	}
+	//// 死亡
+	//if (input.IsPress(PAD_INPUT_4))
+	//{
+	//	m_isDeath = true;
+	//}
+	//// 生きている
+	//else
+	//{
+	//	m_isDeath = false;
+	//}
 
 	if (m_pos.x <= kLeftEndWidth)
 	{
