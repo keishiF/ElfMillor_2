@@ -60,6 +60,7 @@ Player::Player() :
 	m_pos(kPlayerPosX, kPlayerPosY),
 	m_vec(),
 	m_isDirLeft(false),
+	m_isBulletDirRight(false),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
 	m_isLastJump(false),
@@ -131,7 +132,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = true;
 		m_vec.x -= kSpeed;
-		m_pBullet->m_isDirLeft = false;
+		m_isBulletDirRight = false;
 	}
 	// ‰E‘–‚è
 	else if (input.IsPress(PAD_INPUT_RIGHT))
@@ -139,7 +140,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = false;
 		m_vec.x += kSpeed;
-		m_pBullet->m_isDirLeft = true;;
+		m_isBulletDirRight = true;
 	}
 	// ‘–‚Á‚Ä‚È‚¢
 	else
@@ -147,8 +148,6 @@ void Player::Update(Input& input)
 		m_isRun = false;
 		m_vec.x = 0;
 	}
-
-	
 
 	// ƒWƒƒƒ“ƒv
 	if (input.IsTrigger(PAD_INPUT_1))
@@ -186,8 +185,6 @@ void Player::Update(Input& input)
 	m_vec = m_vec.GetNormalize() * kSpeed;
 	m_pos += m_vec;
 
-	
-
 	// UŒ‚
 	if (input.IsPress(PAD_INPUT_2))
 	{
@@ -203,6 +200,7 @@ void Player::Update(Input& input)
 	{
 		m_pBullet->m_pos = m_pos;
 		m_pBullet->m_isShotFlag = true;
+		m_pBullet->m_isDirLeft = m_isBulletDirRight;
 	}
 
 	// Ž€–S

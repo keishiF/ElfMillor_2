@@ -45,6 +45,8 @@ private:
 
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
+	// 弾を右向きにするかどうか
+	bool m_isBulletDirRight;
 
 	// 被弾時の点滅
 	int m_blinkFrame;

@@ -40,11 +40,14 @@ void Bullet::Draw()
 {
 	if (m_isShotFlag)
 	{
-		m_pos.x += 5;
-		/*if (m_pos.x > 1120)
+		if (m_isDirLeft)
 		{
-			m_isShotFlag = false;
-		}*/
-		DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true,m_isDirLeft);
+			m_pos.x += 5;
+		}
+		else if (!m_isDirLeft)
+		{
+			m_pos.x -= 5;
+		}
+		DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }
