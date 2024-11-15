@@ -18,7 +18,7 @@ namespace
 Bullet::Bullet():
 	m_isShotFlag(false),
 	m_handle(-1),
-	m_isDirLeft(false),
+	m_isDirLeft(true),
 	m_pos(0,0),
 	m_graphWidth(kGraphWidth),
 	m_graphHeight(kGraphHeight)
