@@ -33,82 +33,94 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="General\Application.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
-    <ClCompile Include="General\Input.cpp">
+    <ClCompile Include="Input.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
-    <ClCompile Include="General\main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\GameScene.cpp">
+    <ClCompile Include="GameScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\ResultScene.cpp">
+    <ClCompile Include="ResultScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\SceneBase.cpp">
+    <ClCompile Include="SceneBase.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\SceneController.cpp">
+    <ClCompile Include="SceneController.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
+    <ClCompile Include="TitleScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\GameObject.cpp">
+    <ClCompile Include="GameObject.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Player.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Bullet.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Animation.cpp">
+    <ClCompile Include="Animation.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBase.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="General\Application.h">
+    <ClInclude Include="Application.h">
       <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
-    <ClInclude Include="General\Input.h">
+    <ClInclude Include="Input.h">
       <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
-    <ClInclude Include="General\game.h">
+    <ClInclude Include="game.h">
       <Filter>ヘッダー ファイル\General</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\GameScene.h">
+    <ClInclude Include="GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\ResultScene.h">
+    <ClInclude Include="ResultScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\SceneBase.h">
+    <ClInclude Include="SceneBase.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\SceneController.h">
+    <ClInclude Include="SceneController.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
+    <ClInclude Include="TitleScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Bullet.h">
+    <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Player.h">
+    <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\GameObject.h">
+    <ClInclude Include="GameObject.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Animation.h">
+    <ClInclude Include="Animation.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject\Vec3.h">
+    <ClInclude Include="Vec3.h">
       <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBase.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

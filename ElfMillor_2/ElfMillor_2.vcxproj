@@ -139,33 +139,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject\Animation.cpp" />
-    <ClCompile Include="General\Application.cpp" />
-    <ClCompile Include="GameObject\Bullet.cpp" />
-    <ClCompile Include="GameObject\GameObject.cpp" />
-    <ClCompile Include="Scene\GameScene.cpp" />
-    <ClCompile Include="General\Input.cpp" />
-    <ClCompile Include="General\main.cpp" />
-    <ClCompile Include="GameObject\Player.cpp" />
-    <ClCompile Include="Scene\ResultScene.cpp" />
-    <ClCompile Include="Scene\SceneBase.cpp" />
-    <ClCompile Include="Scene\SceneController.cpp" />
-    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="EnemyBase.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="SceneBase.cpp" />
+    <ClCompile Include="SceneController.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameObject\Animation.h" />
-    <ClInclude Include="General\Application.h" />
-    <ClInclude Include="GameObject\Bullet.h" />
-    <ClInclude Include="General\game.h" />
-    <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Scene\GameScene.h" />
-    <ClInclude Include="General\Input.h" />
-    <ClInclude Include="GameObject\Player.h" />
-    <ClInclude Include="Scene\ResultScene.h" />
-    <ClInclude Include="Scene\SceneBase.h" />
-    <ClInclude Include="Scene\SceneController.h" />
-    <ClInclude Include="Scene\TitleScene.h" />
-    <ClInclude Include="GameObject\Vec3.h" />
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Boss.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="EnemyBase.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="SceneBase.h" />
+    <ClInclude Include="SceneController.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

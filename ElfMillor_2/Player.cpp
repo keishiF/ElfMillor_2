@@ -26,9 +26,6 @@ namespace
 	// 重力
 	constexpr float kGravity = 0.4f;
 
-	// 各アニメーションのコマ数
-	constexpr int kIdleAnimFrame = 11;
-
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
 
@@ -36,13 +33,13 @@ namespace
 	constexpr int kGraphWidth = 160;
 	constexpr int kGraphHeight = 128;
 
-	// 待機アニメーションのフレーム数
+	// 待機アニメーションのコマ数
 	constexpr int kIdleAnimNum = 8;
-	// 走りアニメーションのフレーム数
+	// 走りアニメーションのコマ数
 	constexpr int kRunAnimNum = 8;
-	// 攻撃アニメーションのフレーム数
+	// 攻撃アニメーションのコマ数
 	constexpr int kAtkAnimNum = 13;
-	// 死亡アニメーションのフレーム数
+	// 死亡アニメーションのコマ数
 	constexpr int kDeathAnimNum = 10;
 
 	// グラフィックの拡大率

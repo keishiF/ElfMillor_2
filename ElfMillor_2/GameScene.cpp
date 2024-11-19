@@ -4,7 +4,7 @@
 #include "SceneController.h"
 #include "ResultScene.h"
 #include "Player.h"
-#include "Bullet.h"
+#include "Boss.h"
 
 #include <memory>
 #include <cassert>
@@ -40,6 +40,7 @@ void GameScene::FadeOutUpdate(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_player->Update(input);
+	m_boss->Update();
 	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &GameScene::FadeOutUpdate;
@@ -62,6 +63,7 @@ void GameScene::FadeDraw()
 void GameScene::NormalDraw()
 {
 	m_player->Draw();
+	m_boss->Draw();
 	DrawString(600, 100, "GameScene", 0xffffff);
 	DrawLine(160, 0, 160, 720, 0xffffff, true);
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
@@ -79,6 +81,9 @@ GameScene::GameScene(SceneController& controller):
 
 	m_player = std::make_shared<Player>();
 	m_player->Init();
+
+	m_boss = std::make_shared<Boss>();
+	m_boss->Init();
 }
 
 void GameScene::Update(Input& input)
