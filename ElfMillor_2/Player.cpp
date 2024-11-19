@@ -30,8 +30,7 @@ namespace
 	constexpr int kIdleAnimFrame = 11;
 
 	// アニメーション1コマのフレーム数
-	constexpr int kSingleAnimFrame = 8;
-	constexpr int kAtkAnimFrame = 8;
+	constexpr int kAnimSingleFrame = 8;
 
 	// キャラクターのグラフィックのサイズ
 	constexpr int kGraphWidth = 160;
@@ -45,6 +44,9 @@ namespace
 	constexpr int kAtkAnimNum = 13;
 	// 死亡アニメーションのフレーム数
 	constexpr int kDeathAnimNum = 10;
+
+	// グラフィックの拡大率
+	constexpr float kExpRate = 2.0f;
 }
 
 Player::Player() :
@@ -52,7 +54,7 @@ Player::Player() :
 	m_handleRun(-1),
 	m_handleAtk(-1),
 	m_handleDeath(-1),
-	m_animFrame(0),
+	m_animAllFrame(0),
 	m_isRun(false),
 	m_isJump(false),
 	m_isAtk(false),
@@ -65,7 +67,11 @@ Player::Player() :
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
 	m_isLastJump(false),
-	m_isLastJumpButton(false)
+	m_isLastJumpButton(false),
+	m_pBullet(),
+	m_idleAnim(),
+	m_runAnim(),
+	m_atkAnim()
 {
 }
 
@@ -95,6 +101,11 @@ void Player::Init()
 
 	m_pBullet = new Bullet;
 	m_pBullet->Init();
+
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_runAnim.Init(m_handleRun, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
+	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
+
 }
 
 void Player::End()
@@ -104,29 +115,14 @@ void Player::End()
 
 void Player::Update(Input& input)
 {
-	// アニメーションの更新
-	m_animFrame++;
-	int totalFrame = kIdleAnimNum * kSingleAnimFrame;
+	m_idleAnim.Update();
 	if (m_isRun)
 	{
-		totalFrame = kRunAnimNum * kSingleAnimFrame;
+		m_runAnim.Update();
 	}
 	if (m_isAtk)
 	{
-		totalFrame = kAtkAnimNum * kAtkAnimFrame;
-	}
-	if (m_isDeath)
-	{
-		totalFrame = kDeathAnimNum * kSingleAnimFrame;
-	}
-
-	if (m_animFrame >= totalFrame)
-	{
-		m_animFrame = 0;
-		if (m_isAtk)
-		{
-			m_isAtk = false;
-		}
+		m_atkAnim.Update();
 	}
 
 	// 走り
@@ -190,6 +186,7 @@ void Player::Update(Input& input)
 	m_vec = m_vec.GetNormalize() * kSpeed;
 	m_pos += m_vec;
 
+	// 攻撃
 	if (input.IsTrigger(PAD_INPUT_2))
 	{
 		m_isAtk = true;
@@ -197,17 +194,10 @@ void Player::Update(Input& input)
 		m_pBullet->m_isShotFlag = true;
 		m_pBullet->m_isDirLeft = m_isBulletDirRight;
 	}
-
-	//// 死亡
-	//if (input.IsPress(PAD_INPUT_4))
-	//{
-	//	m_isDeath = true;
-	//}
-	//// 生きている
-	//else
-	//{
-	//	m_isDeath = false;
-	//}
+	else
+	{
+		m_isAtk = false;
+	}
 
 	if (m_pos.x <= kLeftEndWidth)
 	{
@@ -223,31 +213,16 @@ void Player::Update(Input& input)
 
 void Player::Draw()
 {
-	int animNo = m_animFrame / kSingleAnimFrame;
-
-	// 表示するグラフィックをプレイヤーの状態に応じて変更
-	// 何もしていないときに待機アニメーション
-	int useHandle = m_handleIdle;
-
-	// 走り
 	if (m_isRun)
 	{
-		useHandle = m_handleRun;
+		m_runAnim.Play(m_pos, m_isDirLeft);
 	}
-	// 攻撃
-	if (m_isAtk)
+	else if (m_isAtk)
 	{
-		useHandle = m_handleAtk;
+		m_atkAnim.Play(m_pos, m_isDirLeft);
 	}
-	// 死亡
-	if (m_isDeath)
+	else
 	{
-		useHandle = m_handleDeath;
+		m_idleAnim.Play(m_pos, m_isDirLeft);
 	}
-
-	// 描画
-	DrawRectRotaGraph(m_pos.x, m_pos.y,
-		animNo * kGraphWidth, 0, kGraphWidth, kGraphHeight,
-		2.0f, 0.0f,
-		useHandle, true, m_isDirLeft);
 }
