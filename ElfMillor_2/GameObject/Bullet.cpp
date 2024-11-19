@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Player.h"
 #include "DxLib.h"
+#include "game.h"
 
 #include <cassert>
 
@@ -48,6 +49,16 @@ void Bullet::Draw()
 		{
 			m_pos.x -= 5;
 		}
+
+		if (m_pos.x > Game::kScreenWidth)
+		{
+			m_isShotFlag = false;
+		}
+		if (m_pos.x < 0)
+		{
+			m_isShotFlag = false;
+		}
+
 		DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }

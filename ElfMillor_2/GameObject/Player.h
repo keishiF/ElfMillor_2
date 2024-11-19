@@ -30,7 +30,7 @@ private:
 	// アニメーションのフレーム数を数える
 	int m_animAllFrame;
 
-	// 各アニメーションに関するフラグ
+	// 各アニメーションを切り替えるフラグ
 	bool m_isRun;
 	bool m_isJump;
 	bool m_isAtk;
@@ -59,10 +59,10 @@ private:
 	bool m_isLastJumpButton;
 
 	// 弾の情報
-	Bullet* m_pBullet;
+	Bullet m_bullet[5];
 
+	// 各アニメーション
 	Animation m_idleAnim;
 	Animation m_runAnim;
 	Animation m_atkAnim;
-
 };
