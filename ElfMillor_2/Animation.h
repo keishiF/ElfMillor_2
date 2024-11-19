@@ -4,12 +4,13 @@
 class Animation
 {
 public:
-	void Init(int drawHandle, int animAllFrame, int animSingleFrame, int graphWidth, int graphHeight, float expRate, int animNum);
+	void Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float expRate, int animNum);
 	void Update();
 	void Play(Vec3 pos, bool isDirLeft);
+	void ResetAnimFrame() { m_animFrame = 0; }
 
 private:
-	int m_animAllFrame;
+	int m_animFrame;
 	int m_animSingleFrame;
 	int m_graphWidth;
 	int m_graphHeight;

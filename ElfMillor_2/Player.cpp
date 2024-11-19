@@ -54,7 +54,6 @@ Player::Player() :
 	m_handleRun(-1),
 	m_handleAtk(-1),
 	m_handleDeath(-1),
-	m_animAllFrame(0),
 	m_isRun(false),
 	m_isJump(false),
 	m_isAtk(false),
@@ -104,9 +103,9 @@ void Player::Init()
 		m_bullet[i].Init();
 	}
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
-	m_runAnim.Init(m_handleRun, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
-	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
+	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
 }
 
 void Player::End()
