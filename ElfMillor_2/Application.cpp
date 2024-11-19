@@ -3,7 +3,7 @@
 #include "Input.h"
 #include "game.h"
 #include "Player.h"
-#include <DxLib.h>
+#include "DxLib.h"
 #include <cassert>
 
 using namespace std;

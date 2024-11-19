@@ -2,8 +2,7 @@
 #include "Vec3.h"
 #include "Bullet.h"
 #include "Animation.h"
-
-#include <DxLib.h>
+#include "DxLib.h"
 
 class Input;
 class Vec3;
