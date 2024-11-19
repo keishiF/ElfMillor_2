@@ -1,7 +1,7 @@
 #include "Bullet.h"
 #include "Player.h"
+#include "DxLib.h"
 
-#include <DxLib.h>
 #include <cassert>
 
 namespace
