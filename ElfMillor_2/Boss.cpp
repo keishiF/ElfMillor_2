@@ -25,6 +25,7 @@ namespace
 
 Boss::Boss()
 {
+	m_animAllFrame = 0;
 }
 
 Boss::~Boss()
@@ -32,11 +33,13 @@ Boss::~Boss()
 }
 
 void Boss::Init()
-{
+{	
 	m_handleIdle = LoadGraph("img/Boss/Boss.png");
 	assert(m_handleIdle != -1);
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_pos.x = kBossPosX;
+	m_pos.y = kBossPosY;
 }
 
 void Boss::Update()
@@ -46,8 +49,6 @@ void Boss::Update()
 
 void Boss::Draw()
 {
-	m_pos.x = kBossPosX;
-	m_pos.y = kBossPosY;
 	m_isDirLeft = false;
 	m_idleAnim.Play(m_pos, m_isDirLeft);
 }
