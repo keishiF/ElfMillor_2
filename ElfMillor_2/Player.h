@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec3.h"
 #include "Bullet.h"
+#include "Animation.h"
 
 #include <DxLib.h>
 
@@ -28,7 +29,7 @@ private:
 	int m_handleDeath;
 
 	// アニメーションのフレーム数を数える
-	int m_animFrame;
+	int m_animAllFrame;
 
 	// 各アニメーションに関するフラグ
 	bool m_isRun;
@@ -60,4 +61,9 @@ private:
 
 	// 弾の情報
 	Bullet* m_pBullet;
+
+	Animation m_idleAnim;
+	Animation m_runAnim;
+	Animation m_atkAnim;
+
 };
