@@ -47,6 +47,9 @@ namespace
 
 	// グラフィックの拡大率
 	constexpr float kExpRate = 2.0f;
+	
+	// 弾数
+	constexpr int kShot = 5;
 }
 
 Player::Player() :
@@ -68,7 +71,7 @@ Player::Player() :
 	m_hp(kMaxHp),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
-	m_pBullet(),
+	m_bullet(),
 	m_idleAnim(),
 	m_runAnim(),
 	m_atkAnim()
@@ -99,18 +102,18 @@ void Player::Init()
 	m_handleDeath = LoadGraph("img/Player2/Death.png");
 	assert(m_handleDeath != -1);
 
-	m_pBullet = new Bullet;
-	m_pBullet->Init();
+	for (int i = 0; i < kShot; i++)
+	{
+		m_bullet[i].Init();
+	}
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
 	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, m_animAllFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
-
 }
 
 void Player::End()
 {	
-	delete m_pBullet;
 }
 
 void Player::Update(Input& input)
@@ -124,9 +127,6 @@ void Player::Update(Input& input)
 	{
 		m_atkAnim.Update();
 	}
-
-	// 走り
-	m_isRun = false;
 	// 左走り
 	if (input.IsPress(PAD_INPUT_LEFT))
 	{
@@ -189,10 +189,23 @@ void Player::Update(Input& input)
 	// 攻撃
 	if (input.IsTrigger(PAD_INPUT_2))
 	{
-		m_isAtk = true;
-		m_pBullet->m_pos = m_pos;
-		m_pBullet->m_isShotFlag = true;
-		m_pBullet->m_isDirLeft = m_isBulletDirRight;
+		for (int i = 0; i < kShot; ++i)
+		{
+			// アニメーション切り替え
+			m_isAtk = true;
+
+			// 弾の位置をプレイヤーの位置に補正
+			m_bullet[i].m_pos = m_pos;
+
+			// 弾を表示
+			m_bullet[i].m_isShotFlag = true;
+
+			// 弾の向きをプレイヤーと同じ向きに補正
+			m_bullet[i].m_isDirLeft = m_isBulletDirRight;
+
+			// 弾を1発出してループから抜ける
+			break;
+		}
 	}
 	else
 	{
@@ -208,7 +221,10 @@ void Player::Update(Input& input)
 		m_pos.x = kLeftEndWidth;
 	}
 
-	m_pBullet->Draw();
+	for (int i = 0; i < kShot; i++)
+	{
+		m_bullet[i].Draw();
+	}
 }
 
 void Player::Draw()
