@@ -27,9 +27,6 @@ private:
 	int m_handleAtk;
 	int m_handleDeath;
 
-	// アニメーションのフレーム数を数える
-	int m_animAllFrame;
-
 	// 各アニメーションを切り替えるフラグ
 	bool m_isRun;
 	bool m_isJump;
