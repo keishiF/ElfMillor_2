@@ -19,7 +19,7 @@ namespace
 	constexpr float kExpRate = 2.0f;
 
 	// ‰ŠúˆÊ’u
-	constexpr float kBossPosX = 550;
+	constexpr float kBossPosX = 700;
 	constexpr float kBossPosY = 330;
 }
 
