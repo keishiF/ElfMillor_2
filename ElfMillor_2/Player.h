@@ -7,6 +7,11 @@
 class Input;
 class Vec3;
 
+namespace
+{
+	constexpr int kShot = 3;
+}
+
 class Player
 {
 public:
@@ -56,7 +61,7 @@ private:
 	bool m_isLastJumpButton;
 
 	// 弾の情報
-	Bullet m_bullet[5];
+	Bullet m_bullet[kShot];
 
 	// 各アニメーション
 	Animation m_idleAnim;

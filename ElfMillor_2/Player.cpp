@@ -8,7 +8,7 @@
 namespace
 {
 	// 初期位置
-	constexpr int kPlayerPosX = 170;
+	constexpr int kPlayerPosX = 210;
 	constexpr int kPlayerPosY = 388;
 
 	// 画面端
@@ -44,9 +44,6 @@ namespace
 
 	// グラフィックの拡大率
 	constexpr float kExpRate = 2.0f;
-	
-	// 弾数
-	constexpr int kShot = 5;
 }
 
 Player::Player() :
@@ -187,20 +184,23 @@ void Player::Update(Input& input)
 	{
 		for (int i = 0; i < kShot; ++i)
 		{
-			// アニメーション切り替え
-			m_isAtk = true;
+			if (!m_bullet[i].m_isShotFlag)
+			{
+				// アニメーション切り替え
+				m_isAtk = true;
 
-			// 弾の位置をプレイヤーの位置に補正
-			m_bullet[i].m_pos = m_pos;
+				// 弾の位置をプレイヤーの位置に補正
+				m_bullet[i].m_pos = m_pos;
 
-			// 弾を表示
-			m_bullet[i].m_isShotFlag = true;
+				// 弾を表示
+				m_bullet[i].m_isShotFlag = true;
 
-			// 弾の向きをプレイヤーと同じ向きに補正
-			m_bullet[i].m_isDirLeft = m_isBulletDirRight;
+				// 弾の向きをプレイヤーと同じ向きに補正
+				m_bullet[i].m_isDirLeft = m_isBulletDirRight;
 
-			// 弾を1発出してループから抜ける
-			break;
+				// 弾を1発出してループから抜ける
+				break;
+			}
 		}
 	}
 	else
