@@ -13,6 +13,11 @@ public:
 	void Init();
 	void Draw();
 
+	float GetLeft();
+	float GetRight();
+	float GetTop();
+	float GetBottom();
+
 	// ’e‚ªo‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
 	bool m_isShotFlag;
 
