@@ -37,19 +37,22 @@ void Bullet::Init()
 	assert(m_handle != -1);
 }
 
+void Bullet::Update()
+{
+	if (m_isDirLeft)
+	{
+		m_pos.x += 5;
+	}
+	else if (!m_isDirLeft)
+	{
+		m_pos.x -= 5;
+	}
+}
+
 void Bullet::Draw()
 {
 	if (m_isShotFlag)
 	{
-		if (m_isDirLeft)
-		{
-			m_pos.x += 5;
-		}
-		else if (!m_isDirLeft)
-		{
-			m_pos.x -= 5;
-		}
-
 		if (m_pos.x > Game::kScreenWidth)
 		{
 			m_isShotFlag = false;
