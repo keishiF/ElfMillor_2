@@ -26,6 +26,7 @@ namespace
 Boss::Boss()
 {
 	m_animAllFrame = 0;
+	m_hp = 3;
 }
 
 Boss::~Boss()
@@ -45,10 +46,35 @@ void Boss::Init()
 void Boss::Update()
 {
 	m_idleAnim.Update();
+
+	if (GetLeft() < m_bullet.GetRight())
+	{
+		m_hp--;
+	}
 }
 
 void Boss::Draw()
 {
 	m_isDirLeft = false;
 	m_idleAnim.Play(m_pos, m_isDirLeft);
+}
+
+float Boss::GetLeft()
+{
+	return m_pos.x - kGraphWidth * 0.5f;
+}
+
+float Boss::GetRight()
+{
+	return m_pos.x + kGraphWidth * 0.5f;;
+}
+
+float Boss::GetTop()
+{
+	return m_pos.y - kGraphHeight * 0.5f;;
+}
+
+float Boss::GetBottom()
+{
+	return m_pos.y + kGraphHeight * 0.5f;;
 }

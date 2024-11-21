@@ -62,3 +62,23 @@ void Bullet::Draw()
 		DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }
+
+float Bullet::GetLeft()
+{
+	return m_pos.x - kGraphWidth * 0.5f;
+}
+
+float Bullet::GetRight()
+{
+	return m_pos.x + kGraphWidth * 0.5f;
+}
+
+float Bullet::GetTop()
+{
+	return m_pos.y - kGraphHeight * 0.5f;
+}
+
+float Bullet::GetBottom()
+{
+	return m_pos.y + kGraphHeight * 0.5f;
+}
