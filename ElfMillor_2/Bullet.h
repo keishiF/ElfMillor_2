@@ -11,6 +11,7 @@ public:
 	~Bullet();
 
 	void Init();
+	void Update();
 	void Draw();
 
 	float GetLeft();

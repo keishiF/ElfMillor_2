@@ -220,6 +220,7 @@ void Player::Update(Input& input)
 	for (int i = 0; i < kShot; i++)
 	{
 		m_bullet[i].Draw();
+		m_bullet[i].Update();
 	}
 }
 
