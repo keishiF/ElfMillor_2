@@ -41,6 +41,13 @@ void GameScene::NormalUpdate(Input& input)
 {
 	m_player->Update(input);
 	m_boss->Update();
+
+	float disX = m_boss->m_pos.x - m_player->m_pos.x;
+	if (disX > 50)
+	{
+		m_boss->Shot();
+	}
+
 	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &GameScene::FadeOutUpdate;
@@ -75,8 +82,6 @@ GameScene::GameScene(SceneController& controller):
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
-	m_backHandle = LoadGraph("img/BackGround/luffy.png");
-	assert(m_backHandle != -1);
 	m_frame = kFadeInterval;
 
 	m_player = std::make_shared<Player>();

@@ -10,7 +10,6 @@ class GameScene :
 {
 private:
     int m_frame = 60;
-	int m_backHandle;
 	std::shared_ptr<Player> m_player;
 	std::shared_ptr<Boss> m_boss;
 

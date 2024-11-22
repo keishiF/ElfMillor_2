@@ -1,6 +1,6 @@
 #pragma once
 #include "Vec3.h"
-#include "Bullet.h"
+#include "Shot.h"
 #include "Animation.h"
 #include "DxLib.h"
 
@@ -9,7 +9,7 @@ class Vec3;
 
 namespace
 {
-	constexpr int kShot = 3;
+	constexpr int kShot = 15;
 }
 
 class Player
@@ -24,6 +24,10 @@ public:
 	void End();
 	void Update(Input& input);
 	void Draw();
+
+	// プレイヤーの表示位置
+	Vec3 m_pos;
+	Vec3 m_vec;
 
 private:
 	// プレイヤーのグラフィックハンドル
@@ -41,14 +45,10 @@ private:
 	// ジャンプスピード
 	float m_jumpSpeed;
 
-	// プレイヤーの表示位置
-	Vec3 m_pos;
-	Vec3 m_vec;
-
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
 	// 弾を右向きにするかどうか
-	bool m_isBulletDirRight;
+	bool m_isShotDirRight;
 
 	// 被弾時の点滅
 	int m_blinkFrame;
@@ -61,7 +61,7 @@ private:
 	bool m_isLastJumpButton;
 
 	// 弾の情報
-	Bullet m_bullet[kShot];
+	Shot m_shot[kShot];
 
 	// 各アニメーション
 	Animation m_idleAnim;

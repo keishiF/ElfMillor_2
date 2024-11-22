@@ -9,6 +9,10 @@ namespace
 	constexpr int kGraphWidth = 224;
 	constexpr int kGraphHeight = 240;
 
+	// 弾のグラフィックサイズ
+	constexpr int kShotGraphWidth = 64;
+	constexpr int kShotGraphHeight = 64;
+
 	// 各アニメーションのコマ数
 	constexpr int kIdleAnimNum = 15;
 
@@ -23,7 +27,8 @@ namespace
 	constexpr float kBossPosY = 330;
 }
 
-Boss::Boss()
+Boss::Boss():
+	m_handleShot(-1)
 {
 	m_animAllFrame = 0;
 	m_hp = 3;
@@ -38,6 +43,9 @@ void Boss::Init()
 	m_handleIdle = LoadGraph("img/Boss/Boss.png");
 	assert(m_handleIdle != -1);
 
+	m_handleShot = LoadGraph("img/Boss/BossBullet.png");
+	assert(m_handleShot != -1);
+
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 	m_pos.x = kBossPosX;
 	m_pos.y = kBossPosY;
@@ -46,17 +54,18 @@ void Boss::Init()
 void Boss::Update()
 {
 	m_idleAnim.Update();
-
-	if (GetLeft() < m_bullet.GetRight())
-	{
-		m_hp--;
-	}
 }
 
 void Boss::Draw()
 {
 	m_isDirLeft = false;
 	m_idleAnim.Play(m_pos, m_isDirLeft);
+}
+
+void Boss::Shot()
+{
+	DrawRectRotaGraph(m_pos.x, m_pos.y,
+		0, 0, kShotGraphWidth, kGraphHeight, 1.5f, 0.0f, m_handleShot, true);
 }
 
 float Boss::GetLeft()

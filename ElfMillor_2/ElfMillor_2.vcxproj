@@ -146,7 +146,8 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Boss.cpp" />
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Shot.cpp" />
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -162,7 +163,8 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Boss.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Shot.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="GameObject.h" />

@@ -1,4 +1,4 @@
-#include "Bullet.h"
+#include "Shot.h"
 #include "Player.h"
 #include "DxLib.h"
 #include "game.h"
@@ -16,7 +16,7 @@ namespace
 	constexpr int kBulletLeftX = 160;
 }
 
-Bullet::Bullet():
+Shot::Shot():
 	m_isShotFlag(false),
 	m_handle(-1),
 	m_isDirLeft(true),
@@ -26,18 +26,18 @@ Bullet::Bullet():
 {
 }
 
-Bullet::~Bullet()
+Shot::~Shot()
 {
 	DeleteGraph(m_handle);
 }
 
-void Bullet::Init()
+void Shot::Init()
 {
 	m_handle = LoadGraph("img/Bullet/Bullet.png");
 	assert(m_handle != -1);
 }
 
-void Bullet::Update()
+void Shot::Update()
 {
 	if (m_isDirLeft)
 	{
@@ -49,7 +49,7 @@ void Bullet::Update()
 	}
 }
 
-void Bullet::Draw()
+void Shot::Draw()
 {
 	if (m_isShotFlag)
 	{
@@ -66,22 +66,22 @@ void Bullet::Draw()
 	}
 }
 
-float Bullet::GetLeft()
+float Shot::GetLeft()
 {
 	return m_pos.x - kGraphWidth * 0.5f;
 }
 
-float Bullet::GetRight()
+float Shot::GetRight()
 {
 	return m_pos.x + kGraphWidth * 0.5f;
 }
 
-float Bullet::GetTop()
+float Shot::GetTop()
 {
 	return m_pos.y - kGraphHeight * 0.5f;
 }
 
-float Bullet::GetBottom()
+float Shot::GetBottom()
 {
 	return m_pos.y + kGraphHeight * 0.5f;
 }

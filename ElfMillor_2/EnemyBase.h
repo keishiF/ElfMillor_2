@@ -4,13 +4,14 @@
 
 class EnemyBase
 {
-protected:
-	// グラフィック
-	int m_handleIdle;
-
+public:
 	// 表示位置
 	Vec3 m_pos;
 	Vec3 m_vec;
+
+protected:
+	// グラフィック
+	int m_handleIdle;
 
 	// 全体のフレームを数える
 	int m_animAllFrame;

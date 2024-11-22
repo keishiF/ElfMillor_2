@@ -59,12 +59,12 @@ Player::Player() :
 	m_pos(kPlayerPosX, kPlayerPosY),
 	m_vec(),
 	m_isDirLeft(false),
-	m_isBulletDirRight(true),
+	m_isShotDirRight(true),
 	m_blinkFrame(0),
 	m_hp(kMaxHp),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
-	m_bullet(),
+	m_shot(),
 	m_idleAnim(),
 	m_runAnim(),
 	m_atkAnim()
@@ -97,7 +97,7 @@ void Player::Init()
 
 	for (int i = 0; i < kShot; i++)
 	{
-		m_bullet[i].Init();
+		m_shot[i].Init();
 	}
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
@@ -126,7 +126,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = true;
 		m_vec.x -= kSpeed;
-		m_isBulletDirRight = false;
+		m_isShotDirRight = false;
 	}
 	// 右走り
 	else if (input.IsPress(PAD_INPUT_RIGHT))
@@ -134,7 +134,7 @@ void Player::Update(Input& input)
 		m_isRun = true;
 		m_isDirLeft = false;
 		m_vec.x += kSpeed;
-		m_isBulletDirRight = true;
+		m_isShotDirRight = true;
 	}
 	// 走ってない
 	else
@@ -184,19 +184,19 @@ void Player::Update(Input& input)
 	{
 		for (int i = 0; i < kShot; ++i)
 		{
-			if (!m_bullet[i].m_isShotFlag)
-			{
+			if (!m_shot[i].m_isShotFlag)
+			{	
 				// アニメーション切り替え
 				m_isAtk = true;
 
 				// 弾の位置をプレイヤーの位置に補正
-				m_bullet[i].m_pos = m_pos;
+				m_shot[i].m_pos = m_pos;
 
 				// 弾を表示
-				m_bullet[i].m_isShotFlag = true;
+				m_shot[i].m_isShotFlag = true;
 
 				// 弾の向きをプレイヤーと同じ向きに補正
-				m_bullet[i].m_isDirLeft = m_isBulletDirRight;
+				m_shot[i].m_isDirLeft = m_isShotDirRight;
 
 				// 弾を1発出してループから抜ける
 				break;
@@ -219,8 +219,8 @@ void Player::Update(Input& input)
 
 	for (int i = 0; i < kShot; i++)
 	{
-		m_bullet[i].Draw();
-		m_bullet[i].Update();
+		m_shot[i].Draw();
+		m_shot[i].Update();
 	}
 }
 

@@ -4,11 +4,11 @@
 class Input;
 class Vec3;
 
-class Bullet
+class Shot
 {
 public:
-	Bullet();
-	~Bullet();
+	Shot();
+	~Shot();
 
 	void Init();
 	void Update();

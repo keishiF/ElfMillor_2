@@ -1,9 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
 #include "Animation.h"
-#include "Bullet.h"
-
-class Bullet;
 
 class Boss : public EnemyBase
 {
@@ -15,11 +12,13 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	void Shot();
+
 	float GetLeft();
 	float GetRight();
 	float GetTop();
 	float GetBottom();
 
 private:
-	Bullet m_bullet;
+	int m_handleShot;
 };
