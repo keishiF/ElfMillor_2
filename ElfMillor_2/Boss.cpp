@@ -54,6 +54,11 @@ void Boss::Init()
 void Boss::Update()
 {
 	m_idleAnim.Update();
+
+	if (m_hp <= 0)
+	{
+
+	}
 }
 
 void Boss::Draw()
@@ -64,6 +69,7 @@ void Boss::Draw()
 
 void Boss::Shot()
 {
+	DrawCircle(m_pos.x, m_pos.y, 100.0f, 0xffffff, false);
 	DrawRectRotaGraph(m_pos.x, m_pos.y,
 		0, 0, kShotGraphWidth, kGraphHeight, 1.5f, 0.0f, m_handleShot, true);
 }

@@ -2,7 +2,10 @@
 #include "Player.h"
 #include "DxLib.h"
 #include "game.h"
+#include "Vec3.h"
+#include "Boss.h"
 
+#include <cmath>
 #include <cassert>
 
 namespace
@@ -21,6 +24,7 @@ Shot::Shot():
 	m_handle(-1),
 	m_isDirLeft(true),
 	m_pos(0,0),
+	m_velocity(5.0f,0.0f),
 	m_graphWidth(kGraphWidth),
 	m_graphHeight(kGraphHeight)
 {
@@ -37,15 +41,32 @@ void Shot::Init()
 	assert(m_handle != -1);
 }
 
-void Shot::Update()
+void Shot::Update(Boss& boss)
 {
 	if (m_isDirLeft)
 	{
-		m_pos.x += 5;
+		m_pos += m_velocity;
 	}
 	else if (!m_isDirLeft)
 	{
-		m_pos.x -= 5;
+		m_pos -= m_velocity;
+	}
+
+	if (m_pos.x > Game::kScreenWidth)
+	{
+		m_isShotFlag = false;
+	}
+	if (m_pos.x < 160)
+	{
+		m_isShotFlag = false;
+	}
+
+	if (5 + 100 > std::abs(m_pos.x - boss.m_pos.x)&&
+		5 + 100 > std::abs(m_pos.y - boss.m_pos.y))
+	{
+		DrawString(0, 0, "Ë¯Ä", 0xffffff, true);
+		m_isShotFlag = false;
+		boss.m_hp--;
 	}
 }
 
@@ -53,16 +74,8 @@ void Shot::Draw()
 {
 	if (m_isShotFlag)
 	{
-		if (m_pos.x > Game::kScreenWidth)
-		{
-			m_isShotFlag = false;
-		}
-		if (m_pos.x < 0)
-		{
-			m_isShotFlag = false;
-		}
-
-		DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
+		DrawCircle(m_pos.x, m_pos.y, 5.0f, 0xff0000, true);
+		//DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }
 

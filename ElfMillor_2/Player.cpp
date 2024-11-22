@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "DxLib.h"
 #include "game.h"
+#include "Boss.h"
 
 #include <cassert>
 
@@ -109,7 +110,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input)
+void Player::Update(Input& input, Boss& boss)
 {
 	m_idleAnim.Update();
 	if (m_isRun)
@@ -220,7 +221,7 @@ void Player::Update(Input& input)
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Draw();
-		m_shot[i].Update();
+		m_shot[i].Update(boss);
 	}
 }
 

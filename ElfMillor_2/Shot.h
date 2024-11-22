@@ -3,6 +3,7 @@
 
 class Input;
 class Vec3;
+class Boss;
 
 class Shot
 {
@@ -11,7 +12,7 @@ public:
 	~Shot();
 
 	void Init();
-	void Update();
+	void Update(Boss& boss);
 	void Draw();
 
 	float GetLeft();
@@ -24,6 +25,7 @@ public:
 
 	// ’e‚ÌˆÊ’uÀ•W
 	Vec3 m_pos;
+	Vec3 m_velocity;
 
 	// ¶Œü‚«‚©‚Ç‚¤‚©
 	bool m_isDirLeft;

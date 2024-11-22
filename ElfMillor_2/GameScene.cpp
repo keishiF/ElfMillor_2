@@ -39,7 +39,7 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-	m_player->Update(input);
+	m_player->Update(input, *m_boss);
 	m_boss->Update();
 
 	float disX = m_boss->m_pos.x - m_player->m_pos.x;

@@ -9,15 +9,15 @@ public:
 	Vec3 m_pos;
 	Vec3 m_vec;
 
+	// HP
+	int m_hp;
+
 protected:
 	// グラフィック
 	int m_handleIdle;
 
 	// 全体のフレームを数える
 	int m_animAllFrame;
-
-	// HP
-	int m_hp;
 
 	// アニメーション
 	Animation m_idleAnim;

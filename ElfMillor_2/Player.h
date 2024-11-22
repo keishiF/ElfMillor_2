@@ -22,7 +22,7 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update(Input& input);
+	void Update(Input& input, Boss& boss);
 	void Draw();
 
 	// プレイヤーの表示位置
