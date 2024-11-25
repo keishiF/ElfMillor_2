@@ -57,7 +57,7 @@ void Boss::Update()
 
 	if (m_hp <= 0)
 	{
-
+		End();
 	}
 }
 
@@ -65,6 +65,12 @@ void Boss::Draw()
 {
 	m_isDirLeft = false;
 	m_idleAnim.Play(m_pos, m_isDirLeft);
+}
+
+void Boss::End()
+{
+	DeleteGraph(m_handleIdle);
+	DeleteGraph(m_handleIdle);
 }
 
 void Boss::Shot()

@@ -12,6 +12,7 @@ public:
 	virtual void Update() override;
 	virtual void Draw() override;
 
+	void End();
 	void Shot();
 
 	float GetLeft();
