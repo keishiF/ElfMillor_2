@@ -4,6 +4,7 @@
 
 class Player;
 class Boss;
+class Map;
 
 class GameScene :
     public SceneBase
@@ -12,6 +13,7 @@ private:
     int m_frame = 60;
 	std::shared_ptr<Player> m_player;
 	std::shared_ptr<Boss> m_boss;
+	std::shared_ptr<Map> m_map;
 
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);
