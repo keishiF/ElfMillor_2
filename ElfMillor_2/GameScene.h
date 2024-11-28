@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "Map.h"
 #include <memory>
 
 class Player;
@@ -14,6 +15,7 @@ private:
 	std::shared_ptr<Player> m_player;
 	std::shared_ptr<Boss> m_boss;
 	std::shared_ptr<Map> m_map;
+	//Map map;
 
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);

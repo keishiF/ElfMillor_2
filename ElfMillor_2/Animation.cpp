@@ -27,7 +27,7 @@ void Animation::Update()
 void Animation::Play(Vec3 pos, bool isDirLeft)
 {
 	int animNo = m_animFrame / m_animSingleFrame;
-	DrawRectRotaGraph(pos.x, pos.y,
+	DrawRectRotaGraph(static_cast<int>(pos.x), static_cast<int>(pos.y),
 		animNo * m_graphWidth, 0, m_graphWidth, m_graphHeight,
 		m_expRate, 0.0f,
 		m_drawHandle, true, isDirLeft);

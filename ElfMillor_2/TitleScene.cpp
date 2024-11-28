@@ -54,7 +54,7 @@ void TitleScene::FadeDraw()
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
 	DrawString(600, 100, "TitleScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

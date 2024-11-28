@@ -22,7 +22,7 @@ namespace
 	constexpr int kMaxHp = 5;
 
 	// プレイヤーの移動速度
-	constexpr int kSpeed = 5.0f;
+	constexpr float kSpeed = 5.0f;
 
 	// 重力
 	constexpr float kGravity = 0.4f;

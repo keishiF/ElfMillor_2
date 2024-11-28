@@ -77,9 +77,9 @@ void Boss::Shot()
 {
 	if (m_hp > 0)
 	{
-		DrawCircle(m_pos.x, m_pos.y, 100.0f, 0xffffff, false);
+		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 100, 0xffffff, false);
 	}
-	DrawRectRotaGraph(m_pos.x, m_pos.y,
+	DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y),
 		0, 0, kShotGraphWidth, kGraphHeight, 1.5f, 0.0f, m_handleShot, true);
 }
 

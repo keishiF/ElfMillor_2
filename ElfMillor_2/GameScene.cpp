@@ -42,7 +42,6 @@ void GameScene::NormalUpdate(Input& input)
 {
 	m_player->Update(input, *m_boss);
 	m_boss->Update();
-
 	float disX = m_boss->m_pos.x - m_player->m_pos.x;
 	if (disX > 50)
 	{
@@ -63,7 +62,7 @@ void GameScene::FadeDraw()
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
 	DrawString(600, 100, "GameScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
@@ -73,6 +72,7 @@ void GameScene::NormalDraw()
 	m_player->Draw();
 	m_boss->Draw();
 	m_map->Draw();
+
 	DrawString(600, 100, "GameScene", 0xffffff);
 	DrawLine(160, 0, 160, 720, 0xffffff, true);
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
@@ -94,6 +94,8 @@ GameScene::GameScene(SceneController& controller):
 
 	m_map = std::make_shared<Map>();
 	m_map->Init();
+
+	//InitMap(map);
 }
 
 void GameScene::Update(Input& input)

@@ -80,7 +80,7 @@ void Shot::Draw()
 {
 	if (m_isShotFlag)
 	{
-		DrawCircle(m_pos.x, m_pos.y, 5.0f, 0xff0000, true);
+		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 5, 0xff0000, true);
 		//DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }
