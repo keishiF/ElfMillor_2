@@ -3,6 +3,15 @@
 #include <iostream>
 #include <vector>
 
+namespace
+{
+	constexpr int kMapChipSize = 32;
+	constexpr int kMapWidth = 30;
+	constexpr int kMapHeight = 100;
+	constexpr int kMapGraphSizeW = 1472;
+	constexpr int kMapGraphSizeH = 896;
+}
+
 class Map
 {
 public:
