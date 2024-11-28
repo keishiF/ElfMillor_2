@@ -70,12 +70,15 @@ void Boss::Draw()
 void Boss::End()
 {
 	DeleteGraph(m_handleIdle);
-	DeleteGraph(m_handleIdle);
+	DeleteGraph(m_handleShot);
 }
 
 void Boss::Shot()
 {
-	DrawCircle(m_pos.x, m_pos.y, 100.0f, 0xffffff, false);
+	if (m_hp > 0)
+	{
+		DrawCircle(m_pos.x, m_pos.y, 100.0f, 0xffffff, false);
+	}
 	DrawRectRotaGraph(m_pos.x, m_pos.y,
 		0, 0, kShotGraphWidth, kGraphHeight, 1.5f, 0.0f, m_handleShot, true);
 }
