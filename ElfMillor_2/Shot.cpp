@@ -52,7 +52,7 @@ void Shot::Update(Boss& boss)
 		m_pos -= m_velocity;
 	}
 
-	if (m_pos.x > Game::kScreenWidth)
+	if (m_pos.x > 1120)
 	{
 		m_isShotFlag = false;
 	}
@@ -61,14 +61,17 @@ void Shot::Update(Boss& boss)
 		m_isShotFlag = false;
 	}
 
-	if (5 + 100 > std::abs(m_pos.x - boss.m_pos.x)&&
-		5 + 100 > std::abs(m_pos.y - boss.m_pos.y))
+	if (boss.m_hp > 0)
 	{
-		if (m_isShotFlag)
+		if (5 + 100 > std::abs(m_pos.x - boss.m_pos.x) &&
+			5 + 100 > std::abs(m_pos.y - boss.m_pos.y))
 		{
-			DrawString(0, 0, "Ë¯Ä", 0xffffff, true);
-			m_isShotFlag = false;
-			boss.m_hp--;
+			if (m_isShotFlag)
+			{
+				DrawString(0, 0, "Ë¯Ä", 0xffffff, true);
+				m_isShotFlag = false;
+				boss.m_hp--;
+			}
 		}
 	}
 }

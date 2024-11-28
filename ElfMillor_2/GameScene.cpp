@@ -5,7 +5,7 @@
 #include "ResultScene.h"
 #include "Player.h"
 #include "Boss.h"
-#include "Map.h"
+//#include "Map.h"
 
 #include <memory>
 #include <cassert>
@@ -72,7 +72,7 @@ void GameScene::NormalDraw()
 {
 	m_player->Draw();
 	m_boss->Draw();
-	m_map->Draw();
+	//m_map->Draw();
 	DrawString(600, 100, "GameScene", 0xffffff);
 	DrawLine(160, 0, 160, 720, 0xffffff, true);
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
@@ -92,8 +92,8 @@ GameScene::GameScene(SceneController& controller):
 	m_boss = std::make_shared<Boss>();
 	m_boss->Init();
 
-	m_map = std::make_shared<Map>();
-	m_map->Init();
+//	m_map = std::make_shared<Map>();
+//	m_map->Init();
 }
 
 void GameScene::Update(Input& input)
