@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Boss.h"
 #include "Map.h"
+#include "game.h"
 
 #include <memory>
 #include <cassert>
@@ -72,12 +73,10 @@ void GameScene::NormalDraw()
 	DrawMap(map);
 	m_player->Draw();
 	m_boss->Draw();
-	//m_map->Draw();
 
 	DrawString(600, 100, "GameScene", 0xffffff);
 	DrawLine(160, 0, 160, 720, 0xffffff, true);
 	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
-	DrawLine(160, 500, 1120, 500, 0xffffff, false);
 }
 
 GameScene::GameScene(SceneController& controller):

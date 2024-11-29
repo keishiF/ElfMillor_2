@@ -9,8 +9,8 @@
 namespace
 {
 	// èâä˙à íu
-	constexpr int kPlayerPosX = 210;
-	constexpr int kPlayerPosY = 388;
+	constexpr int kPlayerPosX = 270;
+	constexpr int kPlayerPosY = 460;
 
 	// âÊñ í[
 	constexpr int kLeftEndWidth = 160;
@@ -219,8 +219,7 @@ void Player::Update(Input& input, Boss& boss)
 	}
 
 	for (int i = 0; i < kShot; i++)
-	{
-		m_shot[i].Draw();
+	{	
 		m_shot[i].Update(boss);
 	}
 }
@@ -238,5 +237,9 @@ void Player::Draw()
 	else
 	{
 		m_idleAnim.Play(m_pos, m_isDirLeft);
+	}
+	for (int i = 0; i < kShot; i++)
+	{
+		m_shot[i].Draw();
 	}
 }

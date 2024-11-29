@@ -185,10 +185,10 @@ void DrawMap(const Map& map)
 			{
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x);
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
-				DrawRectGraph(leftTopX, leftTopY,
+				DrawRectGraph(leftTopX + 160, leftTopY - 2450,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					kMapChipSize, kMapChipSize,
-					map.m_graphHandle, true);
+					map.m_graphHandle, false);
 
 				if (mapChip.chipNo == 1308)
 				{
