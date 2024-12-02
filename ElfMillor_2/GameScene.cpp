@@ -72,7 +72,7 @@ void GameScene::NormalDraw()
 {
 	DrawMap(map);
 	m_player->Draw();
-	m_boss->Draw();
+	//m_boss->Draw();
 
 	DrawString(600, 100, "GameScene", 0xffffff);
 	DrawLine(160, 0, 160, 720, 0xffffff, true);

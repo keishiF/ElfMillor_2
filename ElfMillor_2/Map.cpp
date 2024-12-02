@@ -133,7 +133,7 @@ void InitMap(Map& map)
 	map.loader.Load("img/BackGround/MapTest.fmf");
 
 	// マップ画像読み込み
-	map.m_graphHandle = LoadGraph("img/BackGround/map.jpg");
+	map.m_graphHandle = LoadGraph("img/BackGround/Map.png");
 	// マップデータ読み込み
 	for (int wIndex = 0; wIndex < kMapWidth; wIndex++)
 	{
