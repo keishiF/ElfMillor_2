@@ -63,6 +63,7 @@ Player::Player() :
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
 	m_blinkFrame(0),
+	m_hp(kDefaultHp),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
 	m_shot(),
@@ -249,6 +250,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 
 void Player::Draw()
 {
+	DrawBox(static_cast<int>(m_pos.x - kGraphWidth * 0.5f), static_cast<int>(m_pos.y), static_cast<int>(m_pos.x + kGraphWidth * 0.5f), static_cast<int>(m_pos.y + kGraphHeight), 0x0000ff, false);
 	if (m_isRun)
 	{
 		m_runAnim.Play(m_pos, m_isDirLeft);

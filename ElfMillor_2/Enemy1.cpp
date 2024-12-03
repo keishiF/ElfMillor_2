@@ -81,6 +81,7 @@ void Enemy1::Update(Player& player)
 
 void Enemy1::Draw()
 {
+	DrawBox(m_pos.x - kGraphWidth * 0.5f, m_pos.y - kGraphHeight * 0.5f, m_pos.x + kGraphWidth * 0.5f, m_pos.y + kGraphHeight * 0.5f, 0xff0000, false);
 	m_idleAnim.Play(m_pos, m_isDirLeft);
 }
 
