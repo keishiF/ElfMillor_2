@@ -5,25 +5,7 @@
 #include "PlatinumLoader.h"
 #include "DxLib.h"
 #include "Vec3.h"
-
-//class Map
-//{
-//public:
-//	Map();
-//	~Map();
-//
-//	void Init();
-//	void End();
-//	void Update();
-//	void Draw();
-//
-//private:
-//	int m_handle;
-//
-//	std::vector<unsigned __int16> m_data;
-//
-//	int m_fileSize;
-//};
+#include "Player.h"
 
 namespace
 {
@@ -58,3 +40,4 @@ struct Map
 // プロトタイプ宣言
 void InitMap(Map& map);
 void DrawMap(const Map& map);
+void Update(Map& map, Player& player);

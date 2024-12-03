@@ -5,6 +5,7 @@
 #include "ResultScene.h"
 #include "Player.h"
 #include "Boss.h"
+#include "Enemy1.h"
 #include "Map.h"
 #include "game.h"
 
@@ -41,8 +42,10 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-	m_player->Update(input, *m_boss);
+	m_player->Update(input, *m_boss, *m_enemy1);
 	m_boss->Update();
+	m_enemy1->Update(*m_player);
+
 	float disX = m_boss->m_pos.x - m_player->m_pos.x;
 	if (disX > 50)
 	{
@@ -59,9 +62,6 @@ void GameScene::NormalUpdate(Input& input)
 
 void GameScene::FadeDraw()
 {
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
-	DrawString(600, 100, "GameScene", 0xffffff);
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -72,11 +72,8 @@ void GameScene::NormalDraw()
 {
 	DrawMap(map);
 	m_player->Draw();
-	//m_boss->Draw();
-
-	DrawString(600, 100, "GameScene", 0xffffff);
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
+	m_boss->Draw();
+	m_enemy1->Draw();
 }
 
 GameScene::GameScene(SceneController& controller):
@@ -92,8 +89,8 @@ GameScene::GameScene(SceneController& controller):
 	m_boss = std::make_shared<Boss>();
 	m_boss->Init();
 
-	/*m_map = std::make_shared<Map>();
-	m_map->Init();*/
+	m_enemy1 = std::make_shared<Enemy1>();
+	m_enemy1->Init();
 
 	InitMap(map);
 }

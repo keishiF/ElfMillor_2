@@ -3,6 +3,7 @@
 #include "DxLib.h"
 #include "game.h"
 #include "Boss.h"
+#include "Enemy1.h"
 
 #include <cassert>
 
@@ -19,7 +20,7 @@ namespace
 	constexpr int kFieldHeight = 352;
 
 	// プレイヤーの初期HP
-	constexpr int kMaxHp = 5;
+	constexpr int kDefaultHp = 5;
 
 	// プレイヤーの移動速度
 	constexpr float kSpeed = 5.0f;
@@ -62,7 +63,6 @@ Player::Player() :
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
 	m_blinkFrame(0),
-	m_hp(kMaxHp),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
 	m_shot(),
@@ -101,6 +101,8 @@ void Player::Init()
 		m_shot[i].Init();
 	}
 
+	m_hp = kDefaultHp;
+
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
 	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
@@ -110,7 +112,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Boss& boss)
+void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 {
 	m_idleAnim.Update();
 	if (m_isRun)
@@ -218,9 +220,30 @@ void Player::Update(Input& input, Boss& boss)
 		m_pos.x = kLeftEndWidth;
 	}
 
+	// 被弾
+	if (enemy1.m_hp > 0)
+	{
+		if (GetRight() > enemy1.GetLeft() &&
+			GetLeft() < enemy1.GetRight() &&
+			GetTop() < enemy1.GetBottom() &&
+			GetBottom() > enemy1.GetTop())
+		{
+			m_hp--;
+			printfDx("ﾋｯﾄ\n");
+		}
+	}
+
+	if (m_hp <= 0)
+	{
+		DeleteGraph(m_handleIdle);
+		DeleteGraph(m_handleRun);
+		DeleteGraph(m_handleAtk);
+		DeleteGraph(m_handleDeath);
+	}
+
 	for (int i = 0; i < kShot; i++)
 	{	
-		m_shot[i].Update(boss);
+		m_shot[i].Update(boss, enemy1);
 	}
 }
 
@@ -242,4 +265,24 @@ void Player::Draw()
 	{
 		m_shot[i].Draw();
 	}
+}
+
+float Player::GetLeft()
+{
+	return (m_pos.x - kGraphWidth * 0.5f);;
+}
+
+float Player::GetRight()
+{
+	return (m_pos.x + kGraphWidth * 0.5f);
+}
+
+float Player::GetTop()
+{
+	return (m_pos.y - kGraphHeight);
+}
+
+float Player::GetBottom()
+{
+	return (m_pos.y + kGraphHeight * 0.5f);
 }

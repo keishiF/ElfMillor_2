@@ -24,14 +24,13 @@ namespace
 
 	// èâä˙à íu
 	constexpr float kBossPosX = 700;
-	constexpr float kBossPosY = 330;
+	constexpr float kBossPosY = -330;
 }
 
 Boss::Boss():
 	m_handleShot(-1)
 {
 	m_animAllFrame = 0;
-	m_hp = 3;
 }
 
 Boss::~Boss()
@@ -47,8 +46,11 @@ void Boss::Init()
 	assert(m_handleShot != -1);
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+
 	m_pos.x = kBossPosX;
 	m_pos.y = kBossPosY;
+
+	m_hp = 3;
 }
 
 void Boss::Update()
@@ -85,20 +87,20 @@ void Boss::Shot()
 
 float Boss::GetLeft()
 {
-	return m_pos.x - kGraphWidth * 0.5f;
+	return (m_pos.x - kGraphWidth * 0.5f);
 }
 
 float Boss::GetRight()
 {
-	return m_pos.x + kGraphWidth * 0.5f;;
+	return (m_pos.x + kGraphWidth * 0.5f);
 }
 
 float Boss::GetTop()
 {
-	return m_pos.y - kGraphHeight * 0.5f;;
+	return (m_pos.y - kGraphHeight);
 }
 
 float Boss::GetBottom()
 {
-	return m_pos.y + kGraphHeight * 0.5f;;
+	return (m_pos.y + kGraphHeight * 0.5f);
 }
