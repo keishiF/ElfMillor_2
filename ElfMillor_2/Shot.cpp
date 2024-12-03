@@ -52,13 +52,16 @@ void Shot::Update(Boss& boss, Enemy1& enemy1)
 	{
 		m_pos.y--;
 	}
-	else if (m_isDirLeft)
+	else
 	{
-		m_pos += m_velocity;
-	}
-	else if (!m_isDirLeft)
-	{
-		m_pos -= m_velocity;
+		if (m_isDirLeft)
+		{
+			m_pos += m_velocity;
+		}
+		else if (!m_isDirLeft)
+		{
+			m_pos -= m_velocity;
+		}
 	}
 
 	if (m_pos.x > 1120)
