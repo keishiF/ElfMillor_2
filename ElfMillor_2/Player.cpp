@@ -62,6 +62,7 @@ Player::Player() :
 	m_vec(),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
+	m_isUp(false),
 	m_blinkFrame(0),
 	m_hp(kDefaultHp),
 	m_isLastJump(false),
@@ -183,33 +184,75 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 	m_vec = m_vec.GetNormalize() * kSpeed;
 	m_pos += m_vec;
 
-	// 攻撃
-	if (input.IsTrigger(PAD_INPUT_2))
+	if (input.IsTrigger(PAD_INPUT_UP))
 	{
-		for (int i = 0; i < kShot; ++i)
+		m_isUp = true;
+	}
+	else
+	{
+		m_isUp = false;
+	}
+
+	// 攻撃
+	if (m_isUp)
+	{
+		if (input.IsTrigger(PAD_INPUT_2))
 		{
-			if (!m_shot[i].m_isShotFlag)
-			{	
-				// アニメーション切り替え
-				m_isAtk = true;
+			for (int i = 0; i < kShot; ++i)
+			{
+				if (!m_shot[i].m_isShotFlag)
+				{
+					// 弾に上入力を教える
+					m_shot[i].m_isUp = m_isUp;
 
-				// 弾の位置をプレイヤーの位置に補正
-				m_shot[i].m_pos = m_pos;
+					// アニメーション切り替え
+					m_isAtk = true;
 
-				// 弾を表示
-				m_shot[i].m_isShotFlag = true;
+					// 弾の位置をプレイヤーの位置に補正
+					m_shot[i].m_pos = m_pos;
 
-				// 弾の向きをプレイヤーと同じ向きに補正
-				m_shot[i].m_isDirLeft = m_isShotDirRight;
+					// 弾を表示
+					m_shot[i].m_isShotFlag = true;
 
-				// 弾を1発出してループから抜ける
-				break;
+					// 弾を1発出してループから抜ける
+					break;
+				}
 			}
+		}
+		else
+		{
+			m_isAtk = false;
 		}
 	}
 	else
 	{
-		m_isAtk = false;
+		if (input.IsTrigger(PAD_INPUT_2))
+		{
+			for (int i = 0; i < kShot; ++i)
+			{
+				if (!m_shot[i].m_isShotFlag)
+				{
+					// アニメーション切り替え
+					m_isAtk = true;
+
+					// 弾の位置をプレイヤーの位置に補正
+					m_shot[i].m_pos = m_pos;
+
+					// 弾を表示
+					m_shot[i].m_isShotFlag = true;
+
+					// 弾の向きをプレイヤーと同じ向きに補正
+					m_shot[i].m_isDirLeft = m_isShotDirRight;
+
+					// 弾を1発出してループから抜ける
+					break;
+				}
+			}
+		}
+		else
+		{
+			m_isAtk = false;
+		}
 	}
 
 	if (m_pos.x <= kLeftEndWidth)

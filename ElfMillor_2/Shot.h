@@ -31,6 +31,9 @@ public:
 	// 左向きかどうか
 	bool m_isDirLeft;
 
+	// 上入力されているかどうか
+	bool m_isUp;
+
 private:
 	// 弾のグラフィックハンドル
 	int m_handle;

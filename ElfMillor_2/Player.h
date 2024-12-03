@@ -58,6 +58,9 @@ private:
 	// ’e‚ğ‰EŒü‚«‚É‚·‚é‚©‚Ç‚¤‚©
 	bool m_isShotDirRight;
 
+	// ã“ü—Í‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
+	bool m_isUp;
+
 	// ”í’e‚Ì“_–Å
 	int m_blinkFrame;
 

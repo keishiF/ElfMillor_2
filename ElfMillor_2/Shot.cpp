@@ -30,7 +30,8 @@ Shot::Shot():
 	m_pos(0,0),
 	m_velocity(5.0f,0.0f),
 	m_graphWidth(kGraphWidth),
-	m_graphHeight(kGraphHeight)
+	m_graphHeight(kGraphHeight),
+	m_isUp(false)
 {
 }
 
@@ -47,7 +48,11 @@ void Shot::Init()
 
 void Shot::Update(Boss& boss, Enemy1& enemy1)
 {
-	if (m_isDirLeft)
+	if (m_isUp)
+	{
+		m_pos.y--;
+	}
+	else if (m_isDirLeft)
 	{
 		m_pos += m_velocity;
 	}
