@@ -146,6 +146,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="PlatinumLoader.cpp" />
     <ClCompile Include="Shot.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="Enemy1.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="PlatinumLoader.h" />
     <ClInclude Include="Shot.h" />

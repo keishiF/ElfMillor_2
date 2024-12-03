@@ -4,6 +4,7 @@
 class Input;
 class Vec3;
 class Boss;
+class Enemy1;
 
 class Shot
 {
@@ -12,7 +13,7 @@ public:
 	~Shot();
 
 	void Init();
-	void Update(Boss& boss);
+	void Update(Boss& boss, Enemy1 & enemy1);
 	void Draw();
 
 	float GetLeft();
