@@ -5,7 +5,6 @@
 #include "PlatinumLoader.h"
 #include "DxLib.h"
 #include "Vec3.h"
-#include "Player.h"
 
 namespace
 {

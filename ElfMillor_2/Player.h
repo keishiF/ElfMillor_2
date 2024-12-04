@@ -1,10 +1,8 @@
 #pragma once
 #include "Vec3.h"
-#include "Shot.h"
 #include "Animation.h"
-#include "DxLib.h"
+#include "Shot.h"
 
-class Input;
 class Vec3;
 class Boss;
 class Enemy1;

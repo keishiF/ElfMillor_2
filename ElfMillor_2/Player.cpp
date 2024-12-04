@@ -306,6 +306,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 					{
 						//printfDx("“–‚½‚Á‚Ä‚È‚¢\n");
 					}
+					printfDx("x:%.00f / y:%.00f\n", chip.m_pos.x, chip.m_pos.y);
 				}
 			}
 		}
