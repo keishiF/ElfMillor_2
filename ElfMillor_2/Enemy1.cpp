@@ -14,7 +14,7 @@ namespace
 	constexpr float kEnemyDefaultPosY = 530;
 
 	// 各アニメーションのコマ数
-	constexpr int kIdleAnimNum = 6;
+	constexpr int kWalkAnimNum = 8;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
@@ -24,10 +24,13 @@ namespace
 
 	// 移動速度
 	constexpr float kSpeed = 2.0f;
+
+	// ノックバック距離
+	constexpr int kKnockBack = 30;
 }
 
 Enemy1::Enemy1():
-	m_handleIdle(-1)
+	m_handleRun(-1)
 {
 	m_animAllFrame = 0;
 }
@@ -38,10 +41,10 @@ Enemy1::~Enemy1()
 
 void Enemy1::Init()
 {
-	m_handleIdle = LoadGraph("img/Enemy/Orc/OrcIdle.png");
-	assert(m_handleIdle != -1);
+	m_handleRun = LoadGraph("img/Enemy/Orc/OrcWalk.png");
+	assert(m_handleRun != -1);
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_idleRun.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kWalkAnimNum);
 
 	m_pos.x = kEnemyDefaultPosX;
 	m_pos.y = kEnemyDefaultPosY;
@@ -55,7 +58,7 @@ void Enemy1::Update()
 
 void Enemy1::Update(Player& player)
 {
-	m_idleAnim.Update();
+	m_idleRun.Update();
 
 	if (m_pos.x > player.m_pos.x)
 	{
@@ -70,24 +73,24 @@ void Enemy1::Update(Player& player)
 
 	// 移動処理
 	m_vec = m_vec.GetNormalize() * kSpeed;
-	m_pos += m_vec;
+	//m_pos += m_vec;
 
 	// 死亡
 	if (m_hp <= 0)
 	{
-		DeleteGraph(m_handleIdle);
+		DeleteGraph(m_handleRun);
 	}
 }
 
 void Enemy1::Draw()
 {
 	DrawBox(m_pos.x - kGraphWidth * 0.5f, m_pos.y - kGraphHeight * 0.5f, m_pos.x + kGraphWidth * 0.5f, m_pos.y + kGraphHeight * 0.5f, 0xff0000, false);
-	m_idleAnim.Play(m_pos, m_isDirLeft);
+	m_idleRun.Play(m_pos, m_isDirLeft);
 }
 
 void Enemy1::End()
 {
-	DeleteGraph(m_handleIdle);
+	DeleteGraph(m_handleRun);
 }
 
 float Enemy1::GetLeft()

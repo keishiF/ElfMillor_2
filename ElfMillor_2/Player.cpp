@@ -4,14 +4,15 @@
 #include "game.h"
 #include "Boss.h"
 #include "Enemy1.h"
+#include "Map.h"
 
 #include <cassert>
 
 namespace
 {
 	// 初期位置
-	constexpr int kPlayerPosX = 270;
-	constexpr int kPlayerPosY = 460;
+	constexpr int kPlayerPosX = 0; // 270
+	constexpr int kPlayerPosY = 0; // 460
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -20,7 +21,7 @@ namespace
 	constexpr int kFieldHeight = 352;
 
 	// プレイヤーの初期HP
-	constexpr int kDefaultHp = 5;
+	constexpr int kDefaultHp = 15;
 
 	// プレイヤーの移動速度
 	constexpr float kSpeed = 5.0f;
@@ -46,6 +47,9 @@ namespace
 
 	// グラフィックの拡大率
 	constexpr float kExpRate = 2.0f;
+
+	// ノックバック距離
+	constexpr int kKnockBack = 30;
 }
 
 Player::Player() :
@@ -114,7 +118,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
+void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 {
 	m_idleAnim.Update();
 	if (m_isRun)
@@ -226,14 +230,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 		m_isAtk = false;
 	}
 
-	if (m_pos.x <= kLeftEndWidth)
-	{
-		m_pos.x = kRightEndWidth;
-	}
-	else if (m_pos.x >= kRightEndWidth)
-	{
-		m_pos.x = kLeftEndWidth;
-	}
+	//// 右端に行ったら左端に
+	//if (m_pos.x <= kLeftEndWidth)
+	//{
+	//	m_pos.x = kRightEndWidth;
+	//}
+	//// 左端に行ったら右端に
+	//else if (m_pos.x >= kRightEndWidth)
+	//{
+	//	m_pos.x = kLeftEndWidth;
+	//}
 
 	// 被弾
 	if (enemy1.m_hp > 0)
@@ -243,11 +249,24 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 			GetTop() < enemy1.GetBottom() &&
 			GetBottom() > enemy1.GetTop())
 		{
+			// HPを減らす
 			m_hp--;
-			printfDx("ﾋｯﾄ\n");
+
+			// 当たった相手がいない方向にノックバック
+			if (m_pos.x < enemy1.m_pos.x)
+			{
+				m_pos.x -= kKnockBack;
+				enemy1.m_pos.x += kKnockBack;
+			}
+			else if (m_pos.x > enemy1.m_pos.x)
+			{
+				m_pos.x += kKnockBack;
+				enemy1.m_pos.x -= kKnockBack;
+			}
 		}
 	}
 
+	// HPがなくなったら死ぬ
 	if (m_hp <= 0)
 	{
 		DeleteGraph(m_handleIdle);
@@ -256,9 +275,40 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1)
 		DeleteGraph(m_handleDeath);
 	}
 
+	// 弾を発射
 	for (int i = 0; i < kShot; i++)
 	{	
 		m_shot[i].Update(boss, enemy1);
+	}
+
+	// マップとの当たり判定
+	for (int y = 0; y < kMapHeight; y++)
+	{
+		for (int x = 0; x < kMapWidth; x++)
+		{
+			for (int i = 0; i < _countof(kWhiteList); i++)
+			{
+				if (map.mapChips[y][x].chipNo == kWhiteList[i])
+				{
+					MapChip chip = map.mapChips[y][x];
+					float chipBottom = chip.m_pos.y + kMapChipSize;
+					float chipTop = chip.m_pos.y;
+					float chipRight = chip.m_pos.x + kMapChipSize;
+					float chipLeft = chip.m_pos.x;
+					if (GetTop() < chipBottom ||
+						GetBottom() > chipTop ||
+						GetRight() > chipLeft ||
+						GetLeft() < chipRight)
+					{
+						//printfDx("当たってる\n");
+					}
+					else
+					{
+						//printfDx("当たってない\n");
+					}
+				}
+			}
+		}
 	}
 }
 

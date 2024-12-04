@@ -15,7 +15,7 @@ void InitMap(Map& map)
 	{
 		for (int hIndex = 0; hIndex < kMapHeight; hIndex++)
 		{
-			MapChip& mapChip = map.mapChips[wIndex][hIndex];
+			MapChip& mapChip = map.mapChips[hIndex][wIndex];
 			mapChip.w = kMapChipSize;
 			mapChip.h = kMapChipSize;
 
@@ -26,7 +26,7 @@ void InitMap(Map& map)
 			{
 				int a = 1;
 			}
-			mapChip.chipNo = map.loader.GetChipSpriteNo(LayerType::BackGround, wIndex, hIndex);
+			mapChip.chipNo = map.loader.GetChipSpriteNo(LayerType::BackGround, hIndex, wIndex);
 
 			// ポジションの基準を左上に
 			mapChip.m_pos = VGet(wIndex * mapChip.w, hIndex * mapChip.h, 0);
@@ -51,31 +51,34 @@ void InitMap(Map& map)
 
 void DrawMap(const Map& map)
 {
-	for (int wIndex = 0; wIndex < kMapWidth; wIndex++)
+	for (int hIndex = 0; hIndex < kMapHeight; hIndex++)
 	{
-		for (int hIndex = 0; hIndex < kMapHeight; hIndex++)
+		for (int wIndex = 0; wIndex < kMapWidth; wIndex++)
 		{
 			// １は当たり判定チップを表しているので１のところだけ描画
-			const MapChip& mapChip = map.mapChips[wIndex][hIndex];
+			const MapChip& mapChip = map.mapChips[hIndex][wIndex];
 			if (mapChip.chipNo > 0)
 			{
-				auto leftTopX = static_cast<int>(mapChip.m_pos.x);
-				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
-				DrawRectGraph(leftTopX + 160, leftTopY - 2450,
+				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + kMapOffsetX;
+				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - kMapOffsetY;
+				DrawRectGraph(leftTopX, leftTopY,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					kMapChipSize, kMapChipSize,
-					map.m_graphHandle, false);
+					map.m_graphHandle, true);
 
 				if (mapChip.chipNo == 1308)
 				{
 					assert(false);
 				}
+				DrawBox(leftTopX, leftTopY, leftTopX + kMapChipSize, leftTopY + kMapChipSize, 0xff0000, false);
+				/*for (int i = 0; i < _countof(kWhiteList); i++)
+				{
+					if (map.mapChips[wIndex][hIndex].chipNo == kWhiteList[i])
+					{
+						DrawBox(leftTopX, leftTopY, leftTopX + kMapChipSize, leftTopY + kMapChipSize, 0xff0000, false);
+					}
+				}*/
 			}
 		}
 	}
-}
-
-void Update(Map& map, Player& player)
-{
-
 }

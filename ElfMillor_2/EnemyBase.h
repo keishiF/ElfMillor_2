@@ -20,7 +20,7 @@ protected:
 	int m_animAllFrame;
 
 	// アニメーション
-	Animation m_idleAnim;
+	Animation m_idleRun;
 
 	// 左を向いてるかどうかのフラグ
 	bool m_isDirLeft;

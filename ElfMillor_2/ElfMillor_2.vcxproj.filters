@@ -84,6 +84,9 @@
     <ClCompile Include="Enemy1.cpp">
       <Filter>ソース ファイル\GameObject</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="PlatinumLoader.h">
       <Filter>ヘッダー ファイル\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

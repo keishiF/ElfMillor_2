@@ -42,7 +42,7 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-	m_player->Update(input, *m_boss, *m_enemy1);
+	m_player->Update(input, *m_boss, *m_enemy1, map);
 	m_boss->Update();
 	m_enemy1->Update(*m_player);
 

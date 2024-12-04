@@ -8,6 +8,7 @@ class Input;
 class Vec3;
 class Boss;
 class Enemy1;
+class Map;
 
 namespace
 {
@@ -24,7 +25,7 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update(Input& input, Boss& boss, Enemy1& enemy1);
+	void Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map);
 	void Draw();
 
 	// 当たり判定のための座標取得
