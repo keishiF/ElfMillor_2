@@ -22,5 +22,5 @@ public:
 	float GetBottom();
 
 private:
-	int m_handleIdle;
+	int m_handleRun;
 };

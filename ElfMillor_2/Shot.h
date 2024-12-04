@@ -2,7 +2,6 @@
 #include "Vec3.h"
 
 class Input;
-class Vec3;
 class Boss;
 class Enemy1;
 

@@ -45,7 +45,7 @@ void Boss::Init()
 	m_handleShot = LoadGraph("img/Boss/BossBullet.png");
 	assert(m_handleShot != -1);
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_idleRun.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 
 	m_pos.x = kBossPosX;
 	m_pos.y = kBossPosY;
@@ -55,7 +55,7 @@ void Boss::Init()
 
 void Boss::Update()
 {
-	m_idleAnim.Update();
+	m_idleRun.Update();
 
 	if (m_hp <= 0)
 	{
@@ -66,7 +66,7 @@ void Boss::Update()
 void Boss::Draw()
 {
 	m_isDirLeft = false;
-	m_idleAnim.Play(m_pos, m_isDirLeft);
+	m_idleRun.Play(m_pos, m_isDirLeft);
 }
 
 void Boss::End()

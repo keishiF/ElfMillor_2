@@ -4,14 +4,13 @@
 #include<windows.h>
 
 enum class LayerType {
-	BackGround,//背景
-	Enemies,//敵
-	Event,//イベント
+	BackGround//背景
+	//Enemies,//敵
+	//Event,//イベント
 };
 
 //マップの広さ * レイヤー数なので、2つのベクターを入れ子にしてる
 using MapData_t = std::vector < std::vector<unsigned __int16>>;
-
 
 /// <summary>
 /// Platinumのデータをロードする
@@ -50,7 +49,7 @@ private:
 	/// データの内容をXY転置する
 	/// </summary>
 	/// <param name="layerId">レイヤーID</param>
-	void TransposeMapData(int layerId);
+	//void TransposeMapData(int layerId);
 private:
 
 	MapData_t mapData_;
