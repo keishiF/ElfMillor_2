@@ -23,7 +23,7 @@ namespace
 	constexpr float kExpRate = 3.5f;
 
 	// 移動速度
-	constexpr float kSpeed = 2.0f;
+	constexpr float kSpeed = 1.0f;
 
 	// ノックバック距離
 	constexpr int kKnockBack = 30;
@@ -73,7 +73,7 @@ void Enemy1::Update(Player& player)
 
 	// 移動処理
 	m_vec = m_vec.GetNormalize() * kSpeed;
-	//m_pos += m_vec;
+	m_pos += m_vec;
 
 	// 死亡
 	if (m_hp <= 0)

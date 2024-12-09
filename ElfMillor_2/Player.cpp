@@ -11,8 +11,8 @@
 namespace
 {
 	// 初期位置
-	constexpr int kPlayerPosX = 0; // 270
-	constexpr int kPlayerPosY = 0; // 460
+	constexpr int kPlayerPosX = 270; // 270
+	constexpr int kPlayerPosY = 460; // 460
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -49,7 +49,7 @@ namespace
 	constexpr float kExpRate = 2.0f;
 
 	// ノックバック距離
-	constexpr int kKnockBack = 30;
+	constexpr int kKnockBack = 60;
 }
 
 Player::Player() :
@@ -230,16 +230,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isAtk = false;
 	}
 
-	//// 右端に行ったら左端に
-	//if (m_pos.x <= kLeftEndWidth)
-	//{
-	//	m_pos.x = kRightEndWidth;
-	//}
-	//// 左端に行ったら右端に
-	//else if (m_pos.x >= kRightEndWidth)
-	//{
-	//	m_pos.x = kLeftEndWidth;
-	//}
+	// 右端に行ったら左端に
+	if (m_pos.x <= kLeftEndWidth)
+	{
+		m_pos.x = kRightEndWidth;
+	}
+	// 左端に行ったら右端に
+	else if (m_pos.x >= kRightEndWidth)
+	{
+		m_pos.x = kLeftEndWidth;
+	}
 
 	// 被弾
 	if (enemy1.m_hp > 0)
@@ -250,7 +250,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			GetBottom() > enemy1.GetTop())
 		{
 			// HPを減らす
-			m_hp--;
+			//m_hp--;
 
 			// 当たった相手がいない方向にノックバック
 			if (m_pos.x < enemy1.m_pos.x)
@@ -281,7 +281,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
-	printfDx("当たってない\n");
 	// マップとの当たり判定
 	for (int y = 0; y < kMapHeight; y++)
 	{
@@ -301,7 +300,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 						GetRight() > chipLeft ||
 						GetLeft() < chipRight)
 					{
-						printfDx("当たってる\n");
+						//printfDx("当たってる\n");
 					}
 					else
 					{
