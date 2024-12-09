@@ -10,7 +10,7 @@ namespace
 {
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth = 30;
-	constexpr int kMapHeight = 100;
+	constexpr int kMapHeight = 24;
 	constexpr int kMapGraphSize = 1472;
 	constexpr int kWhiteList[] =
 	{
@@ -21,8 +21,15 @@ namespace
 		3088,3089,3090,3091,// °
 		1027,1283,// •Ç
 		16,17,// °
-		272,273// Šø‚Ì“Vˆä
+		272,273,// Šø‚Ì“Vˆä
+		782,783 // ½‚Ì“Vˆä
 	};
+	//constexpr int kBlackList[] = 
+	//{
+	//	528,529,784,785,1040,1041,1296,1297,// Šø
+	//	1038,1039,1294,1295,1550,1551,4110,4111,4366,4367,4622,4623,4878,4879,// ½
+	//	1805,1806,1807,1808,
+	//}
 
 	constexpr int kMapOffsetX = 160;
 	constexpr int kMapOffsetY = 2470;

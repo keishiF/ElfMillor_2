@@ -281,6 +281,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
+	printfDx("“–‚½‚Á‚Ä‚È‚¢\n");
 	// ƒ}ƒbƒv‚Æ‚Ì“–‚½‚è”»’è
 	for (int y = 0; y < kMapHeight; y++)
 	{
@@ -300,13 +301,13 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 						GetRight() > chipLeft ||
 						GetLeft() < chipRight)
 					{
-						//printfDx("“–‚½‚Á‚Ä‚é\n");
+						printfDx("“–‚½‚Á‚Ä‚é\n");
 					}
 					else
 					{
 						//printfDx("“–‚½‚Á‚Ä‚È‚¢\n");
 					}
-					printfDx("x:%.00f / y:%.00f\n", chip.m_pos.x, chip.m_pos.y);
+					//printfDx("chipNo:%d / x:%.00f / y:%.00f\n", chip.chipNo, chip.m_pos.x, chip.m_pos.y);
 				}
 			}
 		}
@@ -315,7 +316,10 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 
 void Player::Draw()
 {
-	DrawBox(static_cast<int>(m_pos.x - kGraphWidth * 0.5f), static_cast<int>(m_pos.y), static_cast<int>(m_pos.x + kGraphWidth * 0.5f), static_cast<int>(m_pos.y + kGraphHeight), 0x0000ff, false);
+	if (m_hp > 0)
+	{
+		DrawBox(static_cast<int>(m_pos.x - kGraphWidth * 0.5f), static_cast<int>(m_pos.y), static_cast<int>(m_pos.x + kGraphWidth * 0.5f), static_cast<int>(m_pos.y + kGraphHeight), 0x0000ff, false);
+	}
 	if (m_isRun)
 	{
 		m_runAnim.Play(m_pos, m_isDirLeft);

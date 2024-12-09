@@ -59,8 +59,8 @@ void DrawMap(const Map& map)
 			const MapChip& mapChip = map.mapChips[hIndex][wIndex];
 			if (mapChip.chipNo > 0)
 			{
-				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + kMapOffsetX;
-				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - kMapOffsetY;
+				auto leftTopX = static_cast<int>(mapChip.m_pos.x)/* + kMapOffsetX*/;
+				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
 				DrawRectGraph(leftTopX, leftTopY,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					kMapChipSize, kMapChipSize,
@@ -70,14 +70,8 @@ void DrawMap(const Map& map)
 				{
 					assert(false);
 				}
+
 				DrawBox(leftTopX, leftTopY, leftTopX + kMapChipSize, leftTopY + kMapChipSize, 0xff0000, false);
-				/*for (int i = 0; i < _countof(kWhiteList); i++)
-				{
-					if (map.mapChips[wIndex][hIndex].chipNo == kWhiteList[i])
-					{
-						DrawBox(leftTopX, leftTopY, leftTopX + kMapChipSize, leftTopY + kMapChipSize, 0xff0000, false);
-					}
-				}*/
 			}
 		}
 	}
