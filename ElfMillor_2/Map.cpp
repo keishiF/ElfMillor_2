@@ -6,7 +6,8 @@
 void InitMap(Map& map)
 {
 	// Platinumデータ読み込み
-	map.loader.Load("img/BackGround/MapTest.fmf");
+	map.loader.Load("img/BackGround/Map.fmf");
+	//map.loader.Load("img/BackGround/MapTest.fmf");
 
 	// マップ画像読み込み
 	map.m_graphHandle = LoadGraph("img/BackGround/Map.png");
@@ -60,7 +61,7 @@ void DrawMap(const Map& map)
 			if (mapChip.chipNo > 0)
 			{
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + kMapOffsetX;
-				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
+				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - kMapOffsetY;
 				DrawRectGraph(leftTopX, leftTopY,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					kMapChipSize, kMapChipSize,

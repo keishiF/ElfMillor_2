@@ -10,7 +10,7 @@ namespace
 {
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth = 30;
-	constexpr int kMapHeight = 24;
+	constexpr int kMapHeight = 100;
 	constexpr int kMapGraphSize = 1472;
 	constexpr int kWhiteList[] =
 	{
@@ -32,7 +32,7 @@ namespace
 	//}
 
 	constexpr int kMapOffsetX = 160;
-	constexpr int kMapOffsetY = 2470;
+	constexpr int kMapOffsetY = 2455;
 }
 
 /// <summary>
