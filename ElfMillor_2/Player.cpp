@@ -5,18 +5,21 @@
 #include "Boss.h"
 #include "Enemy1.h"
 #include "Map.h"
+#include "Camera.h"
 
 #include <cassert>
 
 namespace
 {
 	// 初期位置
-	constexpr int kPlayerPosX = 270; // 270
-	constexpr int kPlayerPosY = 460; // 460
+	//constexpr int kPlayerPosX = 270; // 270
+	//constexpr int kPlayerPosY = 460; // 460
+	constexpr int kPlayerPosX = 0; // 270
+	constexpr int kPlayerPosY = 0; // 460
 
 	// 画面端
-	constexpr int kLeftEndWidth = 160;
-	constexpr int kRightEndWidth = 1120;
+	constexpr int kLeftEndWidth = -480;
+	constexpr int kRightEndWidth = 480;
 
 	constexpr int kFieldHeight = 352;
 
@@ -52,7 +55,7 @@ namespace
 	constexpr int kKnockBack = 60;
 }
 
-Player::Player() :
+Player::Player(Camera& camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
 	m_handleAtk(-1),
@@ -62,7 +65,6 @@ Player::Player() :
 	m_isAtk(false),
 	m_isDeath(false),
 	m_jumpSpeed(0.0f),
-	m_pos(kPlayerPosX, kPlayerPosY),
 	m_vec(),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
@@ -74,7 +76,9 @@ Player::Player() :
 	m_shot(),
 	m_idleAnim(),
 	m_runAnim(),
-	m_atkAnim()
+	m_atkAnim(),
+	// 基底クラスの初期化
+	GameObject(Vec3(kPlayerPosX, kPlayerPosY), camera)
 {
 }
 
@@ -282,22 +286,22 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	}
 
 	// マップとの当たり判定
-	for (int y = 0; y < kMapHeight; y++)
+	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
-		for (int x = 0; x < kMapWidth; x++)
+		for (int x = 0; x < MapConsts::kMapWidth; x++)
 		{
-			for (int i = 0; i < _countof(kWhiteList); i++)
+			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
 			{
-				if (map.mapChips[y][x].chipNo == kWhiteList[i])
+				if (map.mapChips[y][x].chipNo == MapConsts::kWhiteList[i])
 				{
 					MapChip chip = map.mapChips[y][x];
-					float chipBottom = chip.m_pos.y + kMapChipSize;
-					float chipTop = chip.m_pos.y;
-					float chipRight = chip.m_pos.x + kMapChipSize;
-					float chipLeft = chip.m_pos.x;
-					if (GetTop() < chipBottom ||
-						GetBottom() > chipTop ||
-						GetRight() > chipLeft ||
+					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5;
+					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5;
+					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5;
+					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5;
+					if (GetTop() < chipBottom &&
+						GetBottom() > chipTop &&
+						GetRight() > chipLeft &&
 						GetLeft() < chipRight)
 					{
 						//printfDx("当たってる\n");
@@ -306,7 +310,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 					{
 						//printfDx("当たってない\n");
 					}
-					//printfDx("chipNo:%d / x:%.00f / y:%.00f\n", chip.chipNo, chip.m_pos.x, chip.m_pos.y);
+					/*if (GetRight() > chipLeft)
+					{
+						printfDx("当たってる\n");
+					}
+					else
+					{
+						printfDx("当たってない\n");
+					}*/
 				}
 			}
 		}
@@ -315,31 +326,36 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 
 void Player::Draw()
 {
+	Vec3 drawPos = m_camera.Capture(m_pos);
+
 	if (m_hp > 0)
 	{
-		DrawBox(static_cast<int>(m_pos.x - kGraphWidth * 0.5f), static_cast<int>(m_pos.y), static_cast<int>(m_pos.x + kGraphWidth * 0.5f), static_cast<int>(m_pos.y + kGraphHeight), 0x0000ff, false);
+		DrawBox(static_cast<int>(drawPos.x - kGraphWidth * 0.5f), static_cast<int>(drawPos.y), static_cast<int>(drawPos.x + kGraphWidth * 0.5f), static_cast<int>(drawPos.y + kGraphHeight), 0x0000ff, false);
 	}
 	if (m_isRun)
 	{
-		m_runAnim.Play(m_pos, m_isDirLeft);
+		m_runAnim.Play(drawPos, m_isDirLeft);
 	}
 	else if (m_isAtk)
 	{
-		m_atkAnim.Play(m_pos, m_isDirLeft);
+		m_atkAnim.Play(drawPos, m_isDirLeft);
 	}
 	else
 	{
-		m_idleAnim.Play(m_pos, m_isDirLeft);
+		m_idleAnim.Play(drawPos, m_isDirLeft);
 	}
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Draw();
 	}
+
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
 }
 
 float Player::GetLeft()
 {
-	return (m_pos.x - kGraphWidth * 0.5f);;
+	return (m_pos.x - kGraphWidth * 0.5f);
 }
 
 float Player::GetRight()
@@ -349,7 +365,7 @@ float Player::GetRight()
 
 float Player::GetTop()
 {
-	return (m_pos.y - kGraphHeight);
+	return (m_pos.y - kGraphHeight * 0.5f);
 }
 
 float Player::GetBottom()

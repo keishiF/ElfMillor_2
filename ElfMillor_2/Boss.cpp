@@ -27,8 +27,9 @@ namespace
 	constexpr float kBossPosY = -330;
 }
 
-Boss::Boss():
-	m_handleShot(-1)
+Boss::Boss(Camera& camera) :
+	m_handleShot(-1),
+	EnemyBase(Vec3(kBossPosX, kBossPosY), camera)
 {
 	m_animAllFrame = 0;
 }

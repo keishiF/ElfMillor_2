@@ -1,12 +1,14 @@
 #pragma once
 #include "Vec3.h"
 #include "Animation.h"
+#include "GameObject.h"
 
-class EnemyBase
+class Camera;
+
+class EnemyBase : public GameObject
 {
 public:
 	// •\Ž¦ˆÊ’u
-	Vec3 m_pos;
 	Vec3 m_vec;
 
 	// HP
@@ -26,6 +28,12 @@ protected:
 	bool m_isDirLeft;
 
 public:
+	EnemyBase(Vec3 initPos, Camera& camera) :
+		GameObject(initPos, camera)
+	{
+	}
+	virtual ~EnemyBase() {}
+
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;

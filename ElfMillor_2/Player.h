@@ -2,22 +2,24 @@
 #include "Vec3.h"
 #include "Animation.h"
 #include "Shot.h"
+#include "GameObject.h"
 
 class Vec3;
 class Boss;
 class Enemy1;
 class Map;
+class Camera;
 
 namespace
 {
 	constexpr int kShot = 15;
 }
 
-class Player
+class Player : public GameObject
 {
 public:
 	// プレイヤーのコンストラクタとデストラクタ
-	Player();
+	Player(Camera& camera);
 	~Player();
 
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
@@ -33,7 +35,6 @@ public:
 	float GetBottom();
 
 	// プレイヤーの表示位置
-	Vec3 m_pos;
 	Vec3 m_vec;
 
 private:

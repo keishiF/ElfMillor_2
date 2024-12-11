@@ -2,10 +2,12 @@
 #include "EnemyBase.h"
 #include "Animation.h"
 
+class Camera;
+
 class Boss : public EnemyBase
 {
 public:
-	Boss();
+	Boss(Camera& camera);
 	~Boss();
 
 	virtual void Init() override;
