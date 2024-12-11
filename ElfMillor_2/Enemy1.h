@@ -3,11 +3,12 @@
 #include "Animation.h"
 
 class Player;
+class Camera;
 
 class Enemy1 :public EnemyBase
 {
 public:
-	Enemy1();
+	Enemy1(Camera& camera);
 	~Enemy1();
 
 	virtual void Init() override;

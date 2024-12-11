@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include <cassert>
 #include "Player.h"
+#include "Camera.h"
 
 namespace
 {
@@ -10,8 +11,8 @@ namespace
 	constexpr int kGraphHeight = 100;
 
 	// 初期位置
-	constexpr float kEnemyDefaultPosX = 900;
-	constexpr float kEnemyDefaultPosY = 530;
+	constexpr float kEnemyDefaultPosX = 420;
+	constexpr float kEnemyDefaultPosY = 50;
 
 	// 各アニメーションのコマ数
 	constexpr int kWalkAnimNum = 8;
@@ -29,8 +30,9 @@ namespace
 	constexpr int kKnockBack = 30;
 }
 
-Enemy1::Enemy1():
-	m_handleRun(-1)
+Enemy1::Enemy1(Camera& camera) :
+	m_handleRun(-1),
+	EnemyBase(Vec3(kEnemyDefaultPosX, kEnemyDefaultPosY), camera)
 {
 	m_animAllFrame = 0;
 }
@@ -84,11 +86,16 @@ void Enemy1::Update(Player& player)
 
 void Enemy1::Draw()
 {
+	Vec3 drawPos = m_camera.Capture(m_pos);
+
 	if (m_hp > 0)
 	{
-		DrawBox(m_pos.x - kGraphWidth * 0.5f, m_pos.y - kGraphHeight * 0.5f, m_pos.x + kGraphWidth * 0.5f, m_pos.y + kGraphHeight * 0.5f, 0xff0000, false);
+		DrawBox(drawPos.x - kGraphWidth * 0.5f, drawPos.y - kGraphHeight * 0.5f, drawPos.x + kGraphWidth * 0.5f, drawPos.y + kGraphHeight * 0.5f, 0xff0000, false);
 	}
-	m_idleRun.Play(m_pos, m_isDirLeft);
+	m_idleRun.Play(drawPos, m_isDirLeft);
+
+	DrawFormatString(0, 30, 0xffffff, "EnemyPos.X~%f, Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 45, 0xffffff, "drawPos.X~%f, Y=%f", drawPos.x, drawPos.y);
 }
 
 void Enemy1::End()
@@ -108,7 +115,7 @@ float Enemy1::GetRight()
 
 float Enemy1::GetTop()
 {
-	return (m_pos.y - kGraphHeight);
+	return (m_pos.y - kGraphHeight * 0.5f);
 }
 
 float Enemy1::GetBottom()

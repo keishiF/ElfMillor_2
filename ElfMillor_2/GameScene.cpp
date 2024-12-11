@@ -8,6 +8,7 @@
 #include "Enemy1.h"
 #include "Map.h"
 #include "game.h"
+#include "Camera.h"
 
 #include <memory>
 #include <cassert>
@@ -42,6 +43,7 @@ void GameScene::FadeOutUpdate(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
+	m_camera->Update();
 	m_player->Update(input, *m_boss, *m_enemy1, map);
 	m_boss->Update();
 	m_enemy1->Update(*m_player);
@@ -83,14 +85,18 @@ GameScene::GameScene(SceneController& controller):
 {
 	m_frame = kFadeInterval;
 
-	m_player = std::make_shared<Player>();
-	m_player->Init();
+	m_camera = std::make_shared<Camera>();
 
-	m_boss = std::make_shared<Boss>();
+	m_boss = std::make_shared<Boss>(*m_camera);
 	m_boss->Init();
 
-	m_enemy1 = std::make_shared<Enemy1>();
+	m_enemy1 = std::make_shared<Enemy1>(*m_camera);
 	m_enemy1->Init();
+
+	m_player = std::make_shared<Player>(*m_camera);
+	m_player->Init();
+
+	m_camera->Init(m_player);
 
 	InitMap(map);
 }

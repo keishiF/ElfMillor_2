@@ -6,7 +6,7 @@
 #include "DxLib.h"
 #include "Vec3.h"
 
-namespace
+namespace MapConsts
 {
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth = 30;
@@ -38,11 +38,12 @@ namespace
 /// <summary>
 /// マップチップ構造体
 /// </summary>
-struct MapChip
+class MapChip
 {
+public:
 	int chipNo;
 	float w, h;			// 幅、高さ
-	VECTOR m_pos;			// 座標
+	Vec3 m_pos;			// 座標
 	int posInGraphX;	// 画像内のX座標
 	int posInGraphY;	// 画像内のY座標
 };
@@ -50,9 +51,10 @@ struct MapChip
 /// <summary>
 /// マップ構造体
 /// </summary>
-struct Map
+class Map
 {
-	MapChip mapChips[kMapHeight][kMapWidth];
+public:
+	MapChip mapChips[MapConsts::kMapHeight][MapConsts::kMapWidth];
 	int m_graphHandle;
 	PlatinumLoader loader;
 };

@@ -49,6 +49,11 @@ public:
 		return temp;
 	}
 
+	Vec3 operator-() const
+	{
+		return Vec3(-x, -y);
+	}
+
 	Vec3 operator*=(float scale)
 	{
 		x *= scale;
