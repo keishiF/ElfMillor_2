@@ -15,7 +15,7 @@ namespace
 	//constexpr int kPlayerPosX = 270; // 270
 	//constexpr int kPlayerPosY = 460; // 460
 	constexpr int kPlayerPosX = 0; // 270
-	constexpr int kPlayerPosY = 0; // 460
+	constexpr int kPlayerPosY = 500; // 460
 
 	// 画面端
 	constexpr int kLeftEndWidth = -480;
@@ -234,16 +234,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isAtk = false;
 	}
 
-	// 右端に行ったら左端に
-	if (m_pos.x <= kLeftEndWidth)
-	{
-		m_pos.x = kRightEndWidth;
-	}
-	// 左端に行ったら右端に
-	else if (m_pos.x >= kRightEndWidth)
-	{
-		m_pos.x = kLeftEndWidth;
-	}
+	//// 右端に行ったら左端に
+	//if (m_pos.x <= kLeftEndWidth)
+	//{
+	//	m_pos.x = kRightEndWidth;
+	//}
+	//// 左端に行ったら右端に
+	//else if (m_pos.x >= kRightEndWidth)
+	//{
+	//	m_pos.x = kLeftEndWidth;
+	//}
 
 	// 被弾
 	if (enemy1.m_hp > 0)
@@ -285,6 +285,8 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
+	bool isHit = false;
+
 	// マップとの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
@@ -295,54 +297,61 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				if (map.mapChips[y][x].chipNo == MapConsts::kWhiteList[i])
 				{
 					MapChip chip = map.mapChips[y][x];
-					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5;
-					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5;
-					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5;
-					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5;
+					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetY;
+					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetY;
+					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetX;
+					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetX;
 					if (GetTop() < chipBottom &&
 						GetBottom() > chipTop &&
 						GetRight() > chipLeft &&
 						GetLeft() < chipRight)
 					{
-						//printfDx("当たってる\n");
+						isHit = true;
 					}
 					else
 					{
 						//printfDx("当たってない\n");
 					}
-					/*if (GetRight() > chipLeft)
-					{
-						printfDx("当たってる\n");
-					}
-					else
-					{
-						printfDx("当たってない\n");
-					}*/
+
+					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
 				}
 			}
 		}
+	}
+
+	if (isHit)
+	{
+		printfDx("当たってる\n");
+	}
+	else
+	{
+		printfDx("当たってない\n");
 	}
 }
 
 void Player::Draw()
 {
-	Vec3 drawPos = m_camera.Capture(m_pos);
+	//Vec3 drawPos = m_camera.Capture(m_pos);
 
 	if (m_hp > 0)
 	{
-		DrawBox(static_cast<int>(drawPos.x - kGraphWidth * 0.5f), static_cast<int>(drawPos.y), static_cast<int>(drawPos.x + kGraphWidth * 0.5f), static_cast<int>(drawPos.y + kGraphHeight), 0x0000ff, false);
+		//DrawBox(static_cast<int>(drawPos.x - kGraphWidth * 0.5f), static_cast<int>(drawPos.y), static_cast<int>(drawPos.x + kGraphWidth * 0.5f), static_cast<int>(drawPos.y + kGraphHeight), 0x0000ff, false);
+
+		DrawBox(GetLeft(), GetTop(), GetRight(), GetBottom(), 0xff0000, true);
+
+		DrawFormatString(300, 0, 0xffffff, "プレイヤー左上座標:%d", GetLeft());
 	}
 	if (m_isRun)
 	{
-		m_runAnim.Play(drawPos, m_isDirLeft);
+		m_runAnim.Play(m_pos, m_isDirLeft);
 	}
 	else if (m_isAtk)
 	{
-		m_atkAnim.Play(drawPos, m_isDirLeft);
+		m_atkAnim.Play(m_pos, m_isDirLeft);
 	}
 	else
 	{
-		m_idleAnim.Play(drawPos, m_isDirLeft);
+		m_idleAnim.Play(m_pos, m_isDirLeft);
 	}
 	for (int i = 0; i < kShot; i++)
 	{
@@ -350,7 +359,7 @@ void Player::Draw()
 	}
 
 	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
-	DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
+	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
 }
 
 float Player::GetLeft()
