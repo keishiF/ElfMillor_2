@@ -12,14 +12,12 @@
 namespace
 {
 	// 初期位置
-	//constexpr int kPlayerPosX = 270; // 270
-	//constexpr int kPlayerPosY = 460; // 460
-	constexpr int kPlayerPosX = 0; // 270
-	constexpr int kPlayerPosY = 500; // 460
+	constexpr int kDefaultPlayerPosX = 360;
+	constexpr int kDefaultPlayerPosY = 400;
 
 	// 画面端
-	constexpr int kLeftEndWidth = -480;
-	constexpr int kRightEndWidth = 480;
+	constexpr int kLeftEndWidth = 160;
+	constexpr int kRightEndWidth = 1120;
 
 	constexpr int kFieldHeight = 352;
 
@@ -78,7 +76,7 @@ Player::Player(Camera& camera) :
 	m_runAnim(),
 	m_atkAnim(),
 	// 基底クラスの初期化
-	GameObject(Vec3(kPlayerPosX, kPlayerPosY), camera)
+	GameObject(Vec3(kDefaultPlayerPosX, kDefaultPlayerPosY), camera)
 {
 }
 
@@ -172,7 +170,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 
 		if (m_jumpSpeed > 0.0f)
 		{
-			if (m_pos.y >= kPlayerPosY)
+			if (m_pos.y >= kDefaultPlayerPosY)
 			{
 				m_isJump = false;
 				m_jumpSpeed = 0.0f;
@@ -234,16 +232,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isAtk = false;
 	}
 
-	//// 右端に行ったら左端に
-	//if (m_pos.x <= kLeftEndWidth)
-	//{
-	//	m_pos.x = kRightEndWidth;
-	//}
-	//// 左端に行ったら右端に
-	//else if (m_pos.x >= kRightEndWidth)
-	//{
-	//	m_pos.x = kLeftEndWidth;
-	//}
+	// 右端に行ったら左端に
+	if (m_pos.x <= kLeftEndWidth)
+	{
+		m_pos.x = kRightEndWidth;
+	}
+	// 左端に行ったら右端に
+	else if (m_pos.x >= kRightEndWidth)
+	{
+		m_pos.x = kLeftEndWidth;
+	}
 
 	// 被弾
 	if (enemy1.m_hp > 0)
@@ -285,8 +283,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
-	bool isHit = false;
-
 	// マップとの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
@@ -294,38 +290,34 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		{
 			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
 			{
+				// マップチップの中で当たり判定したいやつを限定する
 				if (map.mapChips[y][x].chipNo == MapConsts::kWhiteList[i])
 				{
+					// 当たり判定したいやつの上下左右を取る
 					MapChip chip = map.mapChips[y][x];
-					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetY;
-					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetY;
-					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetX;
-					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetX;
-					if (GetTop() < chipBottom &&
-						GetBottom() > chipTop &&
-						GetRight() > chipLeft &&
+					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+
+					// 当たり判定
+					if (GetRight() > chipLeft &&
 						GetLeft() < chipRight)
 					{
-						isHit = true;
-					}
-					else
-					{
-						//printfDx("当たってない\n");
+						if (GetBottom() > chipTop)
+						{
+							m_pos.y -= 0.001;
+						}
+						else if (GetBottom() < chipTop)
+						{
+							m_pos.y += 0.001;
+						}
 					}
 
 					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
 				}
 			}
 		}
-	}
-
-	if (isHit)
-	{
-		printfDx("当たってる\n");
-	}
-	else
-	{
-		printfDx("当たってない\n");
 	}
 }
 
@@ -335,11 +327,7 @@ void Player::Draw()
 
 	if (m_hp > 0)
 	{
-		//DrawBox(static_cast<int>(drawPos.x - kGraphWidth * 0.5f), static_cast<int>(drawPos.y), static_cast<int>(drawPos.x + kGraphWidth * 0.5f), static_cast<int>(drawPos.y + kGraphHeight), 0x0000ff, false);
-
 		DrawBox(GetLeft(), GetTop(), GetRight(), GetBottom(), 0xff0000, true);
-
-		DrawFormatString(300, 0, 0xffffff, "プレイヤー左上座標:%d", GetLeft());
 	}
 	if (m_isRun)
 	{
@@ -364,20 +352,20 @@ void Player::Draw()
 
 float Player::GetLeft()
 {
-	return (m_pos.x - kGraphWidth * 0.5f);
+	return (m_pos.x - 50);
 }
 
 float Player::GetRight()
 {
-	return (m_pos.x + kGraphWidth * 0.5f);
+	return (m_pos.x + 50);
 }
 
 float Player::GetTop()
 {
-	return (m_pos.y - kGraphHeight * 0.5f);
+	return (m_pos.y - 25);
 }
 
 float Player::GetBottom()
 {
-	return (m_pos.y + kGraphHeight * 0.5f);
+	return (m_pos.y + kGraphHeight - 20);
 }
