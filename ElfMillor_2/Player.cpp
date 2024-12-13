@@ -29,6 +29,7 @@ namespace
 
 	// 重力
 	constexpr float kGravity = 0.4f;
+	constexpr float kZeroGravity = 0;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
@@ -63,6 +64,8 @@ Player::Player(Camera& camera) :
 	m_isAtk(false),
 	m_isDeath(false),
 	m_jumpSpeed(0.0f),
+	m_isGroundHit(false),
+	m_isCeilingHit(false),
 	m_vec(),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
@@ -186,10 +189,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isLastJumpButton = false;
 	}
 
-	// 移動処理
-	m_vec = m_vec.GetNormalize() * kSpeed;
-	m_pos += m_vec;
-
 	// 上入力しているかどうか
 	if (input.IsTrigger(PAD_INPUT_UP))
 	{
@@ -232,16 +231,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isAtk = false;
 	}
 
-	// 右端に行ったら左端に
-	if (m_pos.x <= kLeftEndWidth)
-	{
-		m_pos.x = kRightEndWidth;
-	}
-	// 左端に行ったら右端に
-	else if (m_pos.x >= kRightEndWidth)
-	{
-		m_pos.x = kLeftEndWidth;
-	}
+	//// 右端に行ったら左端に
+	//if (m_pos.x <= kLeftEndWidth)
+	//{
+	//	m_pos.x = kRightEndWidth;
+	//}
+	//// 左端に行ったら右端に
+	//else if (m_pos.x >= kRightEndWidth)
+	//{
+	//	m_pos.x = kLeftEndWidth;
+	//}
 
 	// 被弾
 	if (enemy1.m_hp > 0)
@@ -283,6 +282,8 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
+	bool isHit = false;
+
 	// マップとの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
@@ -295,23 +296,47 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				{
 					// 当たり判定したいやつの上下左右を取る
 					MapChip chip = map.mapChips[y][x];
-					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize - MapConsts::kMapOffsetY;
+					float chipTop = chip.m_pos.y - MapConsts::kMapOffsetY;
+					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize + MapConsts::kMapOffsetX;
+					float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
 
 					// 当たり判定
-					if (GetRight() > chipLeft &&
+					// プレイヤーが床に当たった時
+					if (GetBottom() > chipTop &&
+						GetTop() < chipTop &&
+						GetRight() > chipLeft &&
 						GetLeft() < chipRight)
 					{
-						if (GetBottom() > chipTop)
-						{
-							m_pos.y -= 0.001;
-						}
-						else if (GetBottom() < chipTop)
-						{
-							m_pos.y += 0.001;
-						}
+						m_isGroundHit = true;
+						m_isCeilingHit = false;
+					}
+					// 床から離れたとき
+					else if (GetBottom() < chipTop &&
+						GetTop() < chipTop &&
+						GetRight() > chipLeft &&
+						GetLeft() < chipRight)
+					{
+						m_isGroundHit = false;
+						m_isCeilingHit = false;
+					}
+					// プレイヤーが天井に当たった時
+					else if (GetTop() < chipBottom &&
+						GetBottom() > chipBottom &&
+						GetRight() > chipLeft &&
+						GetLeft() < chipRight)
+					{	
+						m_isGroundHit = false;
+						m_isCeilingHit = true;
+					}
+					// 天井から離れたとき
+					else if (GetTop() > chipBottom &&
+						GetBottom() > chipBottom &&
+						GetRight() > chipLeft &&
+						GetLeft() < chipRight)
+					{
+						m_isGroundHit = false;
+						m_isCeilingHit = false;
 					}
 
 					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
@@ -319,6 +344,24 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			}
 		}
 	}
+
+	// 天井や床に当たった時の反発処理
+	if (!m_isCeilingHit && !m_isGroundHit)
+	{
+		m_pos.y += kGravity;
+	}
+	else if (m_isGroundHit)
+	{
+		m_pos.y -= kGravity;
+	}
+	else if (m_isCeilingHit)
+	{
+		m_pos.y -= 1;
+	}
+
+	// 移動処理s
+	m_vec = m_vec.GetNormalize() * kSpeed;
+	m_pos += m_vec;
 }
 
 void Player::Draw()

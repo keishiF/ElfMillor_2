@@ -60,6 +60,21 @@ void DrawMap(const Map& map)
 	{
 		for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
 		{
+			// マップチップの中で当たり判定したいやつを限定する
+			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
+			{
+				if (map.mapChips[hIndex][wIndex].chipNo == MapConsts::kWhiteList[i])
+				{
+					// 当たり判定したいやつの上下左右を取る
+					MapChip chip = map.mapChips[hIndex][wIndex];
+					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xffffff, false);
+				}
+			}
+
 			// １は当たり判定チップを表しているので１のところだけ描画
 			const MapChip& mapChip = map.mapChips[hIndex][wIndex];
 			if (mapChip.chipNo > 0)
@@ -76,7 +91,7 @@ void DrawMap(const Map& map)
 					assert(false);
 				}
 
-				//DrawBox(leftTopX, leftTopY, leftTopX + MapConsts::kMapChipSize, leftTopY + MapConsts::kMapChipSize, 0xff0000, false);
+				DrawBox(leftTopX, leftTopY, leftTopX + MapConsts::kMapChipSize, leftTopY + MapConsts::kMapChipSize, 0xff0000, false);
 			}
 		}
 	}

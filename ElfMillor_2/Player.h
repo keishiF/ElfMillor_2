@@ -50,6 +50,12 @@ private:
 	bool m_isAtk;
 	bool m_isDeath;
 
+	// 地に足がついているかのフラグ
+	bool m_isGroundHit;
+
+	// 天井に当たったかどうかのフラグ
+	bool m_isCeilingHit;
+
 	// ジャンプスピード
 	float m_jumpSpeed;
 
