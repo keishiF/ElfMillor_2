@@ -65,11 +65,14 @@ Player::Player(Camera& camera) :
 	m_isDeath(false),
 	m_jumpSpeed(0.0f),
 	m_vec(),
+	m_velocity(),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
 	m_isUp(false),
 	m_blinkFrame(0),
 	m_hp(kDefaultHp),
+	m_isGroundHit(false),
+	m_isCeilingHit(false),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
 	m_shot(),
@@ -137,7 +140,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_isRun = true;
 		m_isDirLeft = true;
-		m_vec.x -= kSpeed;
+		m_velocity.x = -kSpeed;
 		m_isShotDirRight = false;
 	}
 	// 右走り
@@ -145,14 +148,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_isRun = true;
 		m_isDirLeft = false;
-		m_vec.x += kSpeed;
+		m_velocity.x = kSpeed;
 		m_isShotDirRight = true;
 	}
 	// 走ってない
 	else
 	{
 		m_isRun = false;
-		m_vec.x = 0;
+		m_velocity.x = 0;
 	}
 
 	// ジャンプ
@@ -171,7 +174,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 
 		if (m_jumpSpeed > 0.0f)
 		{
-			if (m_pos.y >= kDefaultPlayerPosY)
+			if (m_isGroundHit)
 			{
 				m_isJump = false;
 				m_jumpSpeed = 0.0f;
@@ -298,21 +301,29 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 					float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
 
 					// 当たり判定
-					// プレイヤーが床に当たった時
-					if (GetBottom() > chipTop &&
-						GetTop() < chipTop &&
-						GetRight() > chipLeft &&
-						GetLeft() < chipRight)
+					// 左壁との当たり判定
+					if (GetLeft() < chipRight &&
+						GetRight() > chipLeft)
 					{
-
+						m_vec.x = 1.0f;
 					}
-					// プレイヤーが天井に当たった時
-					else if (GetTop() < chipBottom &&
-						GetBottom() > chipBottom &&
-						GetRight() > chipLeft &&
-						GetLeft() < chipRight)
+					// 床との当たり判定
+					else if (GetBottom() > chipTop &&
+						GetTop() < chipTop && 
+						GetRight() < chipLeft || 
+						GetLeft() > chipRight)
 					{
-
+						m_isGroundHit = true;
+						m_isCeilingHit = false;
+					}
+					// 天井との当たり判定
+					else if (GetBottom() > chipTop &&
+						GetTop() < chipTop &&
+						GetRight() < chipLeft ||
+						GetLeft() > chipRight)
+					{
+						m_isCeilingHit = true;
+						m_isGroundHit = false;
 					}
 
 					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);

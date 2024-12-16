@@ -36,6 +36,7 @@ public:
 
 	// プレイヤーの表示位置
 	Vec3 m_vec;
+	Vec3 m_velocity;
 
 private:
 	// プレイヤーのグラフィックハンドル
@@ -60,6 +61,12 @@ private:
 
 	// 上入力されているかどうか
 	bool m_isUp;
+
+	// 地面に当たっているかどうかのフラグ
+	bool m_isGroundHit;
+
+	// 天井との当たり判定
+	bool m_isCeilingHit;
 
 	// 被弾時の点滅
 	int m_blinkFrame;
