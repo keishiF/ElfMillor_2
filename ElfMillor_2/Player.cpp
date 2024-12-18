@@ -135,12 +135,16 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_atkAnim.Update();
 	}
+
+	m_vec.x = 0.0f;
+	m_vec.y = 0.0f;
+
 	// 左走り
 	if (input.IsPress(PAD_INPUT_LEFT))
 	{
 		m_isRun = true;
 		m_isDirLeft = true;
-		m_velocity.x = -kSpeed;
+		m_vec.x = -kSpeed;
 		m_isShotDirRight = false;
 	}
 	// 右走り
@@ -148,14 +152,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_isRun = true;
 		m_isDirLeft = false;
-		m_velocity.x = kSpeed;
+		m_vec.x = kSpeed;
 		m_isShotDirRight = true;
 	}
 	// 走ってない
 	else
 	{
 		m_isRun = false;
-		m_velocity.x = 0;
+		m_vec.x = 0;
 	}
 
 	// ジャンプ
@@ -169,12 +173,12 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	}
 	if (m_isJump)
 	{
-		m_pos.y += m_jumpSpeed;
+		m_vec.y += m_jumpSpeed;
 		m_jumpSpeed += kGravity;
 
 		if (m_jumpSpeed > 0.0f)
 		{
-			if (m_isGroundHit)
+			if (!m_isGroundHit)
 			{
 				m_isJump = false;
 				m_jumpSpeed = 0.0f;
@@ -257,12 +261,12 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			// 当たった相手がいない方向にノックバック
 			if (m_pos.x < enemy1.m_pos.x)
 			{
-				m_pos.x -= kKnockBack;
+				m_velocity.x -= kKnockBack;
 				enemy1.m_pos.x += kKnockBack;
 			}
 			else if (m_pos.x > enemy1.m_pos.x)
 			{
-				m_pos.x += kKnockBack;
+				m_velocity.x += kKnockBack;
 				enemy1.m_pos.x -= kKnockBack;
 			}
 		}
@@ -332,9 +336,9 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		}
 	}
 
-	// 移動処理s
-	m_vec = m_vec.GetNormalize() * kSpeed;
-	m_pos += m_vec;
+	// 移動処理
+	m_velocity = m_velocity.GetNormalize() * kSpeed;
+	m_pos += m_velocity;
 }
 
 void Player::Draw()
