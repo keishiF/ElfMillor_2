@@ -101,18 +101,29 @@ bool Map::IsCol(Rect rect, Rect& chipRect)
 	{
 		for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
 		{
-			// マップチップの中で当たり判定したいやつを限定する
-			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
-			{
-				if (mapChips[hIndex][wIndex].chipNo == MapConsts::kWhiteList[i]) continue;
-			}
+			if (mapChips[hIndex][wIndex].chipNo != 
+				1554, 1555, 1556, 1557, 
+				1811, 1812, 1813, 1814, 
+				523, 779, 1035, 1291, 1547, 1803,
+				514, 770, 1026, 1282, 1538, 1794,
+				3088, 3089, 3090, 3091,
+				1027, 1283,
+				16, 17,
+				272, 273,
+				782, 783 ) continue;
 
 			// 当たり判定したいやつの上下左右を取る
 			MapChip chip = mapChips[hIndex][wIndex];
-			float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize - MapConsts::kMapOffsetY;
-			float chipTop = chip.m_pos.y - MapConsts::kMapOffsetY;
-			float chipRight = chip.m_pos.x + MapConsts::kMapChipSize + MapConsts::kMapOffsetX;
-			float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
+			//float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize/* - MapConsts::kMapOffsetY*/;
+			//float chipTop = chip.m_pos.y/* - MapConsts::kMapOffsetY*/;
+			//float chipRight = chip.m_pos.x + MapConsts::kMapChipSize /* + MapConsts::kMapOffsetX*/;
+			//float chipLeft = chip.m_pos.x/* + MapConsts::kMapOffsetX*/;
+			//DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
+			float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+			float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+			float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+			float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+			DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
 
 			if (chipTop > rect.bottom) continue;
 			if (chipBottom < rect.top) continue;
