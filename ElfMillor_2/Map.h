@@ -2,9 +2,11 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include "game.h"
 #include "PlatinumLoader.h"
 #include "DxLib.h"
 #include "Vec3.h"
+#include "Rect.h"
 
 namespace MapConsts
 {
@@ -51,6 +53,7 @@ public:
 	MapChip mapChips[MapConsts::kMapHeight][MapConsts::kMapWidth];
 	int m_graphHandle;
 	PlatinumLoader loader;
+	bool IsCol(Rect rect, Rect& chipRect);
 };
 
 // プロトタイプ宣言

@@ -126,6 +126,11 @@ void Player::End()
 void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 {
 	m_idleAnim.Update();
+
+	m_isRun = false;
+
+	m_vec.x = 0.0f;
+
 	if (m_isRun)
 	{
 		m_runAnim.Update();
@@ -140,7 +145,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_isRun = true;
 		m_isDirLeft = true;
-		m_vec.x = -kSpeed;
+		m_vec.x -= kSpeed;
 		m_isShotDirRight = false;
 	}
 	// 右走り
@@ -148,29 +153,45 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		m_isRun = true;
 		m_isDirLeft = false;
-		m_vec.x = kSpeed;
+		m_vec.x += kSpeed;
 		m_isShotDirRight = true;
-	}
-	// 走ってない
-	else
-	{
-		m_isRun = false;
-		m_vec.x = 0.0f;
 	}
 
 	// ジャンプ
 	// 空中にいるときの処理
 	if (m_isJump)
 	{
-		if (m_isGroundHit)
-		{
-			m_vec.y = 0.0f;
-		}
-
 		m_vec.y += kGravity;
 
 		m_pos.x += m_vec.x;
+		Rect chipRect;
+		if (map.IsCol(GetRect(), chipRect))
+		{
+			if (m_vec.x > 0.0f)
+			{
+				m_pos.x = chipRect.left - kGraphWidth * 0.5f - 1;
+			}
+			else if (m_vec.x < 0.0f)
+			{
+				m_pos.x = chipRect.right + kGraphWidth * 0.5f + 1;
+			}
+		}
+
 		m_pos.y += m_vec.y;
+		if (map.IsCol(GetRect(), chipRect))
+		{
+			if (m_vec.y > 0.0f)
+			{
+				m_pos.y -= m_vec.y;
+				m_vec.y = 0.0f;
+				m_isJump = false;
+			}
+			else if (m_vec.y < 0.0f)
+			{
+				m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				m_vec.y *= -1.0f;
+			}
+		}
 	}
 	else
 	{
@@ -193,8 +214,37 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			m_isJump = false;
 		}
 
+		// 移動処理
 		m_pos.x += m_vec.x;
+
+		Rect chipRect;
+		if (map.IsCol(GetRect(), chipRect))
+		{
+			if (m_vec.x > 0.0f)
+			{
+				m_pos.x = chipRect.left - kGraphWidth * 0.5f - 1;
+			}
+			else if (m_vec.x < 0.0f)
+			{
+				m_pos.x = chipRect.right + kGraphWidth * 0.5f + 1;
+			}
+		}
+
 		m_pos.y += m_vec.y;
+
+		if (map.IsCol(GetRect(), chipRect))
+		{
+			if (m_vec.y > 0.0f)
+			{
+				m_pos.y = chipRect.top - 1;
+				m_isJump = false;
+			}
+			else if (m_vec.y < 0.0f)
+			{
+				m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				m_vec.y *= -1.0f;
+			}
+		}
 	}
 
 	// 前フレームでジャンプしていたかを確認
@@ -284,71 +334,13 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{	
 		m_shot[i].Update(boss, enemy1);
 	}
-
-	bool isHit = false;
-
-	// マップとの当たり判定
-	for (int y = 0; y < MapConsts::kMapHeight; y++)
-	{
-		for (int x = 0; x < MapConsts::kMapWidth; x++)
-		{
-			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
-			{
-				// マップチップの中で当たり判定を取りたいやつを限定する
-				if (map.mapChips[y][x].chipNo == MapConsts::kWhiteList[i])
-				{
-					// 当たり判定したいやつの上下左右を取る
-					MapChip chip = map.mapChips[y][x];
-					float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize - MapConsts::kMapOffsetY;
-					float chipTop = chip.m_pos.y - MapConsts::kMapOffsetY;
-					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize + MapConsts::kMapOffsetX;
-					float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
-
-					// 当たり判定
-					// 左壁との当たり判定
-					if (GetLeft() < chipRight &&
-						GetTop() )
-					{
-
-					}
-					// 床との当たり判定
-					else if (GetBottom() > chipTop &&
-						GetTop() < chipTop && 
-						GetRight() < chipLeft && 
-						GetLeft() > chipRight)
-					{
-						m_isGroundHit = true;
-						isHit = true;
-					}
-					// 天井との当たり判定
-					else if (GetTop() < chipBottom &&
-						GetBottom() > chipBottom && 
-						GetRight() < chipLeft && 
-						GetLeft() > chipRight)
-					{
-
-					}
-					else
-					{
-
-					}
-
-					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
-				}
-			}
-		}
-	}
-	if (isHit)
-	{
-		printfDx("Hit\n");
-	}
 }
 
 void Player::Draw()
 {
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
-	if (m_hp > 0)
+	if (m_hp >= 0)
 	{
 		DrawBox(GetLeft(), GetTop(), GetRight(), GetBottom(), 0xff0000, true);
 	}
@@ -391,4 +383,20 @@ float Player::GetTop()
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 20);
+}
+
+float Player::GetCenter()
+{
+	return (GetLeft() + GetRight()) * 0.5;
+}
+
+Rect Player::GetRect()
+{
+	// プレイヤーの矩形当たり判定を作成
+	Rect rect;
+	rect.top = GetTop();
+	rect.bottom = GetBottom();
+	rect.right = GetRight();
+	rect.left = GetLeft();
+	return rect;
 }

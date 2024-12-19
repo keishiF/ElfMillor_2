@@ -94,3 +94,39 @@ void DrawMap(const Map& map)
 		}
 	}
 }
+
+bool Map::IsCol(Rect rect, Rect& chipRect)
+{
+	for (int hIndex = 0; hIndex < MapConsts::kMapHeight; hIndex++)
+	{
+		for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
+		{
+			// マップチップの中で当たり判定したいやつを限定する
+			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
+			{
+				if (mapChips[hIndex][wIndex].chipNo == MapConsts::kWhiteList[i]) continue;
+			}
+
+			// 当たり判定したいやつの上下左右を取る
+			MapChip chip = mapChips[hIndex][wIndex];
+			float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize - MapConsts::kMapOffsetY;
+			float chipTop = chip.m_pos.y - MapConsts::kMapOffsetY;
+			float chipRight = chip.m_pos.x + MapConsts::kMapChipSize + MapConsts::kMapOffsetX;
+			float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
+
+			if (chipTop > rect.bottom) continue;
+			if (chipBottom < rect.top) continue;
+			if (chipRight < rect.left) continue;
+			if (chipLeft > rect.right) continue;
+
+			chipRect.top = chipTop;
+			chipRect.bottom = chipBottom;
+			chipRect.right = chipRight;
+			chipRect.left = chipLeft;
+
+			return true;
+		}
+	}	
+
+	return false;
+}

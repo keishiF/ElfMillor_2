@@ -3,6 +3,7 @@
 #include "Animation.h"
 #include "Shot.h"
 #include "GameObject.h"
+#include "Rect.h"
 
 class Vec3;
 class Boss;
@@ -33,6 +34,10 @@ public:
 	float GetRight();
 	float GetTop();
 	float GetBottom();
+	float GetCenter();
+
+	// プレイヤーの矩形情報取得
+	Rect GetRect();
 
 	// プレイヤーの表示位置
 	Vec3 m_vec;
