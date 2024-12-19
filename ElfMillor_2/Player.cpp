@@ -63,12 +63,11 @@ Player::Player(Camera& camera) :
 	m_isJump(false),
 	m_isAtk(false),
 	m_isDeath(false),
-	m_jumpSpeed(0.0f),
+	m_jumpSpeed(-10.0f),
+	m_jumpCount(0),
 	m_vec(),
-	m_velocity(),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
-	m_isUp(false),
 	m_blinkFrame(0),
 	m_hp(kDefaultHp),
 	m_isGroundHit(false),
@@ -136,9 +135,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_atkAnim.Update();
 	}
 
-	m_vec.x = 0.0f;
-	m_vec.y = 0.0f;
-
 	// 左走り
 	if (input.IsPress(PAD_INPUT_LEFT))
 	{
@@ -159,32 +155,49 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	else
 	{
 		m_isRun = false;
-		m_vec.x = 0;
+		m_vec.x = 0.0f;
 	}
 
 	// ジャンプ
-	if (input.IsTrigger(PAD_INPUT_1))
-	{
-		if (!m_isJump)
-		{
-			m_isJump = true;
-			m_jumpSpeed = -10.0f;
-		}
-	}
+	// 空中にいるときの処理
 	if (m_isJump)
 	{
-		m_vec.y += m_jumpSpeed;
-		m_jumpSpeed += kGravity;
-
-		if (m_jumpSpeed > 0.0f)
+		if (m_isGroundHit)
 		{
-			if (!m_isGroundHit)
-			{
-				m_isJump = false;
-				m_jumpSpeed = 0.0f;
-			}
+			m_vec.y = 0.0f;
 		}
+
+		m_vec.y += kGravity;
+
+		m_pos.x += m_vec.x;
+		m_pos.y += m_vec.y;
 	}
+	else
+	{
+		if (input.IsTrigger(PAD_INPUT_1) && !m_isJump)
+		{
+			m_isJump = true;
+			m_jumpCount++;
+		}
+		else
+		{
+			m_jumpCount = 0;
+		}
+
+		if (m_isJump && m_jumpCount == 1)
+		{
+			m_vec.y = m_jumpSpeed;
+		}
+		else
+		{
+			m_isJump = false;
+		}
+
+		m_pos.x += m_vec.x;
+		m_pos.y += m_vec.y;
+	}
+
+	// 前フレームでジャンプしていたかを確認
 	if (input.IsTrigger(PAD_INPUT_1))
 	{
 		m_isLastJumpButton = true;
@@ -192,16 +205,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	else
 	{
 		m_isLastJumpButton = false;
-	}
-
-	// 上入力しているかどうか
-	if (input.IsTrigger(PAD_INPUT_UP))
-	{
-		m_isUp = true;
-	}
-	else
-	{
-		m_isUp = false;
 	}
 
 	// 攻撃
@@ -213,9 +216,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			{
 				// アニメーション切り替え
 				m_isAtk = true;
-
-				// 弾に上入力しているかどうかを教える
-				m_shot[i].m_isUp = m_isUp;
 
 				// 弾の位置をプレイヤーの位置に補正
 				m_shot[i].m_pos = m_pos;
@@ -261,13 +261,11 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			// 当たった相手がいない方向にノックバック
 			if (m_pos.x < enemy1.m_pos.x)
 			{
-				m_velocity.x -= kKnockBack;
-				enemy1.m_pos.x += kKnockBack;
+				m_vec.x -= kKnockBack;
 			}
 			else if (m_pos.x > enemy1.m_pos.x)
 			{
-				m_velocity.x += kKnockBack;
-				enemy1.m_pos.x -= kKnockBack;
+				m_vec.x += kKnockBack;
 			}
 		}
 	}
@@ -287,6 +285,8 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_shot[i].Update(boss, enemy1);
 	}
 
+	bool isHit = false;
+
 	// マップとの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
@@ -294,7 +294,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		{
 			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
 			{
-				// マップチップの中で当たり判定したいやつを限定する
+				// マップチップの中で当たり判定を取りたいやつを限定する
 				if (map.mapChips[y][x].chipNo == MapConsts::kWhiteList[i])
 				{
 					// 当たり判定したいやつの上下左右を取る
@@ -307,27 +307,30 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 					// 当たり判定
 					// 左壁との当たり判定
 					if (GetLeft() < chipRight &&
-						GetRight() > chipLeft)
+						GetTop() )
 					{
-						m_vec.x = 1.0f;
+
 					}
 					// 床との当たり判定
 					else if (GetBottom() > chipTop &&
 						GetTop() < chipTop && 
-						GetRight() < chipLeft || 
+						GetRight() < chipLeft && 
 						GetLeft() > chipRight)
 					{
 						m_isGroundHit = true;
-						m_isCeilingHit = false;
+						isHit = true;
 					}
 					// 天井との当たり判定
-					else if (GetBottom() > chipTop &&
-						GetTop() < chipTop &&
-						GetRight() < chipLeft ||
+					else if (GetTop() < chipBottom &&
+						GetBottom() > chipBottom && 
+						GetRight() < chipLeft && 
 						GetLeft() > chipRight)
 					{
-						m_isCeilingHit = true;
-						m_isGroundHit = false;
+
+					}
+					else
+					{
+
 					}
 
 					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
@@ -335,10 +338,10 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			}
 		}
 	}
-
-	// 移動処理
-	m_velocity = m_velocity.GetNormalize() * kSpeed;
-	m_pos += m_velocity;
+	if (isHit)
+	{
+		printfDx("Hit\n");
+	}
 }
 
 void Player::Draw()

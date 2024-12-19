@@ -36,7 +36,6 @@ public:
 
 	// プレイヤーの表示位置
 	Vec3 m_vec;
-	Vec3 m_velocity;
 
 private:
 	// プレイヤーのグラフィックハンドル
@@ -53,14 +52,12 @@ private:
 
 	// ジャンプスピード
 	float m_jumpSpeed;
+	int m_jumpCount;
 
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
 	// 弾を右向きにするかどうか
 	bool m_isShotDirRight;
-
-	// 上入力されているかどうか
-	bool m_isUp;
 
 	// 地面に当たっているかどうかのフラグ
 	bool m_isGroundHit;
