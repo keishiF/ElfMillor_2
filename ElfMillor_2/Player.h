@@ -34,7 +34,6 @@ public:
 	float GetRight();
 	float GetTop();
 	float GetBottom();
-	float GetCenter();
 
 	// プレイヤーの矩形情報取得
 	Rect GetRect();

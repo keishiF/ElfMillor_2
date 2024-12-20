@@ -28,7 +28,7 @@ namespace MapConsts
 	};
 
 	constexpr int kMapOffsetX = 160;
-	constexpr int kMapOffsetY = 2455;
+	constexpr int kMapOffsetY = 2477;
 }
 
 /// <summary>

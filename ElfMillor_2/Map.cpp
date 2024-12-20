@@ -24,9 +24,6 @@ void InitMap(Map& map)
 			mapChip.w = MapConsts::kMapChipSize;
 			mapChip.h = MapConsts::kMapChipSize;
 
-			// Platinumからのデータを入れる
-			//mapChip.chipNo = ;
-
 			if (hIndex == 1)
 			{
 				int a = 1;
@@ -71,7 +68,7 @@ void DrawMap(const Map& map)
 					float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
 					float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
 					float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-					DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
+					//DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
 				}
 			}
 
@@ -97,45 +94,34 @@ void DrawMap(const Map& map)
 
 bool Map::IsCol(Rect rect, Rect& chipRect)
 {
-	for (int hIndex = 0; hIndex < MapConsts::kMapHeight; hIndex++)
+	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
-		for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
+		for (int x = 0; x < MapConsts::kMapWidth; x++)
 		{
-			if (mapChips[hIndex][wIndex].chipNo != 
-				1554, 1555, 1556, 1557, 
-				1811, 1812, 1813, 1814, 
-				523, 779, 1035, 1291, 1547, 1803,
-				514, 770, 1026, 1282, 1538, 1794,
-				3088, 3089, 3090, 3091,
-				1027, 1283,
-				16, 17,
-				272, 273,
-				782, 783 ) continue;
+			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
+			{
+				if (mapChips[y][x].chipNo != MapConsts::kWhiteList[i]) continue;
 
-			// 当たり判定したいやつの上下左右を取る
-			MapChip chip = mapChips[hIndex][wIndex];
-			//float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize/* - MapConsts::kMapOffsetY*/;
-			//float chipTop = chip.m_pos.y/* - MapConsts::kMapOffsetY*/;
-			//float chipRight = chip.m_pos.x + MapConsts::kMapChipSize /* + MapConsts::kMapOffsetX*/;
-			//float chipLeft = chip.m_pos.x/* + MapConsts::kMapOffsetX*/;
-			//DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
-			float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-			float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-			float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-			float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-			DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
+				// 当たり判定したいやつの上下左右を取る
+				MapChip chip = mapChips[y][x];
+				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+				float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
+				float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+				float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
+				DrawBox(chipLeft, chipTop, chipRight, chipBottom, 0xff0000, false);
 
-			if (chipTop > rect.bottom) continue;
-			if (chipBottom < rect.top) continue;
-			if (chipRight < rect.left) continue;
-			if (chipLeft > rect.right) continue;
+				if (chipTop > rect.bottom) continue;
+				if (chipBottom < rect.top) continue;
+				if (chipRight < rect.left) continue;
+				if (chipLeft > rect.right) continue;
 
-			chipRect.top = chipTop;
-			chipRect.bottom = chipBottom;
-			chipRect.right = chipRight;
-			chipRect.left = chipLeft;
+				chipRect.top = chipTop;
+				chipRect.bottom = chipBottom;
+				chipRect.right = chipRight;
+				chipRect.left = chipLeft;
 
-			return true;
+				return true;
+			}
 		}
 	}	
 

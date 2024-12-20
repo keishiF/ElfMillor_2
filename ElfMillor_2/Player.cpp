@@ -38,6 +38,10 @@ namespace
 	constexpr int kGraphWidth = 160;
 	constexpr int kGraphHeight = 128;
 
+	// 当たり判定のサイズ
+	constexpr int kColSizeWidth = 0;
+	constexpr int kColSizeHeight = 0;
+
 	// 待機アニメーションのコマ数
 	constexpr int kIdleAnimNum = 8;
 	// 走りアニメーションのコマ数
@@ -52,6 +56,8 @@ namespace
 
 	// ノックバック距離
 	constexpr int kKnockBack = 60;
+
+	// 
 }
 
 Player::Player(Camera& camera) :
@@ -65,7 +71,7 @@ Player::Player(Camera& camera) :
 	m_isDeath(false),
 	m_jumpSpeed(-10.0f),
 	m_jumpCount(0),
-	m_vec(),
+	m_vec(0.0f,0.0f),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
 	m_blinkFrame(0),
@@ -128,7 +134,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	m_idleAnim.Update();
 
 	m_isRun = false;
-
 	m_vec.x = 0.0f;
 
 	if (m_isRun)
@@ -188,7 +193,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			}
 			else if (m_vec.y < 0.0f)
 			{
-				m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				m_pos.y = chipRect.bottom + kGraphHeight * 0.5f + 1;
 				m_vec.y *= -1.0f;
 			}
 		}
@@ -222,11 +227,11 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		{
 			if (m_vec.x > 0.0f)
 			{
-				m_pos.x = chipRect.left - kGraphWidth * 0.5f - 1;
+				m_pos.x = chipRect.left - kGraphWidth - 1;
 			}
 			else if (m_vec.x < 0.0f)
 			{
-				m_pos.x = chipRect.right + kGraphWidth * 0.5f + 1;
+				m_pos.x = chipRect.right + kGraphWidth + 1;
 			}
 		}
 
@@ -244,6 +249,10 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				m_pos.y = chipRect.bottom + kGraphHeight + 1;
 				m_vec.y *= -1.0f;
 			}
+		}
+		else
+		{
+			m_isJump = true;
 		}
 	}
 
@@ -383,11 +392,6 @@ float Player::GetTop()
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 20);
-}
-
-float Player::GetCenter()
-{
-	return (GetLeft() + GetRight()) * 0.5;
 }
 
 Rect Player::GetRect()
