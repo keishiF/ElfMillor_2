@@ -38,10 +38,12 @@ class Map
 {
 public:
 	void InitMap();
+	// マップの描画
 	void DrawMap(Camera& camera);
 
 	MapChip mapChips[MapConsts::kMapHeight][MapConsts::kMapWidth];
 	int m_graphHandle;
 	PlatinumLoader loader;
+	// マップの当たり判定
 	bool IsCol(Rect rect, Rect& chipRect, Camera& camera);
 };

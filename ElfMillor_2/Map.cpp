@@ -55,6 +55,7 @@ void Map::InitMap()
 
 void Map::DrawMap(Camera& camera)
 {
+	// マップの描画
 	for (int hIndex = 0; hIndex < MapConsts::kMapHeight; hIndex++)
 	{
 		for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
@@ -62,6 +63,7 @@ void Map::DrawMap(Camera& camera)
 			const MapChip& mapChip = mapChips[hIndex][wIndex];
 			if (mapChip.chipNo > 0)
 			{
+				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - MapConsts::kMapOffsetY;
 				DrawRectGraph(leftTopX + camera.GetDrawOffset().x, leftTopY + camera.GetDrawOffset().y,
@@ -79,26 +81,30 @@ void Map::DrawMap(Camera& camera)
 }
 
 bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
-{
+{	
+	// マップの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
 		for (int x = 0; x < MapConsts::kMapWidth; x++)
 		{
+			// 当たり判定を取るものを限定する
+			// WhiteListに天井や床、壁など...
 			for (int i = 0; i < _countof(MapConsts::kWhiteList); i++)
 			{
 				if (mapChips[y][x].chipNo != MapConsts::kWhiteList[i]) continue;
 
-				// 当たり判定したいやつの上下左右を取る
-				MapChip chip = mapChips[y][x];
-
+				// カメラに応じて補正
 				Vec3 camOffset = camera.GetDrawOffset();
 
+				// 当たり判定したいやつの上下左右を取る
+				MapChip chip = mapChips[y][x];
 				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
 				float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
 				float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
 				float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
 				DrawBox(chipLeft + camOffset.x, chipTop + camOffset.y, chipRight + camOffset.x, chipBottom + camOffset.y, 0xff0000, false);
 
+				// 当たっていないので一度ループから出る
 				if (chipTop > rect.bottom) continue;
 				if (chipBottom < rect.top) continue;
 				if (chipRight < rect.left) continue;
@@ -109,6 +115,7 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 				chipRect.right = chipRight;
 				chipRect.left = chipLeft;
 
+				// 当たっている
 				return true;
 			}
 		}

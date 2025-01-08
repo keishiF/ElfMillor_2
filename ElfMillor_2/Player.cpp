@@ -170,7 +170,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 
 		m_pos.x += m_vec.x;
 
-		// 縦から当たったかどうかを確認する
+		// 横から当たったかどうかを確認する
 		Rect chipRect;
 		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
@@ -179,11 +179,13 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			// プレイヤーが右方向に移動している
 			if (m_vec.x > 0.0f)
 			{
+				// 右壁に当たっているので左に押し戻す
 				m_pos.x = chipRect.left - kBesideHit;
 			}
 			// プレイヤーが左方向に移動している
 			else if (m_vec.x < 0.0f)
 			{
+				// 左壁に当たっているので右に押し戻す
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
@@ -197,6 +199,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			// プレイヤーが下方向に移動している
 			if (m_vec.y > 0.0f)
 			{
+				// 床に当たっているので上に押し戻す
 				m_pos.y -= m_vec.y;
 				m_vec.y = 0.0f;
 				m_isJump = false;
@@ -204,6 +207,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
+				// 天井に当たっているので下に押し戻す
 				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
@@ -211,6 +215,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	}
 	else
 	{
+		// ジャンプ
 		if (input.IsTrigger(PAD_INPUT_1) && !m_isJump)
 		{
 			m_isJump = true;
@@ -233,31 +238,44 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		// 移動処理
 		m_pos.x += m_vec.x;
 
+		// 横から当たっているかどうかを確認する
 		Rect chipRect;
 		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
+			// 左右どっちから当たったか
+
+			// プレイヤーが右方向に移動している
 			if (m_vec.x > 0.0f)
 			{
+				// 右壁に当たっているので左に押し戻す
 				m_pos.x = chipRect.left - kBesideHit;
 			}
+			// プレイヤーが左方向に移動している
 			else if (m_vec.x < 0.0f)
 			{
+				// 左壁に当たっているので右に押し戻す
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
 
 		m_pos.y += m_vec.y;
 
+		// 縦から当たっているかどうかを確認する
 		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
+			// 上下どっちから当たったか
+
+			// プレイヤーが下方向に移動している
 			if (m_vec.y > 0.0f)
 			{
+				// 床に当たっているので上に押し戻す
 				m_pos.y = chipRect.top - 1;
 				m_isJump = false;
 			}
+			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
-				//m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				// 天井に当たっているので下に押し戻す
 				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
@@ -338,23 +356,31 @@ void Player::Draw(Camera& camera)
 {
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
+	// プレイヤーの当たり判定の表示
 	if (m_hp >= 0)
 	{
 		Vec3 camOffset = camera.GetDrawOffset();
 		DrawBox(GetLeft() + camOffset.x, GetTop() + camOffset.y, GetRight() + camOffset.x, GetBottom() + camOffset.y, 0xff0000, true);
 	}
+
+	// プレイヤーのアニメーション切り替え
+	// 走る
 	if (m_isRun)
 	{
 		m_runAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
+	// 攻撃
 	else if (m_isAtk)
 	{
 		m_atkAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
+	// 待機
 	else
 	{
 		m_idleAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
+
+	// ショット
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Draw();
@@ -367,25 +393,21 @@ void Player::Draw(Camera& camera)
 float Player::GetLeft()
 {
 	return (m_pos.x - 40);
-	//return (m_pos.x - 40);
 }
 
 float Player::GetRight()
 {
 	return (m_pos.x + 40);
-	//return (m_pos.x + 40);
 }
 
 float Player::GetTop()
 {
 	return (m_pos.y - 10);
-	//return (m_pos.y - 5);
 }
 
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 35);
-	//return (m_pos.y + kGraphHeight - 45);
 }
 
 Rect Player::GetRect()
