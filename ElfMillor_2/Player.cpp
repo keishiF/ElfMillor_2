@@ -13,7 +13,7 @@ namespace
 {
 	// 初期位置
 	constexpr int kDefaultPlayerPosX = 360;
-	constexpr int kDefaultPlayerPosY = 400;
+	constexpr int kDefaultPlayerPosY = 500;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -29,7 +29,6 @@ namespace
 
 	// 重力
 	constexpr float kGravity = 0.4f;
-	constexpr float kZeroGravity = 0;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
@@ -52,12 +51,11 @@ namespace
 	constexpr int kDeathAnimNum = 10;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate = 2.0f;
+	constexpr float kExpRate = 1.75f;
 
 	// ノックバック距離
-	constexpr int kKnockBack = 60;
-
-	// 
+	constexpr int kBesideHit = 43;
+	constexpr int kVerticalHit = 15;
 }
 
 Player::Player(Camera& camera) :
@@ -69,7 +67,7 @@ Player::Player(Camera& camera) :
 	m_isJump(false),
 	m_isAtk(false),
 	m_isDeath(false),
-	m_jumpSpeed(-10.0f),
+	m_jumpSpeed(-11.0f),
 	m_jumpCount(0),
 	m_vec(0.0f,0.0f),
 	m_isDirLeft(false),
@@ -163,37 +161,50 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	}
 
 	// ジャンプ
-	// 空中にいるときの処理
 	if (m_isJump)
 	{
+		// 空中にいるときの処理
+
+		// 毎フレーム下方向に重力を加える
 		m_vec.y += kGravity;
 
 		m_pos.x += m_vec.x;
+
+		// 縦から当たったかどうかを確認する
 		Rect chipRect;
-		if (map.IsCol(GetRect(), chipRect))
+		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
+			// 左右どっちから当たったか
+
+			// プレイヤーが右方向に移動している
 			if (m_vec.x > 0.0f)
 			{
-				m_pos.x = chipRect.left - kGraphWidth * 0.5f - 1;
+				m_pos.x = chipRect.left - kBesideHit;
 			}
+			// プレイヤーが左方向に移動している
 			else if (m_vec.x < 0.0f)
 			{
-				m_pos.x = chipRect.right + kGraphWidth * 0.5f + 1;
+				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
 
 		m_pos.y += m_vec.y;
-		if (map.IsCol(GetRect(), chipRect))
+		// 縦から当たったかどうかを確認する
+		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
+			// 上下どっちから当たったか
+
+			// プレイヤーが下方向に移動している
 			if (m_vec.y > 0.0f)
 			{
 				m_pos.y -= m_vec.y;
 				m_vec.y = 0.0f;
 				m_isJump = false;
 			}
+			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
-				m_pos.y = chipRect.bottom + kGraphHeight * 0.5f + 1;
+				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
 		}
@@ -223,21 +234,21 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_pos.x += m_vec.x;
 
 		Rect chipRect;
-		if (map.IsCol(GetRect(), chipRect))
+		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
 			if (m_vec.x > 0.0f)
 			{
-				m_pos.x = chipRect.left - kGraphWidth - 1;
+				m_pos.x = chipRect.left - kBesideHit;
 			}
 			else if (m_vec.x < 0.0f)
 			{
-				m_pos.x = chipRect.right + kGraphWidth + 1;
+				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
 
 		m_pos.y += m_vec.y;
 
-		if (map.IsCol(GetRect(), chipRect))
+		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
 			if (m_vec.y > 0.0f)
 			{
@@ -246,7 +257,8 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			}
 			else if (m_vec.y < 0.0f)
 			{
-				m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				//m_pos.y = chipRect.bottom + kGraphHeight + 1;
+				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
 		}
@@ -277,7 +289,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				m_isAtk = true;
 
 				// 弾の位置をプレイヤーの位置に補正
-				m_shot[i].m_pos = m_pos;
+				m_shot[i].m_pos = m_pos + m_camera.GetDrawOffset();
 
 				// 弾を表示
 				m_shot[i].m_isShotFlag = true;
@@ -295,38 +307,15 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		m_isAtk = false;
 	}
 
-	//// 右端に行ったら左端に
-	//if (m_pos.x <= kLeftEndWidth)
-	//{
-	//	m_pos.x = kRightEndWidth;
-	//}
-	//// 左端に行ったら右端に
-	//else if (m_pos.x >= kRightEndWidth)
-	//{
-	//	m_pos.x = kLeftEndWidth;
-	//}
-
-	// 被弾
-	if (enemy1.m_hp > 0)
+	// 右端に行ったら左端に
+	if (m_pos.x <= kLeftEndWidth)
 	{
-		if (GetRight() > enemy1.GetLeft() &&
-			GetLeft() < enemy1.GetRight() &&
-			GetTop() < enemy1.GetBottom() &&
-			GetBottom() > enemy1.GetTop())
-		{
-			// HPを減らす
-			//m_hp--;
-
-			// 当たった相手がいない方向にノックバック
-			if (m_pos.x < enemy1.m_pos.x)
-			{
-				m_vec.x -= kKnockBack;
-			}
-			else if (m_pos.x > enemy1.m_pos.x)
-			{
-				m_vec.x += kKnockBack;
-			}
-		}
+		m_pos.x = kRightEndWidth;
+	}
+	// 左端に行ったら右端に
+	else if (m_pos.x >= kRightEndWidth)
+	{
+		m_pos.x = kLeftEndWidth;
 	}
 
 	// HPがなくなったら死ぬ
@@ -345,53 +334,58 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	}
 }
 
-void Player::Draw()
+void Player::Draw(Camera& camera)
 {
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
 	if (m_hp >= 0)
 	{
-		DrawBox(GetLeft(), GetTop(), GetRight(), GetBottom(), 0xff0000, true);
+		Vec3 camOffset = camera.GetDrawOffset();
+		DrawBox(GetLeft() + camOffset.x, GetTop() + camOffset.y, GetRight() + camOffset.x, GetBottom() + camOffset.y, 0xff0000, true);
 	}
 	if (m_isRun)
 	{
-		m_runAnim.Play(m_pos, m_isDirLeft);
+		m_runAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
 	else if (m_isAtk)
 	{
-		m_atkAnim.Play(m_pos, m_isDirLeft);
+		m_atkAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
 	else
 	{
-		m_idleAnim.Play(m_pos, m_isDirLeft);
+		m_idleAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Draw();
 	}
 
-	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
 }
 
 float Player::GetLeft()
 {
-	return (m_pos.x - 50);
+	return (m_pos.x - 40);
+	//return (m_pos.x - 40);
 }
 
 float Player::GetRight()
 {
-	return (m_pos.x + 50);
+	return (m_pos.x + 40);
+	//return (m_pos.x + 40);
 }
 
 float Player::GetTop()
 {
-	return (m_pos.y - 25);
+	return (m_pos.y - 10);
+	//return (m_pos.y - 5);
 }
 
 float Player::GetBottom()
 {
-	return (m_pos.y + kGraphHeight - 20);
+	return (m_pos.y + kGraphHeight - 35);
+	//return (m_pos.y + kGraphHeight - 45);
 }
 
 Rect Player::GetRect()

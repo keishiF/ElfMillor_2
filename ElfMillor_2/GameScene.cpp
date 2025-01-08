@@ -44,7 +44,7 @@ void GameScene::FadeOutUpdate(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
-	m_player->Update(input, *m_boss, *m_enemy1, map);
+	m_player->Update(input, *m_boss, *m_enemy1, *m_map);
 	m_boss->Update();
 	//m_enemy1->Update(*m_player);
 
@@ -72,8 +72,8 @@ void GameScene::FadeDraw()
 
 void GameScene::NormalDraw()
 {
-	DrawMap(map);
-	m_player->Draw();
+	m_map->DrawMap(*m_camera);
+	m_player->Draw(*m_camera);
 	m_boss->Draw();
 	//m_enemy1->Draw();
 }
@@ -84,6 +84,9 @@ GameScene::GameScene(SceneController& controller):
 	m_draw(&GameScene::FadeDraw)
 {
 	m_frame = kFadeInterval;
+
+	m_map = std::make_shared<Map>();
+	m_map->InitMap();
 
 	m_camera = std::make_shared<Camera>();
 
@@ -97,8 +100,6 @@ GameScene::GameScene(SceneController& controller):
 	m_player->Init();
 
 	m_camera->Init(m_player);
-
-	InitMap(map);
 }
 
 void GameScene::Update(Input& input)

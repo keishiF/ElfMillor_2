@@ -87,6 +87,9 @@
     <ClCompile Include="Rect.cpp">
       <Filter>ソース ファイル\General</Filter>
     </ClCompile>
+    <ClCompile Include="MapChip.cpp">
+      <Filter>ソース ファイル\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="Rect.h">
       <Filter>ヘッダー ファイル\General</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChip.h">
+      <Filter>ヘッダー ファイル\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

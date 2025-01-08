@@ -27,7 +27,11 @@ public:
 	void Init();
 	void End();
 	void Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map);
-	void Draw();
+	void Draw(Camera& camera);
+
+	// プレイヤーの位置情報を取得
+	float GetX() const { return m_pos.x; }
+	float GetY() const { return m_pos.y; }
 
 	// 当たり判定のための座標取得
 	float GetLeft();

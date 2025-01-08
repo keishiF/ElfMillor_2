@@ -7,6 +7,9 @@
 #include "DxLib.h"
 #include "Vec3.h"
 #include "Rect.h"
+#include "MapChip.h"
+
+class Camera;
 
 namespace MapConsts
 {
@@ -31,31 +34,14 @@ namespace MapConsts
 	constexpr int kMapOffsetY = 2477;
 }
 
-/// <summary>
-/// マップチップ構造体
-/// </summary>
-class MapChip
-{
-public:
-	int chipNo;
-	float w, h;			// 幅、高さ
-	Vec3 m_pos;			// 座標
-	int posInGraphX;	// 画像内のX座標
-	int posInGraphY;	// 画像内のY座標
-};
-
-/// <summary>
-/// マップ構造体
-/// </summary>
 class Map
 {
 public:
+	void InitMap();
+	void DrawMap(Camera& camera);
+
 	MapChip mapChips[MapConsts::kMapHeight][MapConsts::kMapWidth];
 	int m_graphHandle;
 	PlatinumLoader loader;
-	bool IsCol(Rect rect, Rect& chipRect);
+	bool IsCol(Rect rect, Rect& chipRect, Camera& camera);
 };
-
-// プロトタイプ宣言
-void InitMap(Map& map);
-void DrawMap(const Map& map);

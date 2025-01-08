@@ -149,6 +149,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Enemy1.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PlatinumLoader.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Shot.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Enemy1.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapChip.h" />
     <ClInclude Include="PlatinumLoader.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Shot.h" />

@@ -20,6 +20,8 @@ public:
 	void End();
 	void Update();
 
+	Vec3 GetDrawOffset() { return m_offset; }
+
 	Vec3 Capture(const Vec3& pos) const
 	{
 		return m_offset + pos;
