@@ -356,28 +356,30 @@ void Player::Draw(Camera& camera)
 {
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
+	Vec3 camOffset = camera.GetDrawOffset();
+	camOffset.x = 0;
+
 	// プレイヤーの当たり判定の表示
 	if (m_hp >= 0)
 	{
-		Vec3 camOffset = camera.GetDrawOffset();
-		DrawBox(GetLeft() + camOffset.x, GetTop() + camOffset.y, GetRight() + camOffset.x, GetBottom() + camOffset.y, 0xff0000, true);
+		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, true);
 	}
 
 	// プレイヤーのアニメーション切り替え
 	// 走る
 	if (m_isRun)
 	{
-		m_runAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
+		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 	// 攻撃
 	else if (m_isAtk)
 	{
-		m_atkAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
+		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 
 	else
 	{
-		m_idleAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
+		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 
 	// ショット

@@ -15,7 +15,7 @@ namespace MapConsts
 {
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth = 30;
-	constexpr int kMapHeight = 100;
+	constexpr int kMapHeight = 150;
 	constexpr int kMapGraphSize = 1472;
 	constexpr int kWhiteList[] =
 	{
@@ -27,7 +27,9 @@ namespace MapConsts
 		1027,1283,// •Ç
 		16,17,// °
 		272,273,// Šø‚Ì“Vˆä
-		782,783 // ½‚Ì“Vˆä
+		782,783, // ½‚Ì“Vˆä
+		5649,5650,5651,5652, // ‰º‚©‚ç‚Í‚·‚è”²‚¯‚Äã‚©‚ç‚Íæ‚ê‚é°
+		12,13,14,15,268,269
 	};
 
 	constexpr int kMapOffsetX = 160;
