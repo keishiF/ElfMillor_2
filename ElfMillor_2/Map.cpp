@@ -8,8 +8,8 @@
 void Map::InitMap()
 {
 	// Platinumデータ読み込み
-	//map.loader.Load("img/BackGround/Map.fmf");
-	loader.Load("img/BackGround/MapTest.fmf");
+	loader.Load("img/BackGround/Map.fmf");
+	//loader.Load("img/BackGround/MapTest.fmf");
 
 	int mapW, mapH;
 	loader.GetMapSize(mapW, mapH);
@@ -66,7 +66,7 @@ void Map::DrawMap(Camera& camera)
 				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - MapConsts::kMapOffsetY;
-				DrawRectGraph(leftTopX + camera.GetDrawOffset().x, leftTopY + camera.GetDrawOffset().y,
+				DrawRectGraph(leftTopX /* + camera.GetDrawOffset().x*/, leftTopY + camera.GetDrawOffset().y,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					MapConsts::kMapChipSize, MapConsts::kMapChipSize,
 					m_graphHandle, true);
@@ -102,7 +102,7 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 				float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
 				float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
 				float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-				DrawBox(chipLeft + camOffset.x, chipTop + camOffset.y, chipRight + camOffset.x, chipBottom + camOffset.y, 0xff0000, false);
+				DrawBox(chipLeft /* + camOffset.x*/, chipTop + camOffset.y, chipRight /* + camOffset.x*/, chipBottom + camOffset.y, 0xff0000, false);
 
 				// 当たっていないので一度ループから出る
 				if (chipTop > rect.bottom) continue;

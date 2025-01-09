@@ -269,7 +269,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			if (m_vec.y > 0.0f)
 			{
 				// 床に当たっているので上に押し戻す
-				m_pos.y = chipRect.top - 1;
+				m_pos.y = chipRect.top;
 				m_isJump = false;
 			}
 			// プレイヤーが上方向に移動している
@@ -374,7 +374,7 @@ void Player::Draw(Camera& camera)
 	{
 		m_atkAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
 	}
-	// 待機
+
 	else
 	{
 		m_idleAnim.Play(m_pos + camera.GetDrawOffset(), m_isDirLeft);
