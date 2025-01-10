@@ -13,7 +13,7 @@ namespace
 {
 	// 初期位置
 	constexpr int kDefaultPlayerPosX = 360;
-	constexpr int kDefaultPlayerPosY = 500;
+	constexpr int kDefaultPlayerPosY = 4576;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -168,6 +168,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		// 毎フレーム下方向に重力を加える
 		m_vec.y += kGravity;
 
+		// 移動処理
 		m_pos.x += m_vec.x;
 
 		// 横から当たったかどうかを確認する
@@ -191,6 +192,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 		}
 
 		m_pos.y += m_vec.y;
+
 		// 縦から当たったかどうかを確認する
 		if (map.IsCol(GetRect(), chipRect, m_camera))
 		{
@@ -362,7 +364,7 @@ void Player::Draw(Camera& camera)
 	// プレイヤーの当たり判定の表示
 	if (m_hp >= 0)
 	{
-		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, true);
+		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, false);
 	}
 
 	// プレイヤーのアニメーション切り替え

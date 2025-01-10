@@ -3,6 +3,7 @@
 #include <cassert>
 #include "Player.h"
 #include "Camera.h"
+#include "Map.h"
 
 namespace
 {
@@ -11,8 +12,11 @@ namespace
 	constexpr int kGraphHeight = 100;
 
 	// 初期位置
-	constexpr float kEnemyDefaultPosX = 420;
-	constexpr float kEnemyDefaultPosY = 50;
+	constexpr float kEnemyDefaultPosX = 600;
+	constexpr float kEnemyDefaultPosY = 4400;
+
+	// 重力
+	constexpr float kGravity = 0.4f;
 
 	// 各アニメーションのコマ数
 	constexpr int kWalkAnimNum = 8;
@@ -24,14 +28,16 @@ namespace
 	constexpr float kExpRate = 3.5f;
 
 	// 移動速度
-	constexpr float kSpeed = 1.0f;
+	constexpr float kSpeed = 0.4f;
 
 	// ノックバック距離
-	constexpr int kKnockBack = 30;
+	constexpr int kBesideHit = 43;
+	constexpr int kVerticalHit = 15;
 }
 
 Enemy1::Enemy1(Camera& camera) :
 	m_handleRun(-1),
+	m_isDirLeft(false),
 	EnemyBase(Vec3(kEnemyDefaultPosX, kEnemyDefaultPosY), camera)
 {
 	m_animAllFrame = 0;
@@ -58,24 +64,68 @@ void Enemy1::Update()
 {
 }
 
-void Enemy1::Update(Player& player)
+void Enemy1::Update(Player& player, Map& map)
 {
 	m_idleRun.Update();
 
-	if (m_pos.x > player.m_pos.x)
+	// 移動処理
+	if (m_isDirLeft)
 	{
 		m_vec.x -= kSpeed;
-		m_isDirLeft = true;
 	}
-	else if (m_pos.x < player.m_pos.x)
+	else
 	{
 		m_vec.x += kSpeed;
-		m_isDirLeft = false;
 	}
 
-	// 移動処理
-	m_vec = m_vec.GetNormalize() * kSpeed;
-	m_pos += m_vec;
+	m_pos.x += m_vec.x;
+
+	// 横から当たっているかどうかを確認する
+	Rect chipRect;
+	if (map.IsCol(GetRect(), chipRect, m_camera))
+	{
+		// 左右どっちから当たったか
+
+		// プレイヤーが右方向に移動している
+		if (m_vec.x > 0.0f)
+		{
+			// 右壁に当たっているので左に押し戻す
+			//m_pos.x = chipRect.left - kBesideHit;
+			m_isDirLeft = true;
+		}
+		// プレイヤーが左方向に移動している
+		else if (m_vec.x < 0.0f)
+		{
+			// 左壁に当たっているので右に押し戻す
+			//m_pos.x = chipRect.right + kBesideHit;
+			m_isDirLeft = false;
+		}
+	}
+
+	m_pos.y += m_vec.y;
+
+	// 縦から当たっているかどうかを確認する
+	if (map.IsCol(GetRect(), chipRect, m_camera))
+	{
+		// 上下どっちから当たったか
+
+		// プレイヤーが下方向に移動している
+		if (m_vec.y > 0.0f)
+		{
+			// 床に当たっているので上に押し戻す
+			m_pos.y = chipRect.top;
+		}
+		// プレイヤーが上方向に移動している
+		else if (m_vec.y < 0.0f)
+		{
+			// 天井に当たっているので下に押し戻す
+			m_pos.y = chipRect.bottom + kVerticalHit;
+			m_vec.y *= -1.0f;
+		}
+	}
+	else
+	{
+	}
 
 	// 死亡
 	if (m_hp <= 0)
@@ -121,4 +171,15 @@ float Enemy1::GetTop()
 float Enemy1::GetBottom()
 {
 	return (m_pos.y + kGraphHeight * 0.5f);
+}
+
+Rect Enemy1::GetRect()
+{
+	// プレイヤーの矩形当たり判定を作成
+	Rect rect;
+	rect.top = GetTop();
+	rect.bottom = GetBottom();
+	rect.right = GetRight();
+	rect.left = GetLeft();
+	return rect;
 }

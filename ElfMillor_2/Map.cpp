@@ -44,7 +44,6 @@ void Map::InitMap()
 			// .................
 			// 240 ..........255
 			// と番号が付くので、その番号×MapChipSize(32)が画像内の座標
-			int chipSideNum = MapConsts::kMapGraphSize / MapConsts::kMapChipSize;  // 一片のマップチップ個数
 			int inGraphXIdx = (mapChip.chipNo % 256); // 画像内の横インデックス
 			int inGraphYIdx = (mapChip.chipNo / 256); // 画像内の縦インデックス
 			mapChip.posInGraphX = inGraphXIdx * MapConsts::kMapChipSize;
@@ -65,8 +64,8 @@ void Map::DrawMap(Camera& camera)
 			{
 				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
-				auto leftTopY = static_cast<int>(mapChip.m_pos.y) - MapConsts::kMapOffsetY;
-				DrawRectGraph(leftTopX /* + camera.GetDrawOffset().x*/, leftTopY + camera.GetDrawOffset().y,
+				auto leftTopY = static_cast<int>(mapChip.m_pos.y) /* - MapConsts::kMapOffsetY*/;
+				DrawRectGraph(leftTopX, leftTopY + camera.GetDrawOffset().y,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					MapConsts::kMapChipSize, MapConsts::kMapChipSize,
 					m_graphHandle, true);
@@ -98,13 +97,12 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 
 				// 当たり判定したいやつの上下左右を取る
 				MapChip chip = mapChips[y][x];
-				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-				float chipTop = chip.m_pos.y - MapConsts::kMapChipSize * 0.5 - MapConsts::kMapOffsetY + 16;
-				float chipRight = chip.m_pos.x + MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-				float chipLeft = chip.m_pos.x - MapConsts::kMapChipSize * 0.5 + MapConsts::kMapOffsetX + 16;
-				DrawBox(chipLeft /* + camOffset.x*/, chipTop + camOffset.y, chipRight /* + camOffset.x*/, chipBottom + camOffset.y, 0xff0000, false);
+				float chipBottom = chip.m_pos.y /* - MapConsts::kMapOffsetY*/ + MapConsts::kMapChipSize;
+				float chipTop = chip.m_pos.y /*- MapConsts::kMapOffsetY*/;
+				float chipRight = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
+				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
 
-				// 当たっていないので一度ループから出る
 				if (chipTop > rect.bottom) continue;
 				if (chipBottom < rect.top) continue;
 				if (chipRight < rect.left) continue;
@@ -120,6 +118,49 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 			}
 		}
 	}	
+
+	return false;
+}
+
+bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
+{
+	// マップの当たり判定
+	for (int y = 0; y < MapConsts::kMapHeight; y++)
+	{
+		for (int x = 0; x < MapConsts::kMapWidth; x++)
+		{
+			// 当たり判定を取るものを限定する
+			// WhiteListに天井や床、壁など...
+			for (int i = 0; i < _countof(MapConsts::kWhiteList2); i++)
+			{
+				if (mapChips[y][x].chipNo != MapConsts::kWhiteList2[i]) continue;
+
+				// カメラに応じて補正
+				Vec3 camOffset = camera.GetDrawOffset();
+
+				// 当たり判定したいやつの上下左右を取る
+				MapChip chip = mapChips[y][x];
+				float chipBottom = chip.m_pos.y /* - MapConsts::kMapOffsetY*/ + MapConsts::kMapChipSize;
+				float chipTop = chip.m_pos.y /*- MapConsts::kMapOffsetY*/;
+				float chipRight = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
+				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
+
+				if (chipTop > rect.bottom) continue;
+				if (chipBottom < rect.top) continue;
+				if (chipRight < rect.left) continue;
+				if (chipLeft > rect.right) continue;
+
+				chipRect.top = chipTop;
+				chipRect.bottom = chipBottom;
+				chipRect.right = chipRight;
+				chipRect.left = chipLeft;
+
+				// 当たっている
+				return true;
+			}
+		}
+	}
 
 	return false;
 }

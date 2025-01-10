@@ -45,8 +45,8 @@ void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
 	m_player->Update(input, *m_boss, *m_enemy1, *m_map);
-	m_boss->Update();
-	//m_enemy1->Update(*m_player);
+	//m_boss->Update();
+	m_enemy1->Update(*m_player, *m_map);
 
 	float disX = m_boss->m_pos.x - m_player->m_pos.x;
 	if (disX > 50)
@@ -74,8 +74,8 @@ void GameScene::NormalDraw()
 {
 	m_map->DrawMap(*m_camera);
 	m_player->Draw(*m_camera);
-	m_boss->Draw();
-	//m_enemy1->Draw();
+	//m_boss->Draw();
+	m_enemy1->Draw();
 }
 
 GameScene::GameScene(SceneController& controller):

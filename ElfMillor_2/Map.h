@@ -16,7 +16,6 @@ namespace MapConsts
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth = 30;
 	constexpr int kMapHeight = 150;
-	constexpr int kMapGraphSize = 1472;
 	constexpr int kWhiteList[] =
 	{
 		1554,1555,1556,1557,// 草
@@ -28,8 +27,12 @@ namespace MapConsts
 		16,17,// 床
 		272,273,// 旗の天井
 		782,783, // 鎖の天井
-		5649,5650,5651,5652, // 下からはすり抜けて上からは乗れる床
 		12,13,14,15,268,269
+	};
+
+	constexpr int kWhiteList2[] =
+	{
+		5649,5650,5651,5652, // 下からはすり抜けて上からは乗れる床
 	};
 
 	constexpr int kMapOffsetX = 160;
@@ -48,4 +51,5 @@ public:
 	PlatinumLoader loader;
 	// マップの当たり判定
 	bool IsCol(Rect rect, Rect& chipRect, Camera& camera);
+	bool IsCol2(Rect rect, Rect& chipRect, Camera& camera);
 };

@@ -1,9 +1,11 @@
 #pragma once
 #include "EnemyBase.h"
 #include "Animation.h"
+#include "Rect.h"
 
 class Player;
 class Camera;
+class Map;
 
 class Enemy1 :public EnemyBase
 {
@@ -13,7 +15,7 @@ public:
 
 	virtual void Init() override;
 	virtual void Update() override;
-	void Update(Player& player);
+	void Update(Player& player, Map& map);
 	virtual void Draw() override;
 	void End();
 
@@ -22,6 +24,10 @@ public:
 	float GetTop();
 	float GetBottom();
 
+	Rect GetRect();
+
 private:
 	int m_handleRun;
+
+	bool m_isDirLeft;
 };
