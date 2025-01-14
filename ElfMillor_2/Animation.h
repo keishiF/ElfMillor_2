@@ -10,15 +10,15 @@ public:
 	void ResetAnimFrame() { m_animFrame = 0; }
 
 private:
-	int m_animFrame;
-	int m_animSingleFrame;
-	int m_graphWidth;
-	int m_graphHeight;
+	int   m_animFrame;
+	int   m_animSingleFrame;
+	int   m_graphWidth;
+	int   m_graphHeight;
+	int   m_animNum;
+	int   m_totalFrame;
 	float m_expRate;
-	int m_animNum;
-	int m_totalFrame;
 
-	bool m_isDirLeft;
+	bool  m_isDirLeft;
 
-	int m_drawHandle;
+	int   m_drawHandle;
 };

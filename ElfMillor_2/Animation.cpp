@@ -3,13 +3,13 @@
 
 void Animation::Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float expRate, int animNum)
 {
-	m_animFrame = 0;
-	m_drawHandle = drawHandle;
+	m_animFrame   = 0;
+	m_drawHandle  = drawHandle;
 	m_animSingleFrame = animSingleFrame;
-	m_graphWidth = graphWidth;
+	m_graphWidth  = graphWidth;
 	m_graphHeight = graphHeight;
-	m_expRate = expRate;
-	m_animNum = animNum;
+	m_expRate     = expRate;
+	m_animNum     = animNum;
 
 	m_totalFrame = m_animNum * m_animSingleFrame;
 }

@@ -5,6 +5,7 @@
 #include "Vec3.h"
 #include "Boss.h"
 #include "Enemy1.h"
+#include "Camera.h"
 
 #include <cmath>
 #include <cassert>
@@ -12,12 +13,12 @@
 namespace
 {
 	// 弾のグラフィックサイズ
-	constexpr int kGraphWidth = 68;
-	constexpr int kGraphHeight = 9;
+	constexpr int kGraphWidth   = 68;
+	constexpr int kGraphHeight  = 9;
 
-	// 弾の移動制限
-	constexpr int kBulletRifhtX = 1120;
-	constexpr int kBulletLeftX = 160;
+	// 画面端
+	constexpr int kLeftEndWidth = 160;
+	constexpr int kRightEndWidth = 1120;
 
 	// 弾の半径
 	constexpr float kShotRadius = 5.0f;
@@ -46,29 +47,24 @@ void Shot::Init()
 	assert(m_handle != -1);
 }
 
-void Shot::Update(Boss& boss, Enemy1& enemy1)
+void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera)
 {
-	if (m_isUp)
+	if (m_isDirLeft)
 	{
-		m_pos.y--;
+		m_pos += m_velocity;
 	}
-	else
+	else if (!m_isDirLeft)
 	{
-		if (m_isDirLeft)
-		{
-			m_pos += m_velocity;
-		}
-		else if (!m_isDirLeft)
-		{
-			m_pos -= m_velocity;
-		}
+		m_pos -= m_velocity;
 	}
 
-	if (m_pos.x > 1120)
+	// 右端に行ったら左端に
+	if (m_pos.x <= kLeftEndWidth)
 	{
 		m_isShotFlag = false;
 	}
-	if (m_pos.x < 160)
+	// 左端に行ったら右端に
+	else if (m_pos.x >= kRightEndWidth)
 	{
 		m_isShotFlag = false;
 	}
@@ -102,11 +98,14 @@ void Shot::Update(Boss& boss, Enemy1& enemy1)
 	}
 }
 
-void Shot::Draw()
+void Shot::Draw(Camera& camera)
 {
+	Vec3 camOffset = camera.GetDrawOffset();
+	camOffset.x = 0;
+
 	if (m_isShotFlag)
 	{
-		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), static_cast<int>(kShotRadius), 0xff0000, true);
+		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y, static_cast<int>(kShotRadius), 0x0000ff, true);
 		//DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }

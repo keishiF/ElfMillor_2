@@ -5,7 +5,6 @@
 #include "GameObject.h"
 #include "Rect.h"
 
-class Vec3;
 class Boss;
 class Enemy1;
 class Map;
@@ -26,7 +25,7 @@ public:
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map);
+	void Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera);
 	void Draw(Camera& camera);
 
 	// 当たり判定のための座標取得
@@ -56,7 +55,7 @@ private:
 
 	// ジャンプスピード
 	float m_jumpSpeed;
-	int m_jumpCount;
+	int   m_jumpCount;
 
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;

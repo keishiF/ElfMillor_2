@@ -25,7 +25,7 @@ void Camera::Update()
 	m_pos = m_player.lock()->m_pos;
 	
 	// ƒJƒƒ‰‚ÌˆÊ’u‚ğ’†S‚É
-	m_offset = m_pos;
+	m_offset    = m_pos;
 	m_offset.x *= -1;
 	m_offset.y *= -1;
 	m_offset.x += Game::kScreenWidth * 0.5f;

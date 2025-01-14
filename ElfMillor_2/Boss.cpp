@@ -6,11 +6,11 @@
 namespace
 {
 	// グラフィックのサイズ
-	constexpr int kGraphWidth = 224;
+	constexpr int kGraphWidth  = 224;
 	constexpr int kGraphHeight = 240;
 
 	// 弾のグラフィックサイズ
-	constexpr int kShotGraphWidth = 64;
+	constexpr int kShotGraphWidth  = 64;
 	constexpr int kShotGraphHeight = 64;
 
 	// 各アニメーションのコマ数
@@ -20,7 +20,7 @@ namespace
 	constexpr int kAnimSingleFrame = 8;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate = 2.0f;
+	constexpr float kExpRate  = 2.0f;
 
 	// 初期位置
 	constexpr float kBossPosX = 700;

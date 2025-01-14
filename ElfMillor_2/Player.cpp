@@ -9,6 +9,10 @@
 
 #include <cassert>
 
+#ifdef _DEBUG
+#define DISP_COLLISION
+#endif
+
 namespace
 {
 	// 初期位置
@@ -16,7 +20,7 @@ namespace
 	constexpr int kDefaultPlayerPosY = 4576;
 
 	// 画面端
-	constexpr int kLeftEndWidth = 160;
+	constexpr int kLeftEndWidth  = 160;
 	constexpr int kRightEndWidth = 1120;
 
 	constexpr int kFieldHeight = 352;
@@ -25,7 +29,7 @@ namespace
 	constexpr int kDefaultHp = 15;
 
 	// プレイヤーの移動速度
-	constexpr float kSpeed = 5.0f;
+	constexpr float kSpeed   = 5.0f;
 
 	// 重力
 	constexpr float kGravity = 0.4f;
@@ -34,27 +38,27 @@ namespace
 	constexpr int kAnimSingleFrame = 8;
 
 	// キャラクターのグラフィックのサイズ
-	constexpr int kGraphWidth = 160;
+	constexpr int kGraphWidth  =  160;
 	constexpr int kGraphHeight = 128;
 
 	// 当たり判定のサイズ
-	constexpr int kColSizeWidth = 0;
+	constexpr int kColSizeWidth  = 0;
 	constexpr int kColSizeHeight = 0;
 
 	// 待機アニメーションのコマ数
-	constexpr int kIdleAnimNum = 8;
+	constexpr int kIdleAnimNum  = 8;
 	// 走りアニメーションのコマ数
-	constexpr int kRunAnimNum = 8;
+	constexpr int kRunAnimNum   = 8;
 	// 攻撃アニメーションのコマ数
-	constexpr int kAtkAnimNum = 13;
+	constexpr int kAtkAnimNum   = 13;
 	// 死亡アニメーションのコマ数
 	constexpr int kDeathAnimNum = 10;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate = 1.75f;
+	constexpr float kExpRate   = 1.75f;
 
 	// ノックバック距離
-	constexpr int kBesideHit = 43;
+	constexpr int kBesideHit   = 43;
 	constexpr int kVerticalHit = 15;
 }
 
@@ -67,7 +71,7 @@ Player::Player(Camera& camera) :
 	m_isJump(false),
 	m_isAtk(false),
 	m_isDeath(false),
-	m_jumpSpeed(-11.0f),
+	m_jumpSpeed(-10.0f),
 	m_jumpCount(0),
 	m_vec(0.0f,0.0f),
 	m_isDirLeft(false),
@@ -127,7 +131,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
+void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
 {
 	m_idleAnim.Update();
 
@@ -165,7 +169,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	{
 		// 空中にいるときの処理
 
-		// 毎フレーム下方向に重力を加える
+		// 毎フレーム重力によって下方向に加速する
 		m_vec.y += kGravity;
 
 		// 移動処理
@@ -190,6 +194,19 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
+		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		{
+			// 左右どっちから当たったか
+
+			// プレイヤーが右方向に移動している
+			if (m_vec.x > 0.0f)
+			{
+			}
+			// プレイヤーが左方向に移動している
+			else if (m_vec.x < 0.0f)
+			{
+			}
+		}
 
 		m_pos.y += m_vec.y;
 
@@ -203,22 +220,39 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			{
 				// 床に当たっているので上に押し戻す
 				m_pos.y -= m_vec.y;
-				m_vec.y = 0.0f;
+				m_vec.y  = 0.0f;
 				m_isJump = false;
 			}
 			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
 				// 天井に当たっているので下に押し戻す
-				m_pos.y = chipRect.bottom + kVerticalHit;
+				m_pos.y  = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
+			}
+		}
+		// 下からはすり抜け、上からは乗れる床の判定
+		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		{
+			// 上下どっちから当たったか
+
+			// プレイヤーが下方向に移動している
+			if (m_vec.y > 0.0f)
+			{
+				// 床に当たっているので上に押し戻す
+				m_pos.y -= m_vec.y;
+				m_vec.y  = 0.0f;
+				m_isJump = false;
+			}
+			else
+			{
 			}
 		}
 	}
 	else
 	{
 		// ジャンプ
-		if (input.IsTrigger(PAD_INPUT_1) && !m_isJump)
+		if (input.IsPress(PAD_INPUT_1) && !m_isJump)
 		{
 			m_isJump = true;
 			m_jumpCount++;
@@ -259,6 +293,19 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
+		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		{
+			// 左右どっちから当たったか
+
+			// プレイヤーが右方向に移動している
+			if (m_vec.x > 0.0f)
+			{
+			}
+			// プレイヤーが左方向に移動している
+			else if (m_vec.x < 0.0f)
+			{
+			}
+		}
 
 		m_pos.y += m_vec.y;
 
@@ -271,15 +318,32 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 			if (m_vec.y > 0.0f)
 			{
 				// 床に当たっているので上に押し戻す
-				m_pos.y = chipRect.top;
+				m_pos.y  = chipRect.top;
 				m_isJump = false;
 			}
 			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
 				// 天井に当たっているので下に押し戻す
-				m_pos.y = chipRect.bottom + kVerticalHit;
+				m_pos.y  = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
+			}
+		}
+		// 下からはすり抜け、上からは乗れる床の判定
+		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		{
+			// 上下どっちから当たったか
+
+			// プレイヤーが下方向に移動している
+			if (m_vec.y > 0.0f)
+			{
+				// 床に当たっているので上に押し戻す
+				m_pos.y = chipRect.top;
+				m_isJump = false;
+			}
+			else
+			{
+
 			}
 		}
 		else
@@ -309,7 +373,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 				m_isAtk = true;
 
 				// 弾の位置をプレイヤーの位置に補正
-				m_shot[i].m_pos = m_pos + m_camera.GetDrawOffset();
+				m_shot[i].m_pos = m_pos;
 
 				// 弾を表示
 				m_shot[i].m_isShotFlag = true;
@@ -350,7 +414,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map)
 	// 弾を発射
 	for (int i = 0; i < kShot; i++)
 	{	
-		m_shot[i].Update(boss, enemy1);
+		m_shot[i].Update(boss, enemy1, camera);
 	}
 }
 
@@ -361,11 +425,13 @@ void Player::Draw(Camera& camera)
 	Vec3 camOffset = camera.GetDrawOffset();
 	camOffset.x = 0;
 
+#ifdef DISP_COLLISION
 	// プレイヤーの当たり判定の表示
 	if (m_hp >= 0)
 	{
 		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, false);
 	}
+#endif
 
 	// プレイヤーのアニメーション切り替え
 	// 走る
@@ -387,10 +453,10 @@ void Player::Draw(Camera& camera)
 	// ショット
 	for (int i = 0; i < kShot; i++)
 	{
-		m_shot[i].Draw();
+		m_shot[i].Draw(camera);
 	}
 
-	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
 }
 
@@ -406,7 +472,7 @@ float Player::GetRight()
 
 float Player::GetTop()
 {
-	return (m_pos.y - 10);
+	return (m_pos.y);
 }
 
 float Player::GetBottom()
@@ -418,9 +484,9 @@ Rect Player::GetRect()
 {
 	// プレイヤーの矩形当たり判定を作成
 	Rect rect;
-	rect.top = GetTop();
+	rect.top    = GetTop();
 	rect.bottom = GetBottom();
-	rect.right = GetRight();
-	rect.left = GetLeft();
+	rect.right  = GetRight();
+	rect.left   = GetLeft();
 	return rect;
 }

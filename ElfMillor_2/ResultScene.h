@@ -7,10 +7,10 @@ class ResultScene :
 private:
 	int m_frame = 60;
 	using UpdateFunc_t = void (ResultScene::*)(Input& input);
-	using DrawFunc_t = void (ResultScene::*)();
+	using DrawFunc_t   = void (ResultScene::*)();
 
 	UpdateFunc_t m_update = nullptr;
-	DrawFunc_t m_draw = nullptr;
+	DrawFunc_t   m_draw = nullptr;
 
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);

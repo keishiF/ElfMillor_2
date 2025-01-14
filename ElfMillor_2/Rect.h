@@ -18,13 +18,13 @@ public:
 		right(0)
 	{
 	}
-	float getWidth() const { return right - left; }
-	float getHeight() const { return bottom - top; }
+	float GetWidth() const { return right - left; }
+	float GetHeight() const { return bottom - top; }
 
 	// 各座標取得
-	Vec3 getCenter();
+	Vec3 GetCenter();
 
 	// 当たり(重なり)判定
-	bool isCol(const Rect& rect);
+	bool IsCol(const Rect& rect);
 	// 座標が矩形内に含まれるかどうか判定
 };

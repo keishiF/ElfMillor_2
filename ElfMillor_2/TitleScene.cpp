@@ -11,7 +11,7 @@
 namespace
 {
 	// ‰æ–Ê’†‰›
-	constexpr int kGameScreenHalfWidth = Game::kScreenWidth / 2;
+	constexpr int kGameScreenHalfWidth  = Game::kScreenWidth / 2;
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 	constexpr int kFadeInterval = 60;
 }
@@ -21,7 +21,7 @@ void TitleScene::FadeInUpdate(Input&)
 	if (m_frame-- <= 0)
 	{
 		m_update = &TitleScene::NormalUpdate;
-		m_draw = &TitleScene::NormalDraw;
+		m_draw   = &TitleScene::NormalDraw;
 	}
 }
 
@@ -43,8 +43,8 @@ void TitleScene::NormalUpdate(Input& input)
 	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &TitleScene::FadeOutUpdate;
-		m_draw = &TitleScene::FadeDraw;
-		m_frame = 0;
+		m_draw   = &TitleScene::FadeDraw;
+		m_frame  = 0;
 	}
 }
 

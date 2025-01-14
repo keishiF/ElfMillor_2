@@ -10,8 +10,8 @@ class GameObject
 public:
 	virtual ~GameObject() {};
 
-	Vec3 m_pos;
-	Vec3 dir;
+	Vec3  m_pos;
+	Vec3  dir;
 	float w;
 	float h;
 protected:

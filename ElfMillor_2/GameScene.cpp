@@ -23,7 +23,7 @@ void GameScene::FadeInUpdate(Input& input)
 	if (m_frame-- <= 0)
 	{
 		m_update = &GameScene::NormalUpdate;
-		m_draw = &GameScene::NormalDraw;
+		m_draw   = &GameScene::NormalDraw;
 	}
 }
 
@@ -44,7 +44,7 @@ void GameScene::FadeOutUpdate(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
-	m_player->Update(input, *m_boss, *m_enemy1, *m_map);
+	m_player->Update(input, *m_boss, *m_enemy1, *m_map, *m_camera);
 	//m_boss->Update();
 	m_enemy1->Update(*m_player, *m_map);
 
@@ -75,7 +75,7 @@ void GameScene::NormalDraw()
 	m_map->DrawMap(*m_camera);
 	m_player->Draw(*m_camera);
 	//m_boss->Draw();
-	m_enemy1->Draw();
+	m_enemy1->Draw(*m_camera);
 }
 
 GameScene::GameScene(SceneController& controller):
@@ -83,14 +83,14 @@ GameScene::GameScene(SceneController& controller):
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
-	m_frame = kFadeInterval;
+	m_frame  = kFadeInterval;
 
-	m_map = std::make_shared<Map>();
+	m_map    = std::make_shared<Map>();
 	m_map->InitMap();
 
 	m_camera = std::make_shared<Camera>();
 
-	m_boss = std::make_shared<Boss>(*m_camera);
+	m_boss   = std::make_shared<Boss>(*m_camera);
 	m_boss->Init();
 
 	m_enemy1 = std::make_shared<Enemy1>(*m_camera);

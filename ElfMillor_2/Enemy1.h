@@ -15,8 +15,9 @@ public:
 
 	virtual void Init() override;
 	virtual void Update() override;
-	void Update(Player& player, Map& map);
 	virtual void Draw() override;
+	void Update(Player& player, Map& map);
+	void Draw(Camera& camera);
 	void End();
 
 	float GetLeft();
@@ -24,10 +25,10 @@ public:
 	float GetTop();
 	float GetBottom();
 
-	Rect GetRect();
+	Rect  GetRect();
 
 private:
-	int m_handleRun;
+	int  m_handleRun;
 
 	bool m_isDirLeft;
 };
