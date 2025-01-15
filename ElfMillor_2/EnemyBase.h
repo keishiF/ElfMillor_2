@@ -16,10 +16,10 @@ public:
 
 protected:
 	// グラフィック
-	int m_handleIdle;
+	int m_handleIdle = -1;
 
 	// 全体のフレームを数える
-	int m_animAllFrame;
+	int m_animAllFrame = 0;
 
 	// アニメーション
 	Animation m_idleRun;

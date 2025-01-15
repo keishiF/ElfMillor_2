@@ -103,16 +103,16 @@ Player::~Player()
 void Player::Init()
 {
 	// グラフィックの読み込み
-	m_handleIdle = LoadGraph("img/Player2/Idle.png");
+	m_handleIdle = LoadGraph("img/Player/Idle.png");
 	assert(m_handleIdle != -1);
 
-	m_handleRun = LoadGraph("img/Player2/Run.png");
+	m_handleRun = LoadGraph("img/Player/Run.png");
 	assert(m_handleRun != -1);
 
-	m_handleAtk = LoadGraph("img/Player2/Atk.png");
+	m_handleAtk = LoadGraph("img/Player/Atk.png");
 	assert(m_handleAtk != -1);
 
-	m_handleDeath = LoadGraph("img/Player2/Death.png");
+	m_handleDeath = LoadGraph("img/Player/Death.png");
 	assert(m_handleDeath != -1);
 
 	for (int i = 0; i < kShot; i++)
@@ -194,19 +194,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
-		else if (map.IsCol2(GetRect(), chipRect, m_camera))
-		{
-			// 左右どっちから当たったか
-
-			// プレイヤーが右方向に移動している
-			if (m_vec.x > 0.0f)
-			{
-			}
-			// プレイヤーが左方向に移動している
-			else if (m_vec.x < 0.0f)
-			{
-			}
-		}
 
 		m_pos.y += m_vec.y;
 
@@ -231,8 +218,9 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				m_vec.y *= -1.0f;
 			}
 		}
+
 		// 下からはすり抜け、上からは乗れる床の判定
-		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		if (map.IsCol2(GetRect(), chipRect, m_camera))
 		{
 			// 上下どっちから当たったか
 
@@ -243,9 +231,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				m_pos.y -= m_vec.y;
 				m_vec.y  = 0.0f;
 				m_isJump = false;
-			}
-			else
-			{
 			}
 		}
 	}
@@ -293,19 +278,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				m_pos.x = chipRect.right + kBesideHit;
 			}
 		}
-		else if (map.IsCol2(GetRect(), chipRect, m_camera))
-		{
-			// 左右どっちから当たったか
-
-			// プレイヤーが右方向に移動している
-			if (m_vec.x > 0.0f)
-			{
-			}
-			// プレイヤーが左方向に移動している
-			else if (m_vec.x < 0.0f)
-			{
-			}
-		}
 
 		m_pos.y += m_vec.y;
 
@@ -329,8 +301,13 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				m_vec.y *= -1.0f;
 			}
 		}
+		else
+		{
+			m_isJump = true;
+		}
+
 		// 下からはすり抜け、上からは乗れる床の判定
-		else if (map.IsCol2(GetRect(), chipRect, m_camera))
+		if (map.IsCol2(GetRect(), chipRect, m_camera))
 		{
 			// 上下どっちから当たったか
 
@@ -340,10 +317,6 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 				// 床に当たっているので上に押し戻す
 				m_pos.y = chipRect.top;
 				m_isJump = false;
-			}
-			else
-			{
-
 			}
 		}
 		else
@@ -414,7 +387,7 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 	// 弾を発射
 	for (int i = 0; i < kShot; i++)
 	{	
-		m_shot[i].Update(boss, enemy1, camera);
+		m_shot[i].Update(boss, enemy1, camera, map);
 	}
 }
 
@@ -429,7 +402,8 @@ void Player::Draw(Camera& camera)
 	// プレイヤーの当たり判定の表示
 	if (m_hp >= 0)
 	{
-		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, false);
+		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y), 
+			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
 	}
 #endif
 

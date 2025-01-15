@@ -1,10 +1,13 @@
 #pragma once
 #include "Vec3.h"
+#include "Rect.h"
+#include "GameObject.h"
 
 class Input;
 class Boss;
 class Enemy1;
 class Camera;
+class Map;
 
 class Shot
 {
@@ -13,13 +16,15 @@ public:
 	~Shot();
 
 	void Init();
-	void Update(Boss& boss, Enemy1& enemy1, Camera& camera);
+	void Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map);
 	void Draw(Camera& camera);
 
 	float GetLeft();
 	float GetRight();
 	float GetTop();
 	float GetBottom();
+
+	Rect GetRect();
 
 	// ’e‚ªo‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
 	bool m_isShotFlag;

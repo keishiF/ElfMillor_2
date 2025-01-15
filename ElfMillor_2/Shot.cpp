@@ -6,6 +6,7 @@
 #include "Boss.h"
 #include "Enemy1.h"
 #include "Camera.h"
+#include "Map.h"
 
 #include <cmath>
 #include <cassert>
@@ -47,7 +48,7 @@ void Shot::Init()
 	assert(m_handle != -1);
 }
 
-void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera)
+void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
 {
 	if (m_isDirLeft)
 	{
@@ -96,6 +97,15 @@ void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera)
 			}
 		}
 	}
+
+	Rect chipRect;
+	if (map.IsCol(GetRect(), chipRect, camera))
+	{
+		if (m_isShotFlag)
+		{
+			m_isShotFlag = false;
+		}
+	}
 }
 
 void Shot::Draw(Camera& camera)
@@ -105,7 +115,7 @@ void Shot::Draw(Camera& camera)
 
 	if (m_isShotFlag)
 	{
-		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y, static_cast<int>(kShotRadius), 0x0000ff, true);
+		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y, static_cast<int>(kShotRadius), 0xff0000, true);
 		//DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
 	}
 }
@@ -128,4 +138,14 @@ float Shot::GetTop()
 float Shot::GetBottom()
 {
 	return m_pos.y + kShotRadius;
+}
+
+Rect Shot::GetRect()
+{
+	Rect rect;
+	rect.top = GetTop();
+	rect.bottom = GetBottom();
+	rect.right = GetRight();
+	rect.left = GetLeft();
+	return rect;
 }
