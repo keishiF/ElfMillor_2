@@ -176,3 +176,50 @@ bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
 
 	return false;
 }
+
+bool Map::IsDamageCol(Rect rect, Rect& chipRect, Camera& camera)
+{
+	// マップの当たり判定
+	for (int y = 0; y < MapConsts::kMapHeight; y++)
+	{
+		for (int x = 0; x < MapConsts::kMapWidth; x++)
+		{
+			// 当たり判定を取るものを限定する
+			// WhiteListに天井や床、壁など...
+			for (int i = 0; i < _countof(MapConsts::kDamageList); i++)
+			{
+				if (mapChips[y][x].chipNo != MapConsts::kDamageList[i]) continue;
+
+				// カメラに応じて補正
+				Vec3 camOffset = camera.GetDrawOffset();
+
+				// 当たり判定したいやつの上下左右を取る
+				MapChip chip     = mapChips[y][x];
+				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize;
+				float chipTop    = chip.m_pos.y;
+				float chipRight  = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
+
+#ifdef DISP_COLLISION
+				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
+#endif
+				// 絶対に当たっていない場合continue
+				if (chipTop    > rect.bottom) continue;
+				if (chipBottom < rect.top)    continue;
+				if (chipRight  < rect.left)   continue;
+				if (chipLeft   > rect.right)  continue;
+
+				// 当たったマップチップの矩形を設定する
+				chipRect.top    = chipTop;
+				chipRect.bottom = chipBottom;
+				chipRect.right  = chipRight;
+				chipRect.left   = chipLeft;
+
+				// 当たっている
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

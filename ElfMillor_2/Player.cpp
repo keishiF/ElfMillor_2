@@ -60,6 +60,9 @@ namespace
 	// ノックバック距離
 	constexpr int kBesideHit   = 43;
 	constexpr int kVerticalHit = 15;
+
+	// ダメージ食らった後の無敵時間
+	constexpr int kDamageBlinkFrame = 45;
 }
 
 Player::Player(Camera& camera) :
@@ -133,6 +136,75 @@ void Player::End()
 
 void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
 {
+	// 生きているときと死んでいるときで処理を切り分ける
+	if (m_hp > 0)
+	{
+		NormalUpdate(input, boss, enemy1, map, m_camera);
+	}
+	else
+	{
+		DeadUpdate();
+	}
+}
+
+void Player::Draw(Camera& camera)
+{
+	// 点滅処理
+	if ((m_blinkFrame / 2) % 2)
+	{
+		return;
+	}
+
+	//Vec3 drawPos = m_camera.Capture(m_pos);
+
+	Vec3 camOffset = camera.GetDrawOffset();
+	camOffset.x = 0;
+
+#ifdef DISP_COLLISION
+	// プレイヤーの当たり判定の表示
+	if (m_hp >= 0)
+	{
+		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y), 
+			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
+	}
+#endif
+
+	// プレイヤーのアニメーション切り替え
+	// 走る
+	if (m_isRun)
+	{
+		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+	// 攻撃
+	else if (m_isAtk)
+	{
+		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+
+	else
+	{
+		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+
+	// ショット
+	for (int i = 0; i < kShot; i++)
+	{
+		m_shot[i].Draw(camera);
+	}
+
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
+}
+
+void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
+{
+	// 無敵時間の更新
+	m_blinkFrame--;
+	if (m_blinkFrame < 0)
+	{
+		m_blinkFrame = 0;
+	}
+
 	m_idleAnim.Update();
 
 	m_isRun = false;
@@ -207,14 +279,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 			{
 				// 床に当たっているので上に押し戻す
 				m_pos.y -= m_vec.y;
-				m_vec.y  = 0.0f;
+				m_vec.y = 0.0f;
 				m_isJump = false;
 			}
 			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
 				// 天井に当たっているので下に押し戻す
-				m_pos.y  = chipRect.bottom + kVerticalHit;
+				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
 		}
@@ -229,9 +301,15 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 			{
 				// 床に当たっているので上に押し戻す
 				m_pos.y -= m_vec.y;
-				m_vec.y  = 0.0f;
+				m_vec.y = 0.0f;
 				m_isJump = false;
 			}
+		}
+
+		// ダメージ床との当たり判定
+		if (map.IsDamageCol(GetRect(), chipRect, m_camera))
+		{
+			OnDamage();
 		}
 	}
 	else
@@ -290,14 +368,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 			if (m_vec.y > 0.0f)
 			{
 				// 床に当たっているので上に押し戻す
-				m_pos.y  = chipRect.top;
+				m_pos.y = chipRect.top;
 				m_isJump = false;
 			}
 			// プレイヤーが上方向に移動している
 			else if (m_vec.y < 0.0f)
 			{
 				// 天井に当たっているので下に押し戻す
-				m_pos.y  = chipRect.bottom + kVerticalHit;
+				m_pos.y = chipRect.bottom + kVerticalHit;
 				m_vec.y *= -1.0f;
 			}
 		}
@@ -322,6 +400,12 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 		else
 		{
 			m_isJump = true;
+		}
+
+		// ダメージ床との当たり判定
+		if (map.IsDamageCol(GetRect(), chipRect, m_camera))
+		{
+			OnDamage();
 		}
 	}
 
@@ -386,52 +470,13 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 
 	// 弾を発射
 	for (int i = 0; i < kShot; i++)
-	{	
+	{
 		m_shot[i].Update(boss, enemy1, camera, map);
 	}
 }
 
-void Player::Draw(Camera& camera)
+void Player::DeadUpdate()
 {
-	//Vec3 drawPos = m_camera.Capture(m_pos);
-
-	Vec3 camOffset = camera.GetDrawOffset();
-	camOffset.x = 0;
-
-#ifdef DISP_COLLISION
-	// プレイヤーの当たり判定の表示
-	if (m_hp >= 0)
-	{
-		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y), 
-			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
-	}
-#endif
-
-	// プレイヤーのアニメーション切り替え
-	// 走る
-	if (m_isRun)
-	{
-		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-	// 攻撃
-	else if (m_isAtk)
-	{
-		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-
-	else
-	{
-		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-
-	// ショット
-	for (int i = 0; i < kShot; i++)
-	{
-		m_shot[i].Draw(camera);
-	}
-
-	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
-	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
 }
 
 float Player::GetLeft()
@@ -452,6 +497,23 @@ float Player::GetTop()
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 35);
+}
+
+void Player::OnDamage()
+{
+#ifdef DISP_COLLISION
+	printfDx("ダメージ！\n");
+#endif
+
+	// 既にダメージを受けている(無敵時間は)
+	// 再度ダメージを受けることは無い
+	if (m_blinkFrame > 0) return;
+
+	// 無敵時間(点滅する時間)を設定する
+	m_blinkFrame = kDamageBlinkFrame;
+
+	// ダメージを受ける
+	m_hp--;
 }
 
 Rect Player::GetRect()

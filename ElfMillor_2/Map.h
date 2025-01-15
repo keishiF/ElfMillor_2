@@ -35,6 +35,11 @@ namespace MapConsts
 		5649,5650,5651,5652, // 下からはすり抜けて上からは乗れる床
 	};
 
+	constexpr int kDamageList[] =
+	{
+		4617,4618,4619,4873,4874,4875
+	};
+
 	constexpr int kMapOffsetX = 160;
 	constexpr int kMapOffsetY = 2477;
 }
@@ -51,5 +56,10 @@ public:
 	PlatinumLoader loader;
 	// マップの当たり判定
 	bool IsCol(Rect rect, Rect& chipRect, Camera& camera);
+
+	// 下からはすり抜け、上からは乗れる床の判定
 	bool IsCol2(Rect rect, Rect& chipRect, Camera& camera);
+
+	// ダメージを受ける床の判定
+	bool IsDamageCol(Rect rect, Rect& chipRect, Camera& camera);
 };
