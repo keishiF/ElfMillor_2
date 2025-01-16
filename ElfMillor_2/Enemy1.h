@@ -16,7 +16,7 @@ public:
 	virtual void Init() override;
 	virtual void Update() override;
 	virtual void Draw() override;
-	void Update(Player& player, Map& map);
+	void Update(Map& map);
 	void Draw(Camera& camera);
 	void End();
 
@@ -27,8 +27,13 @@ public:
 
 	Rect  GetRect();
 
+	void OnDamage();
+
 private:
 	int  m_handleRun;
 
 	bool m_isDirLeft;
+
+	// ”í’eŽž‚Ì“_–Å
+	int m_blinkFrameCount;
 };

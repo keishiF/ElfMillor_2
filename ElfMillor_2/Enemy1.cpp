@@ -16,8 +16,8 @@ namespace
 	constexpr int kGraphHeight = 100;
 
 	// 初期位置
-	constexpr float kEnemyDefaultPosX = 800;
-	constexpr float kEnemyDefaultPosY = 4400;
+	constexpr float kEnemyDefaultPosX = 500;
+	constexpr float kEnemyDefaultPosY = 4443;
 
 	// 重力
 	constexpr float kGravity = 0.4f;
@@ -36,12 +36,15 @@ namespace
 
 	// ノックバック距離
 	constexpr int kBesideHit   = 43;
-	constexpr int kVerticalHit = 15;
+
+	// ダメージ食らった後の無敵時間
+	constexpr int kDamageBlinkFrame = 30;
 }
 
 Enemy1::Enemy1(Camera& camera) :
 	m_handleRun(-1),
 	m_isDirLeft(false),
+	m_blinkFrameCount(0),
 	EnemyBase(Vec3(kEnemyDefaultPosX, kEnemyDefaultPosY), camera)
 {
 	m_animAllFrame = 0;
@@ -72,7 +75,7 @@ void Enemy1::Draw()
 {
 }
 
-void Enemy1::Update(Player& player, Map& map)
+void Enemy1::Update(Map& map)
 {
 	m_idleRun.Update();
 
@@ -85,9 +88,6 @@ void Enemy1::Update(Player& player, Map& map)
 	{
 		m_vec.x = -kSpeed;
 	}
-
-	// 毎フレーム重力によって下方向に加速する
-	//m_vec.y += kGravity;
 
 	m_pos.x += m_vec.x;
 	// 横から当たっているかどうかを確認する
@@ -112,28 +112,6 @@ void Enemy1::Update(Player& player, Map& map)
 		}
 	}
 
-	m_pos.y += m_vec.y;
-
-	// 縦から当たっているかどうかを確認する
-	if (map.IsCol(GetRect(), chipRect, m_camera))
-	{
-		// 上下どっちから当たったか
-
-		// 下方向に移動している
-		if (m_vec.y > 0.0f)
-		{
-			// 床に当たっているので上に押し戻す
-			m_pos.y = chipRect.top - 40;
-		}
-		// 上方向に移動している
-		else if (m_vec.y < 0.0f)
-		{
-			// 天井に当たっているので下に押し戻す
-			m_pos.y  = chipRect.bottom + kVerticalHit;
-			m_vec.y *= -1.0f;
-		}
-	}
-
 	// 死亡
 	if (m_hp <= 0)
 	{
@@ -143,6 +121,12 @@ void Enemy1::Update(Player& player, Map& map)
 
 void Enemy1::Draw(Camera& camera)
 {
+	// 点滅処理
+	if ((m_blinkFrameCount / 2) % 2)
+	{
+		return;
+	}
+
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
 	Vec3 camOffset = camera.GetDrawOffset();
@@ -172,7 +156,7 @@ float Enemy1::GetLeft()
 
 float Enemy1::GetRight()
 {
-	return (m_pos.x + 40);
+	return (m_pos.x + 25);
 }
 
 float Enemy1::GetTop()
@@ -194,4 +178,17 @@ Rect Enemy1::GetRect()
 	rect.right  = GetRight();
 	rect.left   = GetLeft();
 	return rect;
+}
+
+void Enemy1::OnDamage()
+{
+	// 既にダメージを受けている(無敵時間は)
+	// 再度ダメージを受けることは無い
+	if (m_blinkFrameCount > 0) return;
+
+	// 無敵時間(点滅する時間)を設定する
+	m_blinkFrameCount = kDamageBlinkFrame;
+
+	// ダメージを受ける
+	m_hp--;
 }

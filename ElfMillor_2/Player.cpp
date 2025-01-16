@@ -240,7 +240,7 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 	if (m_isJump)
 	{
 		// ‹ó’†‚É‚¢‚é‚Æ‚«‚Ìˆ—
-
+		
 		// –ˆƒtƒŒ[ƒ€d—Í‚É‚æ‚Á‚Ä‰º•ûŒü‚É‰Á‘¬‚·‚é
 		m_vec.y += kGravity;
 
