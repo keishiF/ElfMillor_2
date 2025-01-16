@@ -23,8 +23,6 @@ namespace
 	constexpr int kLeftEndWidth  = 160;
 	constexpr int kRightEndWidth = 1120;
 
-	constexpr int kFieldHeight = 352;
-
 	// プレイヤーの初期HP
 	constexpr int kDefaultHp = 15;
 
@@ -41,10 +39,6 @@ namespace
 	constexpr int kGraphWidth  =  160;
 	constexpr int kGraphHeight = 128;
 
-	// 当たり判定のサイズ
-	constexpr int kColSizeWidth  = 0;
-	constexpr int kColSizeHeight = 0;
-
 	// 待機アニメーションのコマ数
 	constexpr int kIdleAnimNum  = 8;
 	// 走りアニメーションのコマ数
@@ -52,34 +46,38 @@ namespace
 	// 攻撃アニメーションのコマ数
 	constexpr int kAtkAnimNum   = 13;
 	// 死亡アニメーションのコマ数
-	constexpr int kDeathAnimNum = 10;
+	constexpr int kDeadAnimNum = 10;
 
 	// グラフィックの拡大率
 	constexpr float kExpRate   = 1.75f;
 
 	// ノックバック距離
 	constexpr int kBesideHit   = 43;
-	constexpr int kVerticalHit = 15;
+	constexpr int kVerticalHit = 1;
 
 	// ダメージ食らった後の無敵時間
-	constexpr int kDamageBlinkFrame = 45;
+	constexpr int kDamageBlinkFrame = 30;
+
+	// 死亡時の演出再生時間
+	constexpr int kDeadFrame = 80;
 }
 
 Player::Player(Camera& camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
 	m_handleAtk(-1),
-	m_handleDeath(-1),
+	m_handleDead(-1),
 	m_isRun(false),
 	m_isJump(false),
 	m_isAtk(false),
-	m_isDeath(false),
+	m_isDead(false),
 	m_jumpSpeed(-10.0f),
 	m_jumpCount(0),
 	m_vec(0.0f,0.0f),
 	m_isDirLeft(false),
 	m_isShotDirRight(true),
-	m_blinkFrame(0),
+	m_blinkFrameCount(0),
+	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
 	m_isGroundHit(false),
 	m_isCeilingHit(false),
@@ -89,6 +87,7 @@ Player::Player(Camera& camera) :
 	m_idleAnim(),
 	m_runAnim(),
 	m_atkAnim(),
+	m_deadAnim(),
 	// 基底クラスの初期化
 	GameObject(Vec3(kDefaultPlayerPosX, kDefaultPlayerPosY), camera)
 {
@@ -100,7 +99,7 @@ Player::~Player()
 	DeleteGraph(m_handleIdle);
 	DeleteGraph(m_handleRun);
 	DeleteGraph(m_handleAtk);
-	DeleteGraph(m_handleDeath);
+	DeleteGraph(m_handleDead);
 }
 
 void Player::Init()
@@ -115,8 +114,8 @@ void Player::Init()
 	m_handleAtk = LoadGraph("img/Player/Atk.png");
 	assert(m_handleAtk != -1);
 
-	m_handleDeath = LoadGraph("img/Player/Death.png");
-	assert(m_handleDeath != -1);
+	m_handleDead = LoadGraph("img/Player/Dead.png");
+	assert(m_handleDead != -1);
 
 	for (int i = 0; i < kShot; i++)
 	{
@@ -128,6 +127,7 @@ void Player::Init()
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
 	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
+	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kDeadAnimNum);
 }
 
 void Player::End()
@@ -143,14 +143,14 @@ void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& 
 	}
 	else
 	{
-		DeadUpdate();
+		DeadUpdate(m_camera);
 	}
 }
 
 void Player::Draw(Camera& camera)
 {
 	// 点滅処理
-	if ((m_blinkFrame / 2) % 2)
+	if ((m_blinkFrameCount / 2) % 2)
 	{
 		return;
 	}
@@ -180,7 +180,7 @@ void Player::Draw(Camera& camera)
 	{
 		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
-
+	// 待機
 	else
 	{
 		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
@@ -199,10 +199,10 @@ void Player::Draw(Camera& camera)
 void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
 {
 	// 無敵時間の更新
-	m_blinkFrame--;
-	if (m_blinkFrame < 0)
+	m_blinkFrameCount--;
+	if (m_blinkFrameCount < 0)
 	{
-		m_blinkFrame = 0;
+		m_blinkFrameCount = 0;
 	}
 
 	m_idleAnim.Update();
@@ -465,7 +465,6 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 		DeleteGraph(m_handleIdle);
 		DeleteGraph(m_handleRun);
 		DeleteGraph(m_handleAtk);
-		DeleteGraph(m_handleDeath);
 	}
 
 	// 弾を発射
@@ -475,8 +474,12 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 	}
 }
 
-void Player::DeadUpdate()
+void Player::DeadUpdate(Camera& camera)
 {
+	/*Vec3 camOffset = camera.GetDrawOffset();
+	camOffset.x = 0;
+
+	m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);*/
 }
 
 float Player::GetLeft()
@@ -507,10 +510,10 @@ void Player::OnDamage()
 
 	// 既にダメージを受けている(無敵時間は)
 	// 再度ダメージを受けることは無い
-	if (m_blinkFrame > 0) return;
+	if (m_blinkFrameCount > 0) return;
 
 	// 無敵時間(点滅する時間)を設定する
-	m_blinkFrame = kDamageBlinkFrame;
+	m_blinkFrameCount = kDamageBlinkFrame;
 
 	// ダメージを受ける
 	m_hp--;

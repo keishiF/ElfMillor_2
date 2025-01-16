@@ -16,7 +16,7 @@ void Animation::Init(int drawHandle, int animSingleFrame, int graphWidth, int gr
 
 void Animation::Update()
 {
-	++m_animFrame;
+	m_animFrame++;
 
 	if (m_animFrame >= m_totalFrame)
 	{

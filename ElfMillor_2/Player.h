@@ -30,7 +30,7 @@ public:
 
 	// 状態ごとのアップデート
 	void NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera);
-	void DeadUpdate();
+	void DeadUpdate(Camera& camera);
 
 	// 当たり判定のための座標取得
 	float GetLeft();
@@ -51,13 +51,13 @@ private:
 	int m_handleIdle;
 	int m_handleRun;
 	int m_handleAtk;
-	int m_handleDeath;
+	int m_handleDead;
 
 	// 各アニメーションを切り替えるフラグ
 	bool m_isRun;
 	bool m_isJump;
 	bool m_isAtk;
-	bool m_isDeath;
+	bool m_isDead;
 
 	// ジャンプスピード
 	float m_jumpSpeed;
@@ -75,7 +75,10 @@ private:
 	bool m_isCeilingHit;
 
 	// 被弾時の点滅
-	int m_blinkFrame;
+	int m_blinkFrameCount;
+
+	// 死亡時のフレーム
+	int m_deadFrameCount;
 
 	// プレイヤーのHP
 	int m_hp;
@@ -91,4 +94,5 @@ private:
 	Animation m_idleAnim;
 	Animation m_runAnim;
 	Animation m_atkAnim;
+	Animation m_deadAnim;
 };
