@@ -75,7 +75,6 @@ Player::Player(Camera& camera) :
 	m_jumpCount(0),
 	m_vec(0.0f,0.0f),
 	m_isDirLeft(false),
-	m_isShotDirRight(true),
 	m_blinkFrameCount(0),
 	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
@@ -194,6 +193,7 @@ void Player::Draw(Camera& camera)
 
 	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
+	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
@@ -225,7 +225,6 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 		m_isRun = true;
 		m_isDirLeft = true;
 		m_vec.x -= kSpeed;
-		m_isShotDirRight = false;
 	}
 	// 右走り
 	else if (input.IsPress(PAD_INPUT_RIGHT))
@@ -233,7 +232,6 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 		m_isRun = true;
 		m_isDirLeft = false;
 		m_vec.x += kSpeed;
-		m_isShotDirRight = true;
 	}
 
 	// ジャンプ
@@ -436,7 +434,7 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 				m_shot[i].m_isShotFlag = true;
 
 				// 弾の向きをプレイヤーと同じ向きに補正
-				m_shot[i].m_isDirLeft = m_isShotDirRight;
+				m_shot[i].m_isDirLeft = m_isDirLeft;
 
 				// 弾を1発出してループから抜ける
 				break;

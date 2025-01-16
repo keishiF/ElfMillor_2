@@ -12,7 +12,7 @@ class Camera;
 
 namespace
 {
-	constexpr int kShot = 15;
+	constexpr int kShot = 5;
 }
 
 class Player : public GameObject
@@ -65,8 +65,6 @@ private:
 
 	// プレイヤーが左向きかどうか
 	bool m_isDirLeft;
-	// 弾を右向きにするかどうか
-	bool m_isShotDirRight;
 
 	// 地面に当たっているかどうかのフラグ
 	bool m_isGroundHit;

@@ -42,8 +42,4 @@ public:
 private:
 	// 弾のグラフィックハンドル
 	int m_handle;
-
-	// 弾のグラフィックサイズ
-	int m_graphWidth;
-	int m_graphHeight;
 };

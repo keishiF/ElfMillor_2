@@ -13,7 +13,6 @@ void Map::InitMap()
 {
 	// Platinumƒf[ƒ^“Ç‚İ‚İ
 	loader.Load("img/BackGround/Map.fmf");
-	//loader.Load("img/BackGround/MapTest.fmf");
 
 	int mapW, mapH;
 	loader.GetMapSize(mapW, mapH);

@@ -11,18 +11,22 @@
 #include <cmath>
 #include <cassert>
 
+#ifdef _DEBUG
+#define DISP_COLLISION
+#endif
+
 namespace
 {
 	// 弾のグラフィックサイズ
-	constexpr int kGraphWidth   = 68;
-	constexpr int kGraphHeight  = 9;
+	constexpr int kGraphWidth   = 127;
+	constexpr int kGraphHeight  = 123;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
 	constexpr int kRightEndWidth = 1120;
 
 	// 弾の半径
-	constexpr float kShotRadius = 5.0f;
+	constexpr int kShotRadius = 15;
 }
 
 Shot::Shot():
@@ -31,8 +35,6 @@ Shot::Shot():
 	m_isDirLeft(true),
 	m_pos(0,0),
 	m_velocity(5.0f,0.0f),
-	m_graphWidth(kGraphWidth),
-	m_graphHeight(kGraphHeight),
 	m_isUp(false)
 {
 }
@@ -50,11 +52,11 @@ void Shot::Init()
 
 void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
 {
-	if (m_isDirLeft)
+	if (!m_isDirLeft)
 	{
 		m_pos += m_velocity;
 	}
-	else if (!m_isDirLeft)
+	else if (m_isDirLeft)
 	{
 		m_pos -= m_velocity;
 	}
@@ -115,8 +117,13 @@ void Shot::Draw(Camera& camera)
 
 	if (m_isShotFlag)
 	{
-		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y, static_cast<int>(kShotRadius), 0xff0000, true);
-		//DrawRectRotaGraph(m_pos.x, m_pos.y, 0, 0, kGraphWidth, kGraphHeight, 2.0f, 0.0f, m_handle, true, m_isDirLeft);
+		DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
+			0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
+
+//#ifdef DISP_COLLISION
+//		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
+//			kShotRadius, 0xffffff, false);
+//#endif
 	}
 }
 
