@@ -50,9 +50,8 @@ void TitleScene::NormalUpdate(Input& input)
 
 void TitleScene::FadeDraw()
 {
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
-	DrawString(600, 100, "TitleScene", 0xffffff);
+	DrawGraph(0, 0, m_handle, true);
+
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -61,17 +60,19 @@ void TitleScene::FadeDraw()
 
 void TitleScene::NormalDraw()
 {
-	DrawString(600, 100, "TitleScene", 0xffffff);
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
+	DrawGraph(0, 0, m_handle, true);
 }
 
 TitleScene::TitleScene(SceneController& controller):
 	SceneBase(controller),
 	m_update(&TitleScene::FadeInUpdate),
-	m_draw(&TitleScene::FadeDraw)
+	m_draw(&TitleScene::FadeDraw),
+	m_handle(-1),
+	m_backGroundHandle(-1)
 {
 	m_frame = kFadeInterval;
+
+	m_handle = LoadGraph("img/BackGround/title2.png");
 }
 
 void TitleScene::Update(Input& input)

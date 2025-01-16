@@ -51,9 +51,8 @@ void ResultScene::NormalUpdate(Input& input)
 
 void ResultScene::FadeDraw()
 {
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
-	DrawString(600, 100, "ResultScene", 0xffffff);
+	DrawGraph(0, 0, m_handle, true);
+
 	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
@@ -62,17 +61,17 @@ void ResultScene::FadeDraw()
 
 void ResultScene::NormalDraw()
 {
-	DrawString(600, 100, "ResultScene", 0xffffff);
-	DrawLine(160, 0, 160, 720, 0xffffff, true);
-	DrawLine(1120, 0, 1120, 720, 0xffffff, true);
+	DrawGraph(0, 0, m_handle, true);
 }
 
 ResultScene::ResultScene(SceneController& controller):
 	SceneBase(controller),
 	m_update(&ResultScene::FadeInUpdate),
-	m_draw(&ResultScene::FadeDraw)
+	m_draw(&ResultScene::FadeDraw),
+	m_handle(-1)
 {
 	m_frame = kFadeInterval;
+	m_handle = LoadGraph("img/BackGround/GameOver.png");
 }
 
 void ResultScene::Update(Input& input)

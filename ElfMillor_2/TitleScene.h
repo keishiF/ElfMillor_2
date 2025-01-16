@@ -23,6 +23,9 @@ class TitleScene :
 	// ’Êí•`‰æ
 	void NormalDraw();
 
+	int m_handle;
+	int m_backGroundHandle;
+
 public:
 	TitleScene(SceneController& controller);
 

@@ -12,6 +12,8 @@ private:
 	UpdateFunc_t m_update = nullptr;
 	DrawFunc_t   m_draw = nullptr;
 
+	int m_handle;
+
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);
 	void NormalUpdate(Input& input);

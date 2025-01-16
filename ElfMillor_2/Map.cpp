@@ -12,13 +12,13 @@
 void Map::InitMap()
 {
 	// Platinumデータ読み込み
-	loader.Load("img/BackGround/Map.fmf");
+	loader.Load("img/Map/Map.fmf");
 
 	int mapW, mapH;
 	loader.GetMapSize(mapW, mapH);
 
 	// マップ画像読み込み
-	m_graphHandle = LoadGraph("img/BackGround/Map.png");
+	m_graphHandle = LoadGraph("img/Map/Map.png");
 	// マップデータ読み込み
 	for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
 	{
