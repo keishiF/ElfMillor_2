@@ -1,13 +1,13 @@
 #pragma once
 #include "SceneBase.h"
 
-class ResultScene :
+class GameOverScene :
     public SceneBase
 {
 private:
 	int m_frame = 60;
-	using UpdateFunc_t = void (ResultScene::*)(Input& input);
-	using DrawFunc_t   = void (ResultScene::*)();
+	using UpdateFunc_t = void (GameOverScene::*)(Input& input);
+	using DrawFunc_t   = void (GameOverScene::*)();
 
 	UpdateFunc_t m_update = nullptr;
 	DrawFunc_t   m_draw = nullptr;
@@ -22,7 +22,7 @@ private:
 	void NormalDraw();
 
 public:
-	ResultScene(SceneController& controller);
+	GameOverScene(SceneController& controller);
 
 	virtual void Update(Input& input)override;
 	virtual void Draw()override;

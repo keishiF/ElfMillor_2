@@ -2,8 +2,6 @@
 #include "Input.h"
 #include "DxLib.h"
 #include "game.h"
-#include "Boss.h"
-#include "Enemy1.h"
 #include "Map.h"
 #include "Camera.h"
 

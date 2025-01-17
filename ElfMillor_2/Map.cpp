@@ -1,7 +1,5 @@
 #include "Map.h" 
-#include "game.h"
 #include "DxLib.h"
-#include "Player.h"
 #include "Camera.h"
 #include <cassert>
 
@@ -106,7 +104,8 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
 
 #ifdef DISP_COLLISION
-				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
+				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y),
+					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
 #endif
 				// â‘Î‚É“–‚½‚Á‚Ä‚¢‚È‚¢ê‡continue
 				if (chipTop > rect.bottom) continue;
@@ -153,7 +152,8 @@ bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
 				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
 
 #ifdef DISP_COLLISION
-				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
+				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y),
+					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
 #endif
 				// â‘Î‚É“–‚½‚Á‚Ä‚¢‚È‚¢ê‡continue
 				if (chipTop    > rect.bottom) continue;
@@ -200,7 +200,8 @@ bool Map::IsDamageCol(Rect rect, Rect& chipRect, Camera& camera)
 				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
 
 #ifdef DISP_COLLISION
-				DrawBox(chipLeft, chipTop + camOffset.y, chipRight, chipBottom + camOffset.y, 0xff0000, false);
+				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y), 
+					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
 #endif
 				// â‘Î‚É“–‚½‚Á‚Ä‚¢‚È‚¢ê‡continue
 				if (chipTop    > rect.bottom) continue;

@@ -13,7 +13,7 @@ public:
 	Enemy1(Camera& camera);
 	~Enemy1();
 
-	virtual void Init() override;
+	virtual void Init(float posX, float posY) override;
 	virtual void Update() override;
 	virtual void Draw() override;
 	void Update(Map& map);

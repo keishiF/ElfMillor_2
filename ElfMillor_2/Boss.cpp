@@ -28,6 +28,7 @@ namespace
 }
 
 Boss::Boss(Camera& camera) :
+	m_handleIdle(-1),
 	m_handleShot(-1),
 	EnemyBase(Vec3(kBossPosX, kBossPosY), camera)
 {
@@ -38,7 +39,7 @@ Boss::~Boss()
 {
 }
 
-void Boss::Init()
+void Boss::Init(float posX, float posY)
 {	
 	m_handleIdle = LoadGraph("img/Boss/Boss.png");
 	assert(m_handleIdle != -1);
@@ -46,7 +47,7 @@ void Boss::Init()
 	m_handleShot = LoadGraph("img/Boss/BossBullet.png");
 	assert(m_handleShot != -1);
 
-	m_idleRun.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
 
 	m_pos.x = kBossPosX;
 	m_pos.y = kBossPosY;
@@ -56,7 +57,7 @@ void Boss::Init()
 
 void Boss::Update()
 {
-	m_idleRun.Update();
+	m_idleAnim.Update();
 
 	if (m_hp <= 0)
 	{
@@ -67,7 +68,7 @@ void Boss::Update()
 void Boss::Draw()
 {
 	m_isDirLeft = false;
-	m_idleRun.Play(m_pos, m_isDirLeft);
+	m_idleAnim.Play(m_pos, m_isDirLeft);
 }
 
 void Boss::End()

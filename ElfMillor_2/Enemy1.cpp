@@ -1,9 +1,10 @@
 #include "Enemy1.h"
 #include "DxLib.h"
-#include <cassert>
 #include "Player.h"
 #include "Camera.h"
 #include "Map.h"
+#include <cassert>
+
 
 #ifdef _DEBUG
 #define DISP_COLLISION
@@ -18,6 +19,9 @@ namespace
 	// 初期位置
 	constexpr float kEnemyDefaultPosX = 500;
 	constexpr float kEnemyDefaultPosY = 4443;
+
+	// 初期HP
+	constexpr int kDefaultHp = 3;
 
 	// 重力
 	constexpr float kGravity = 0.4f;
@@ -54,17 +58,17 @@ Enemy1::~Enemy1()
 {
 }
 
-void Enemy1::Init()
+void Enemy1::Init(float posX, float posY)
 {
 	m_handleRun = LoadGraph("img/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
 
-	m_idleRun.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kWalkAnimNum);
+	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kWalkAnimNum);
 
-	m_pos.x = kEnemyDefaultPosX;
-	m_pos.y = kEnemyDefaultPosY;
+	m_pos.x = posX;
+	m_pos.y = posY;
 
-	m_hp = 3;
+	m_hp = kDefaultHp;
 }
 
 void Enemy1::Update()
@@ -77,7 +81,14 @@ void Enemy1::Draw()
 
 void Enemy1::Update(Map& map)
 {
-	m_idleRun.Update();
+	// 無敵時間の更新
+	m_blinkFrameCount--;
+	if (m_blinkFrameCount < 0)
+	{
+		m_blinkFrameCount = 0;
+	}
+
+	m_runAnim.Update();
 
 	// 移動処理
 	if (!m_isDirLeft)
@@ -135,9 +146,10 @@ void Enemy1::Draw(Camera& camera)
 #ifdef DISP_COLLISION
 	if (m_hp > 0)
 	{
-		DrawBox(GetLeft(), GetTop() + camOffset.y, GetRight(), GetBottom() + camOffset.y, 0xff0000, false);
+		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y),
+			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
 	}
-	m_idleRun.Play(m_pos + camOffset, m_isDirLeft);
+	m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 #endif
 
 	/*DrawFormatString(0, 30, 0xffffff, "EnemyPos.X~%f, Y=%f", m_pos.x, m_pos.y);

@@ -1,8 +1,6 @@
 #include "Shot.h"
-#include "Player.h"
 #include "DxLib.h"
 #include "game.h"
-#include "Vec3.h"
 #include "Boss.h"
 #include "Enemy1.h"
 #include "Camera.h"
@@ -95,7 +93,7 @@ void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
 			if (m_isShotFlag)
 			{
 				m_isShotFlag = false;
-				enemy1.m_hp--;
+				enemy1.OnDamage();
 			}
 		}
 	}

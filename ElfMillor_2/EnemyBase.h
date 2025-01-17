@@ -15,14 +15,12 @@ public:
 	int m_hp;
 
 protected:
-	// グラフィック
-	int m_handleIdle = -1;
-
 	// 全体のフレームを数える
 	int m_animAllFrame = 0;
 
 	// アニメーション
-	Animation m_idleRun;
+	Animation m_idleAnim;
+	Animation m_runAnim;
 
 	// 左を向いてるかどうかのフラグ
 	bool m_isDirLeft;
@@ -34,7 +32,7 @@ public:
 	}
 	virtual ~EnemyBase() {}
 
-	virtual void Init() = 0;
+	virtual void Init(float posX, float posY) = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 };

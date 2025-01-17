@@ -1,4 +1,4 @@
-#include "ResultScene.h"
+#include "GameOverScene.h"
 #include "DxLib.h"
 #include "Input.h"
 #include "SceneController.h"
@@ -17,16 +17,16 @@ namespace
 	constexpr int kFadeInterval = 60;
 }
 
-void ResultScene::FadeInUpdate(Input& input)
+void GameOverScene::FadeInUpdate(Input& input)
 {
 	if (m_frame-- <= 0)
 	{
-		m_update = &ResultScene::NormalUpdate;
-		m_draw = &ResultScene::NormalDraw;
+		m_update = &GameOverScene::NormalUpdate;
+		m_draw = &GameOverScene::NormalDraw;
 	}
 }
 
-void ResultScene::FadeOutUpdate(Input& input)
+void GameOverScene::FadeOutUpdate(Input& input)
 {
 	if (m_frame++ >= kFadeInterval)
 	{
@@ -39,17 +39,17 @@ void ResultScene::FadeOutUpdate(Input& input)
 	}
 }
 
-void ResultScene::NormalUpdate(Input& input)
+void GameOverScene::NormalUpdate(Input& input)
 {
 	if (input.IsPress(PAD_INPUT_3))
 	{
-		m_update = &ResultScene::FadeOutUpdate;
-		m_draw   = &ResultScene::FadeDraw;
+		m_update = &GameOverScene::FadeOutUpdate;
+		m_draw   = &GameOverScene::FadeDraw;
 		m_frame  = 0;
 	}
 }
 
-void ResultScene::FadeDraw()
+void GameOverScene::FadeDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
 
@@ -59,27 +59,27 @@ void ResultScene::FadeDraw()
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
 
-void ResultScene::NormalDraw()
+void GameOverScene::NormalDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
 }
 
-ResultScene::ResultScene(SceneController& controller):
+GameOverScene::GameOverScene(SceneController& controller):
 	SceneBase(controller),
-	m_update(&ResultScene::FadeInUpdate),
-	m_draw(&ResultScene::FadeDraw),
+	m_update(&GameOverScene::FadeInUpdate),
+	m_draw(&GameOverScene::FadeDraw),
 	m_handle(-1)
 {
 	m_frame = kFadeInterval;
 	m_handle = LoadGraph("img/BackGround/GameOver.png");
 }
 
-void ResultScene::Update(Input& input)
+void GameOverScene::Update(Input& input)
 {
 	(this->*m_update)(input);
 }
 
-void ResultScene::Draw()
+void GameOverScene::Draw()
 {
 	(this->*m_draw)();
 }
