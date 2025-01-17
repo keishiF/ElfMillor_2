@@ -1,6 +1,7 @@
 #pragma once
 #include "Vec3.h"
 #include "Rect.h"
+#include "Animation.h"
 #include "GameObject.h"
 
 class Input;
@@ -42,4 +43,7 @@ public:
 private:
 	// 弾のグラフィックハンドル
 	int m_handle;
+
+	// アニメーション
+	Animation m_shotAnim;
 };

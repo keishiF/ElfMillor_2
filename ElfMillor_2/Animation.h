@@ -4,7 +4,7 @@
 class Animation
 {
 public:
-	void Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float expRate, int animNum);
+	void Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float extRate, float rotaRate, int animNum);
 	void Update();
 	void Play(Vec3 pos, bool isDirLeft);
 	void ResetAnimFrame() { m_animFrame = 0; }
@@ -16,7 +16,8 @@ private:
 	int   m_graphHeight;
 	int   m_animNum;
 	int   m_totalFrame;
-	float m_expRate;
+	float m_extRate;
+	float m_rotationRate;
 
 	bool  m_isDirLeft;
 

@@ -47,7 +47,10 @@ namespace
 	constexpr int kDeadAnimNum = 10;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate   = 1.75f;
+	constexpr float kExtRate   = 1.75f;
+
+	// グラフィックの回転率
+	constexpr float kRotaRate = 0.0f;
 
 	// ノックバック距離
 	constexpr int kBesideHit   = 43;
@@ -121,10 +124,10 @@ void Player::Init()
 
 	m_hp = kDefaultHp;
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
-	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kRunAnimNum);
-	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kAtkAnimNum);
-	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kDeadAnimNum);
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
+	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
+	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kAtkAnimNum);
+	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
 }
 
 void Player::End()
@@ -189,9 +192,9 @@ void Player::Draw(Camera& camera)
 		m_shot[i].Draw(camera);
 	}
 
-	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
+	//DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
@@ -472,10 +475,28 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 
 void Player::DeadUpdate(Camera& camera)
 {
-	/*Vec3 camOffset = camera.GetDrawOffset();
+	Vec3 camOffset = camera.GetDrawOffset();
 	camOffset.x = 0;
 
-	m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);*/
+	m_deadAnim.Update();
+	m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+}
+
+void Player::OnDamage()
+{
+#ifdef DISP_COLLISION
+	printfDx("ダメージ！\n");
+#endif
+
+	// 既にダメージを受けている(無敵時間は)
+	// 再度ダメージを受けることは無い
+	if (m_blinkFrameCount > 0) return;
+
+	// 無敵時間(点滅する時間)を設定する
+	m_blinkFrameCount = kDamageBlinkFrame;
+
+	// ダメージを受ける
+	m_hp--;
 }
 
 float Player::GetLeft()
@@ -496,23 +517,6 @@ float Player::GetTop()
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 35);
-}
-
-void Player::OnDamage()
-{
-#ifdef DISP_COLLISION
-	printfDx("ダメージ！\n");
-#endif
-
-	// 既にダメージを受けている(無敵時間は)
-	// 再度ダメージを受けることは無い
-	if (m_blinkFrameCount > 0) return;
-
-	// 無敵時間(点滅する時間)を設定する
-	m_blinkFrameCount = kDamageBlinkFrame;
-
-	// ダメージを受ける
-	m_hp--;
 }
 
 Rect Player::GetRect()

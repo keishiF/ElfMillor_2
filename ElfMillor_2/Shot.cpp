@@ -18,6 +18,20 @@ namespace
 	// 弾のグラフィックサイズ
 	constexpr int kGraphWidth   = 127;
 	constexpr int kGraphHeight  = 123;
+	/*constexpr int kGraphWidth = 100;
+	constexpr int kGraphHeight = 26;*/
+
+	// アニメーション1コマのフレーム数
+	constexpr int kAnimSingleFrame = 8;
+
+	// アニメーションのコマ数
+	constexpr int kShotAnimNum = 10;
+
+	// グラフィックの拡大率
+	constexpr float kExtRate = 1.0f;
+
+	// グラフィックの回転率
+	constexpr float kRotaRate = 0.0f;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -33,7 +47,8 @@ Shot::Shot():
 	m_isDirLeft(true),
 	m_pos(0,0),
 	m_velocity(5.0f,0.0f),
-	m_isUp(false)
+	m_isUp(false),
+	m_shotAnim()
 {
 }
 
@@ -46,10 +61,14 @@ void Shot::Init()
 {
 	m_handle = LoadGraph("img/Bullet/Bullet.png");
 	assert(m_handle != -1);
+
+	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
 }
 
 void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
 {
+	m_shotAnim.Update();
+
 	if (!m_isDirLeft)
 	{
 		m_pos += m_velocity;
@@ -117,7 +136,7 @@ void Shot::Draw(Camera& camera)
 	{
 		DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
 			0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
-
+		//m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
 //#ifdef DISP_COLLISION
 //		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
 //			kShotRadius, 0xffffff, false);

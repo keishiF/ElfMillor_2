@@ -21,7 +21,7 @@ namespace
 	constexpr float kEnemyDefaultPosY = 4443;
 
 	// 初期HP
-	constexpr int kDefaultHp = 3;
+	constexpr int kDefaultHp = 100;
 
 	// 重力
 	constexpr float kGravity = 0.4f;
@@ -33,7 +33,10 @@ namespace
 	constexpr int kAnimSingleFrame = 8;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate = 3.5f;
+	constexpr float kExtRate = 3.5f;
+
+	// グラフィックの回転率
+	constexpr float kRotaRate = 0.0f;
 
 	// 移動速度
 	constexpr float kSpeed = 2.5f;
@@ -63,7 +66,7 @@ void Enemy1::Init(float posX, float posY)
 	m_handleRun = LoadGraph("img/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
 
-	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kWalkAnimNum);
+	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
 
 	m_pos.x = posX;
 	m_pos.y = posY;
@@ -149,8 +152,9 @@ void Enemy1::Draw(Camera& camera)
 		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y),
 			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
 	}
-	m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 #endif
+
+	m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 
 	/*DrawFormatString(0, 30, 0xffffff, "EnemyPos.X~%f, Y=%f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 45, 0xffffff, "drawPos.X~%f, Y=%f", drawPos.x, drawPos.y);*/

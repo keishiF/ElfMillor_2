@@ -31,14 +31,15 @@ public:
 	// 状態ごとのアップデート
 	void NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera);
 	void DeadUpdate(Camera& camera);
+	
+	// ダメージ処理
+	void OnDamage();
 
 	// 当たり判定のための座標取得
 	float GetLeft();
 	float GetRight();
 	float GetTop();
 	float GetBottom();
-
-	void OnDamage();
 
 	// プレイヤーの矩形情報取得
 	Rect GetRect();

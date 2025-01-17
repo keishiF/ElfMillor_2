@@ -20,7 +20,10 @@ namespace
 	constexpr int kAnimSingleFrame = 8;
 
 	// グラフィックの拡大率
-	constexpr float kExpRate  = 2.0f;
+	constexpr float kExtRate  = 2.0f;
+
+	// グラフィックの回転率
+	constexpr float kRotaRate = 0.0f;
 
 	// 初期位置
 	constexpr float kBossPosX = 700;
@@ -47,7 +50,7 @@ void Boss::Init(float posX, float posY)
 	m_handleShot = LoadGraph("img/Boss/BossBullet.png");
 	assert(m_handleShot != -1);
 
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExpRate, kIdleAnimNum);
+	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
 
 	m_pos.x = kBossPosX;
 	m_pos.y = kBossPosY;
