@@ -192,9 +192,9 @@ void Player::Draw(Camera& camera)
 		m_shot[i].Draw(camera);
 	}
 
-	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
-	//DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
+	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
