@@ -47,6 +47,9 @@ public:
 	// プレイヤーの表示位置
 	Vec3 m_vec;
 
+	// プレイヤーのHPを取得
+	int GetHp() { return m_hp; };
+
 private:
 	// プレイヤーのグラフィックハンドル
 	int m_handleIdle;

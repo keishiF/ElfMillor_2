@@ -4,7 +4,7 @@
 
 SceneController::SceneController()
 {
-	ChangeScene(std::make_shared<GameScene>(*this));
+	ChangeScene(std::make_shared<TitleScene>(*this));
 }
 
 void SceneController::Update(Input& input)

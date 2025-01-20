@@ -21,7 +21,7 @@ namespace
 	constexpr float kEnemyDefaultPosY = 4443;
 
 	// èâä˙HP
-	constexpr int kDefaultHp = 100;
+	constexpr int kDefaultHp = 3;
 
 	// èdóÕ
 	constexpr float kGravity = 0.4f;
@@ -67,9 +67,6 @@ void Enemy1::Init(float posX, float posY)
 	assert(m_handleRun != -1);
 
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
-
-	m_pos.x = posX;
-	m_pos.y = posY;
 
 	m_hp = kDefaultHp;
 }
@@ -183,6 +180,16 @@ float Enemy1::GetTop()
 float Enemy1::GetBottom()
 {
 	return (m_pos.y + 35);
+}
+
+Rect Enemy1::GetOutRect()
+{
+	Rect outRect;
+	outRect.top = GetTop();
+	outRect.bottom = GetBottom();
+	outRect.right = (GetRight() + 10);
+	outRect.left = (GetLeft() + 10);
+	return outRect;
 }
 
 Rect Enemy1::GetRect()

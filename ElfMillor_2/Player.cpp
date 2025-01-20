@@ -22,7 +22,7 @@ namespace
 	constexpr int kRightEndWidth = 1120;
 
 	// プレイヤーの初期HP
-	constexpr int kDefaultHp = 15;
+	constexpr int kDefaultHp = 3/*15*/;
 
 	// プレイヤーの移動速度
 	constexpr float kSpeed   = 5.0f;

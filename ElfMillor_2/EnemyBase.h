@@ -32,7 +32,7 @@ public:
 	}
 	virtual ~EnemyBase() {}
 
-	virtual void Init(float posX, float posY) = 0;
+	virtual void Init(float posX, float posY) { m_pos.x = posX, m_pos.y = posY; };
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 };

@@ -25,6 +25,8 @@ public:
 	float GetTop();
 	float GetBottom();
 
+	Rect GetOutRect();
+
 	Rect  GetRect();
 
 	void OnDamage();

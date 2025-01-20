@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include <memory>
+#include <vector>
 
 class Player;
 class Boss;
@@ -11,6 +12,12 @@ class Map;
 class GameScene :
     public SceneBase
 {
+public:
+	GameScene(SceneController& controller);
+
+	virtual void Update(Input& input)override;
+	virtual void Draw()override;
+
 private:
     int m_frame = 60;
 	std::shared_ptr<Player> m_player;
@@ -18,7 +25,9 @@ private:
 	std::shared_ptr<Enemy1> m_enemy1;
 	std::shared_ptr<Map>    m_map;
 	std::shared_ptr<Camera> m_camera;
-	
+
+	//std::vector<Enemy1> m_enemy;
+
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);
 	void NormalUpdate(Input& input);
@@ -32,9 +41,6 @@ private:
 	UpdateFunc_t m_update;
 	DrawFunc_t   m_draw;
 
-public:
-	GameScene(SceneController& controller);
-
-	virtual void Update(Input& input)override;
-	virtual void Draw()override;
+	// エネミーの量産
+	void CreateEnemy(float posX, float posY);
 };
