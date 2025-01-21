@@ -15,7 +15,7 @@ namespace MapConsts
 {
 	constexpr int kMapChipSize = 32;
 	constexpr int kMapWidth    = 30;
-	constexpr int kMapHeight   = 150;
+	constexpr int kMapHeight   = 200;
 	constexpr int kWhiteList[] =
 	{
 		1554,1555,1556,1557,// ëê

@@ -104,28 +104,28 @@ void GroundEnemy::Update(Map& map)
 		// 右方向に移動している
 		if (m_vec.x > 0.0f)
 		{
-			// 右壁に当たっているので左に押し戻す
+			// 右壁に当たっているので左向きにする
 			m_isDirLeft = true;
 			m_pos.x = chipRect.left - kBesideHit;
 		}
 		// 左方向に移動している
 		else if (m_vec.x < 0.0f)
 		{
-			// 左壁に当たっているので右に押し戻す
+			// 左壁に当たっているので右向きにする
 			m_isDirLeft = false;
 			m_pos.x = chipRect.right + kBesideHit + 30;
 		}
 	}
 
-	// 右端に行ったら左端に
+	// 左端に行ったら右向きにする
 	if (m_pos.x <= kLeftEndWidth)
 	{
-		m_pos.x = kRightEndWidth;
+		m_isDirLeft = false;
 	}
-	// 左端に行ったら右端に
+	// 右端に行ったら左向きにする
 	else if (m_pos.x >= kRightEndWidth)
 	{
-		m_pos.x = kLeftEndWidth;
+		m_isDirLeft = true;
 	}
 
 	// 死亡

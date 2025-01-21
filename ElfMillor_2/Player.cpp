@@ -15,8 +15,8 @@
 namespace
 {
 	// 初期位置
-	constexpr int kDefaultPlayerPosX = 360;
-	constexpr int kDefaultPlayerPosY = 4576;
+	constexpr int kPlayerInitPosX = 360;
+	constexpr int kPlayerInitPosY = 6150;
 
 	// 画面端
 	constexpr int kLeftEndWidth  = 160;
@@ -90,7 +90,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_atkAnim(),
 	m_deadAnim(),
 	// 基底クラスの初期化
-	GameObject(Vec3(kDefaultPlayerPosX, kDefaultPlayerPosY), camera)
+	GameObject(Vec3(kPlayerInitPosX, kPlayerInitPosY), camera)
 {
 }
 
@@ -409,12 +409,6 @@ void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<Ground
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Update(boss, groundEnemy, m_camera, map);
-	}
-
-	// 生きているときと死んでいるときで処理を切り分ける
-	if (m_hp <= 0)
-	{
-		DeadUpdate();
 	}
 }
 

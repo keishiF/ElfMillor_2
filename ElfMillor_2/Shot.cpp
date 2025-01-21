@@ -35,7 +35,7 @@ namespace
 	constexpr float kRotaRate = 0.0f;
 
 	// ‰æ–Ê’[
-	constexpr int kLeftEndWidth = 160;
+	constexpr int kLeftEndWidth  = 160;
 	constexpr int kRightEndWidth = 1120;
 
 	// ’e‚Ì”¼Œa
@@ -107,14 +107,14 @@ void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEn
 	{
 		if (groundEnemy[i]->m_hp > 0)
 		{
-			if (GetRight() > groundEnemy[i]->GetLeft() &&
-				GetLeft() < groundEnemy[i]->GetRight() &&
-				GetTop() < groundEnemy[i]->GetBottom() &&
+			if (GetRight()  > groundEnemy[i]->GetLeft()   &&
+				GetLeft()   < groundEnemy[i]->GetRight()  &&
+				GetTop()    < groundEnemy[i]->GetBottom() &&
 				GetBottom() > groundEnemy[i]->GetTop())
 			{
 				if (m_isShotFlag)
 				{
-					m_isShotFlag = false;
+					m_isShotFlag  = false;
 					groundEnemy[i]->OnDamage();
 				}
 			}
@@ -134,7 +134,7 @@ void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEn
 void Shot::Draw(std::weak_ptr<Camera> camera)
 {
 	Vec3 camOffset = camera.lock()->GetDrawOffset();
-	camOffset.x = 0;
+	camOffset.x    = 0;
 
 	if (m_isShotFlag)
 	{
@@ -167,9 +167,9 @@ float Shot::GetBottom()
 Rect Shot::GetRect()
 {
 	Rect rect;
-	rect.top = GetTop();
+	rect.top    = GetTop();
 	rect.bottom = GetBottom();
-	rect.right = GetRight();
-	rect.left = GetLeft();
+	rect.right  = GetRight();
+	rect.left   = GetLeft();
 	return rect;
 }

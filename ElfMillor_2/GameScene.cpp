@@ -20,17 +20,20 @@ namespace
 	constexpr int kFadeInterval = 60;
 
 	// ìGÇÃèâä˙à íu
-	constexpr float kEnemyDefaultPosX1 = 450;
-	constexpr float kEnemyDefaultPosY1 = 4443;
+	constexpr float kEnemyInitPosX1 = 450.0f;
+	constexpr float kEnemyInitPosY1 = 6044.0f;
 
-	constexpr float kEnemyDefaultPosX2 = 1100;
-	constexpr float kEnemyDefaultPosY2 = 3740;
+	constexpr float kEnemyInitPosX2 = 1100.0f;
+	constexpr float kEnemyInitPosY2 = 5340.0f;
 
-	constexpr float kEnemyDefaultPosX3 = 160;
-	constexpr float kEnemyDefaultPosY3 = 2400;
+	constexpr float kEnemyInitPosX3 = 160.0f;
+	constexpr float kEnemyInitPosY3 = 3997.0f;
 
-	constexpr float kEnemyDefaultPosX4 = 160;
-	constexpr float kEnemyDefaultPosY4 = 2400;
+	constexpr float kEnemyInitPosX4 = 900.0f;
+	constexpr float kEnemyInitPosY4 = 3484.0f;
+
+	constexpr float kEnemyInitPosX5 = 250.0f;
+	constexpr float kEnemyInitPosY5 = 2140.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -51,10 +54,12 @@ GameScene::GameScene(SceneController& controller) :
 	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
 
-	m_groundEnemyArray.resize(3);
-	CreateGroundEnemy(kEnemyDefaultPosX1, kEnemyDefaultPosY1);
-	CreateGroundEnemy(kEnemyDefaultPosX2, kEnemyDefaultPosY2);
-	CreateGroundEnemy(kEnemyDefaultPosX3, kEnemyDefaultPosY3);
+	m_groundEnemyArray.resize(5);
+	CreateGroundEnemy(kEnemyInitPosX1, kEnemyInitPosY1);
+	CreateGroundEnemy(kEnemyInitPosX2, kEnemyInitPosY2);
+	CreateGroundEnemy(kEnemyInitPosX3, kEnemyInitPosY3);
+	CreateGroundEnemy(kEnemyInitPosX4, kEnemyInitPosY4);
+	CreateGroundEnemy(kEnemyInitPosX5, kEnemyInitPosY5);
 
 	m_camera->Init(m_player);
 }
