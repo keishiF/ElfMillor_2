@@ -1,8 +1,11 @@
 #include "Application.h"
+
 #include "SceneController.h"
+
+#include "Player.h"
 #include "Input.h"
 #include "game.h"
-#include "Player.h"
+
 #include "DxLib.h"
 #include <cassert>
 

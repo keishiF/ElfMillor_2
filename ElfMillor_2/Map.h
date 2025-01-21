@@ -1,12 +1,13 @@
 #pragma once
-#include <fstream>
-#include <iostream>
-#include <vector>
-#include "game.h"
-#include "PlatinumLoader.h"
+#include "MapChip.h"
 #include "Vec3.h"
 #include "Rect.h"
-#include "MapChip.h"
+#include "game.h"
+#include "PlatinumLoader.h"
+
+#include <vector>
+#include <fstream>
+#include <iostream>
 
 class Camera;
 

@@ -9,7 +9,6 @@ public:
 	float y;
 //	float z;
 
-public:
 	Vec3()
 	{
 		x = 0.0f;

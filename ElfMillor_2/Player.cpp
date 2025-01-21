@@ -1,10 +1,11 @@
 #include "Player.h"
-#include "Input.h"
-#include "DxLib.h"
-#include "game.h"
-#include "Map.h"
 #include "Camera.h"
+#include "Map.h"
 
+#include "game.h"
+#include "Input.h"
+
+#include "DxLib.h"
 #include <cassert>
 
 #ifdef _DEBUG
@@ -134,12 +135,12 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
+void Player::Update(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera)
 {
 	// ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´Ç∆éÄÇÒÇ≈Ç¢ÇÈÇ∆Ç´Ç≈èàóùÇêÿÇËï™ÇØÇÈ
 	if (m_hp > 0)
 	{
-		NormalUpdate(input, boss, enemy1, map, m_camera);
+		NormalUpdate(input, boss, groundEnemy, map, m_camera);
 	}
 	else
 	{
@@ -197,7 +198,7 @@ void Player::Draw(Camera& camera)
 	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
 }
 
-void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera)
+void Player::NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera)
 {
 	// ñ≥ìGéûä‘ÇÃçXêV
 	m_blinkFrameCount--;
@@ -469,7 +470,7 @@ void Player::NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Ca
 	// íeÇî≠éÀ
 	for (int i = 0; i < kShot; i++)
 	{
-		m_shot[i].Update(boss, enemy1, camera, map);
+		m_shot[i].Update(boss, groundEnemy, camera, map);
 	}
 }
 

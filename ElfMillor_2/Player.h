@@ -1,12 +1,12 @@
 #pragma once
 #include "Vec3.h"
-#include "Animation.h"
-#include "Shot.h"
-#include "GameObject.h"
 #include "Rect.h"
+#include "Animation.h"
+#include "GameObject.h"
+#include "Shot.h"
 
 class Boss;
-class Enemy1;
+class GroundEnemy;
 class Map;
 class Camera;
 
@@ -26,10 +26,10 @@ public:
 	void Init();
 	void End();
 	void Draw(Camera& camera);
-	void Update(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera);
+	void Update(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera);
 
 	// 状態ごとのアップデート
-	void NormalUpdate(Input& input, Boss& boss, Enemy1& enemy1, Map& map, Camera& camera);
+	void NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera);
 	void DeadUpdate(Camera& camera);
 	
 	// ダメージ処理

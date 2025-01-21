@@ -1,11 +1,12 @@
 #include "Shot.h"
-#include "DxLib.h"
-#include "game.h"
 #include "Boss.h"
-#include "Enemy1.h"
+#include "GroundEnemy.h"
 #include "Camera.h"
 #include "Map.h"
 
+#include "game.h"
+
+#include "DxLib.h"
 #include <cmath>
 #include <cassert>
 
@@ -65,7 +66,7 @@ void Shot::Init()
 	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
 }
 
-void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
+void Shot::Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map)
 {
 	m_shotAnim.Update();
 
@@ -102,17 +103,17 @@ void Shot::Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map)
 		}
 	}
 
-	if (enemy1.m_hp > 0)
+	if (groundEnemy.m_hp > 0)
 	{
-		if (GetRight() > enemy1.GetLeft() &&
-			GetLeft() < enemy1.GetRight() &&
-			GetTop() < enemy1.GetBottom() &&
-			GetBottom() > enemy1.GetTop())
+		if (GetRight()  > groundEnemy.GetLeft()   &&
+			GetLeft()   < groundEnemy.GetRight()  &&
+			GetTop()    < groundEnemy.GetBottom() &&
+			GetBottom() > groundEnemy.GetTop())
 		{
 			if (m_isShotFlag)
 			{
 				m_isShotFlag = false;
-				enemy1.OnDamage();
+				groundEnemy.OnDamage();
 			}
 		}
 	}
@@ -134,9 +135,9 @@ void Shot::Draw(Camera& camera)
 
 	if (m_isShotFlag)
 	{
-		//DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
-		//	0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
-		m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
+		DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
+			0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
+		//m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 }
 

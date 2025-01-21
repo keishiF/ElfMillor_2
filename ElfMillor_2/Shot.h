@@ -6,7 +6,7 @@
 
 class Input;
 class Boss;
-class Enemy1;
+class GroundEnemy;
 class Camera;
 class Map;
 
@@ -17,7 +17,7 @@ public:
 	~Shot();
 
 	void Init();
-	void Update(Boss& boss, Enemy1& enemy1, Camera& camera, Map& map);
+	void Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map);
 	void Draw(Camera& camera);
 
 	float GetLeft();

@@ -147,7 +147,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Enemy1.cpp" />
+    <ClCompile Include="GroundEnemy.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PlatinumLoader.cpp" />
@@ -168,7 +168,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Enemy1.h" />
+    <ClInclude Include="GroundEnemy.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="PlatinumLoader.h" />

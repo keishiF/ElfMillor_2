@@ -1,8 +1,9 @@
-#include "Enemy1.h"
-#include "DxLib.h"
+#include "GroundEnemy.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Map.h"
+
+#include "DxLib.h"
 #include <cassert>
 
 #ifdef _DEBUG
@@ -16,8 +17,8 @@ namespace
 	constexpr int kGraphHeight = 100;
 
 	// 初期位置
-	constexpr float kEnemyDefaultPosX = 500;
-	constexpr float kEnemyDefaultPosY = 4443;
+	//constexpr float kEnemyDefaultPosX = 500;
+	//constexpr float kEnemyDefaultPosY = 4443;
 
 	// 初期HP
 	constexpr int kDefaultHp = 3;
@@ -47,20 +48,15 @@ namespace
 	constexpr int kDamageBlinkFrame = 30;
 }
 
-Enemy1::Enemy1(Camera& camera) :
+GroundEnemy::GroundEnemy(Camera& camera) :
 	m_handleRun(-1),
 	m_isDirLeft(false),
 	m_blinkFrameCount(0),
-	EnemyBase(Vec3(kEnemyDefaultPosX, kEnemyDefaultPosY), camera)
-{
-	m_animAllFrame = 0;
-}
-
-Enemy1::~Enemy1()
+	EnemyBase(Vec3(0.0f, 0.0f), camera)
 {
 }
 
-void Enemy1::Init(float posX, float posY)
+void GroundEnemy::Init(float posX, float posY)
 {
 	m_handleRun = LoadGraph("img/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
@@ -68,17 +64,12 @@ void Enemy1::Init(float posX, float posY)
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
 
 	m_hp = kDefaultHp;
+
+	m_pos.x = posX;
+	m_pos.y = posY;
 }
 
-void Enemy1::Update()
-{
-}
-
-void Enemy1::Draw()
-{
-}
-
-void Enemy1::Update(Map& map)
+void GroundEnemy::Update(Map& map)
 {
 	// 無敵時間の更新
 	m_blinkFrameCount--;
@@ -129,7 +120,7 @@ void Enemy1::Update(Map& map)
 	}
 }
 
-void Enemy1::Draw(Camera& camera)
+void GroundEnemy::Draw(Camera& camera)
 {
 	// 点滅処理
 	if ((m_blinkFrameCount / 2) % 2)
@@ -156,42 +147,32 @@ void Enemy1::Draw(Camera& camera)
 	DrawFormatString(0, 45, 0xffffff, "drawPos.X~%f, Y=%f", drawPos.x, drawPos.y);*/
 }
 
-void Enemy1::End()
+void GroundEnemy::End()
 {
 	DeleteGraph(m_handleRun);
 }
 
-float Enemy1::GetLeft()
+float GroundEnemy::GetLeft()
 {
 	return (m_pos.x - 20);
 }
 
-float Enemy1::GetRight()
+float GroundEnemy::GetRight()
 {
 	return (m_pos.x + 25);
 }
 
-float Enemy1::GetTop()
+float GroundEnemy::GetTop()
 {
 	return (m_pos.y - 35);
 }
 
-float Enemy1::GetBottom()
+float GroundEnemy::GetBottom()
 {
 	return (m_pos.y + 35);
 }
 
-Rect Enemy1::GetOutRect()
-{
-	Rect outRect;
-	outRect.top = GetTop();
-	outRect.bottom = GetBottom();
-	outRect.right = (GetRight() + 10);
-	outRect.left = (GetLeft() + 10);
-	return outRect;
-}
-
-Rect Enemy1::GetRect()
+Rect GroundEnemy::GetRect()
 {
 	// プレイヤーの矩形当たり判定を作成
 	Rect rect;
@@ -202,7 +183,7 @@ Rect Enemy1::GetRect()
 	return rect;
 }
 
-void Enemy1::OnDamage()
+void GroundEnemy::OnDamage()
 {
 	// 既にダメージを受けている(無敵時間は)
 	// 再度ダメージを受けることは無い

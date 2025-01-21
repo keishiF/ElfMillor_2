@@ -5,9 +5,6 @@ class SceneController;
 
 class SceneBase
 {
-protected:
-	SceneController& m_controller;
-
 public:
 
 	SceneBase(SceneController& controller);
@@ -15,4 +12,7 @@ public:
 	virtual void Update(Input& input) = 0;
 
 	virtual void Draw() = 0;
+
+protected:
+	SceneController& m_controller;
 };

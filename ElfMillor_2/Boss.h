@@ -1,7 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
-#include "Animation.h"
 #include "Vec3.h"
+#include "Animation.h"
 
 class Camera;
 
@@ -27,4 +27,6 @@ private:
 	int m_handleIdle;
 
 	int m_handleShot;
+
+	bool m_isDirLeft;
 };

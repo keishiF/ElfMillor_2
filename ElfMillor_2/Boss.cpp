@@ -1,6 +1,6 @@
 #include "Boss.h"
-#include "DxLib.h"
 
+#include "DxLib.h"
 #include <cassert>
 
 namespace
@@ -33,9 +33,9 @@ namespace
 Boss::Boss(Camera& camera) :
 	m_handleIdle(-1),
 	m_handleShot(-1),
+	m_isDirLeft(false),
 	EnemyBase(Vec3(kBossPosX, kBossPosY), camera)
 {
-	m_animAllFrame = 0;
 }
 
 Boss::~Boss()

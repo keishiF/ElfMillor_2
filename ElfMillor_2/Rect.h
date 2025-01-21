@@ -10,7 +10,7 @@ public:
 	float bottom;
 	float left;
 	float right;
-public:
+
 	Rect() : //コンストラクタで初期化
 		top(0),
 		bottom(0),

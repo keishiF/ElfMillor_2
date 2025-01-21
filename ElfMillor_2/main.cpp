@@ -1,4 +1,5 @@
 #include "DxLib.h"
+
 #include "Application.h"
 
 using namespace std;

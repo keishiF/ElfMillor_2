@@ -3,15 +3,6 @@
 
 class Application
 {
-private:
-	Application() {};
-	Application(const Application&) = delete;
-	void operator=(const Application&) = delete;
-
-	int m_frame = 0;
-	int imgHandle = 0;
-	//Size m_windowSize;
-
 public:
 	static Application& GetInstance();
 
@@ -21,5 +12,11 @@ public:
 
 	void Terminate();
 
-	//const Size& GetWindowSize() const;
+private:
+	Application() {};
+	Application(const Application&) = delete;
+	void operator=(const Application&) = delete;
+
+	int m_frame = 0;
+	int imgHandle = 0;
 };

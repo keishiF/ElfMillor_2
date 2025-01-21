@@ -1,10 +1,11 @@
 #include "GameOverScene.h"
-#include "DxLib.h"
-#include "Input.h"
-#include "SceneController.h"
 #include "TitleScene.h"
-#include "game.h"
+#include "SceneController.h"
 
+#include "game.h"
+#include "Input.h"
+
+#include "DxLib.h"
 #include <memory>
 #include <cassert>
 
@@ -15,6 +16,31 @@ namespace
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 
 	constexpr int kFadeInterval = 60;
+}
+
+GameOverScene::GameOverScene(SceneController& controller) :
+	SceneBase(controller),
+	m_update(&GameOverScene::FadeInUpdate),
+	m_draw(&GameOverScene::FadeDraw),
+	m_handle(-1)
+{
+	m_frame = kFadeInterval;
+	m_handle = LoadGraph("img/BackGround/GameOver.png");
+}
+
+void GameOverScene::Update(Input& input)
+{
+	(this->*m_update)(input);
+}
+
+void GameOverScene::NormalUpdate(Input& input)
+{
+	if (input.IsPress(PAD_INPUT_3))
+	{
+		m_update = &GameOverScene::FadeOutUpdate;
+		m_draw = &GameOverScene::FadeDraw;
+		m_frame = 0;
+	}
 }
 
 void GameOverScene::FadeInUpdate(Input& input)
@@ -39,14 +65,14 @@ void GameOverScene::FadeOutUpdate(Input& input)
 	}
 }
 
-void GameOverScene::NormalUpdate(Input& input)
+void GameOverScene::Draw()
 {
-	if (input.IsPress(PAD_INPUT_3))
-	{
-		m_update = &GameOverScene::FadeOutUpdate;
-		m_draw   = &GameOverScene::FadeDraw;
-		m_frame  = 0;
-	}
+	(this->*m_draw)();
+}
+
+void GameOverScene::NormalDraw()
+{
+	DrawGraph(0, 0, m_handle, true);
 }
 
 void GameOverScene::FadeDraw()
@@ -57,29 +83,4 @@ void GameOverScene::FadeDraw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-}
-
-void GameOverScene::NormalDraw()
-{
-	DrawGraph(0, 0, m_handle, true);
-}
-
-GameOverScene::GameOverScene(SceneController& controller):
-	SceneBase(controller),
-	m_update(&GameOverScene::FadeInUpdate),
-	m_draw(&GameOverScene::FadeDraw),
-	m_handle(-1)
-{
-	m_frame = kFadeInterval;
-	m_handle = LoadGraph("img/BackGround/GameOver.png");
-}
-
-void GameOverScene::Update(Input& input)
-{
-	(this->*m_update)(input);
-}
-
-void GameOverScene::Draw()
-{
-	(this->*m_draw)();
 }

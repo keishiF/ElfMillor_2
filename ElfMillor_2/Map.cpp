@@ -1,6 +1,7 @@
 #include "Map.h" 
-#include "DxLib.h"
 #include "Camera.h"
+
+#include "DxLib.h"
 #include <cassert>
 
 #ifdef _DEBUG

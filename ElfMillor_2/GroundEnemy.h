@@ -1,21 +1,19 @@
 #pragma once
 #include "EnemyBase.h"
-#include "Animation.h"
 #include "Rect.h"
+#include "Animation.h"
 
 class Player;
 class Camera;
 class Map;
 
-class Enemy1 :public EnemyBase
+class GroundEnemy :public EnemyBase
 {
 public:
-	Enemy1(Camera& camera);
-	~Enemy1();
+	GroundEnemy(Camera& camera);
+	virtual ~GroundEnemy() {};
 
 	virtual void Init(float posX, float posY) override;
-	virtual void Update() override;
-	virtual void Draw() override;
 	void Update(Map& map);
 	void Draw(Camera& camera);
 	void End();
@@ -24,8 +22,6 @@ public:
 	float GetRight();
 	float GetTop();
 	float GetBottom();
-
-	Rect GetOutRect();
 
 	Rect  GetRect();
 

@@ -1,6 +1,7 @@
+#include "PlatinumLoader.h"
+
 #include "DxLib.h"
 #include <vector>
-#include "PlatinumLoader.h"
 #include <string>
 #include <cassert>
 

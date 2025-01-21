@@ -1,4 +1,5 @@
 #include "Animation.h"
+
 #include "DxLib.h"
 
 void Animation::Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float extRate, float rotaRate, int animNum)

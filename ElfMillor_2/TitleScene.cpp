@@ -1,10 +1,11 @@
 #include "TitleScene.h"
-#include "DxLib.h"
-#include "Input.h"
-#include "SceneController.h"
 #include "GameScene.h"
-#include "game.h"
+#include "SceneController.h"
 
+#include "game.h"
+#include "Input.h"
+
+#include "DxLib.h"
 #include <memory>
 #include <cassert>
 
@@ -14,6 +15,32 @@ namespace
 	constexpr int kGameScreenHalfWidth  = Game::kScreenWidth / 2;
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 	constexpr int kFadeInterval = 60;
+}
+
+TitleScene::TitleScene(SceneController& controller) :
+	SceneBase(controller),
+	m_update(&TitleScene::FadeInUpdate),
+	m_draw(&TitleScene::FadeDraw),
+	m_handle(-1)
+{
+	m_frame = kFadeInterval;
+
+	m_handle = LoadGraph("img/BackGround/title2.png");
+}
+
+void TitleScene::Update(Input& input)
+{
+	(this->*m_update)(input);
+}
+
+void TitleScene::NormalUpdate(Input& input)
+{
+	if (input.IsPress(PAD_INPUT_3))
+	{
+		m_update = &TitleScene::FadeOutUpdate;
+		m_draw = &TitleScene::FadeDraw;
+		m_frame = 0;
+	}
 }
 
 void TitleScene::FadeInUpdate(Input&)
@@ -38,14 +65,14 @@ void TitleScene::FadeOutUpdate(Input&)
 	}
 }
 
-void TitleScene::NormalUpdate(Input& input)
+void TitleScene::Draw()
 {
-	if (input.IsPress(PAD_INPUT_3))
-	{
-		m_update = &TitleScene::FadeOutUpdate;
-		m_draw   = &TitleScene::FadeDraw;
-		m_frame  = 0;
-	}
+	(this->*m_draw)();
+}
+
+void TitleScene::NormalDraw()
+{
+	DrawGraph(0, 0, m_handle, true);
 }
 
 void TitleScene::FadeDraw()
@@ -56,31 +83,4 @@ void TitleScene::FadeDraw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-}
-
-void TitleScene::NormalDraw()
-{
-	DrawGraph(0, 0, m_handle, true);
-}
-
-TitleScene::TitleScene(SceneController& controller):
-	SceneBase(controller),
-	m_update(&TitleScene::FadeInUpdate),
-	m_draw(&TitleScene::FadeDraw),
-	m_handle(-1),
-	m_backGroundHandle(-1)
-{
-	m_frame = kFadeInterval;
-
-	m_handle = LoadGraph("img/BackGround/title2.png");
-}
-
-void TitleScene::Update(Input& input)
-{
-	(this->*m_update)(input);
-}
-
-void TitleScene::Draw()
-{
-	(this->*m_draw)();
 }

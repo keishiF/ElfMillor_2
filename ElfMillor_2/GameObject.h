@@ -1,7 +1,6 @@
 #pragma once
-
-#include "DxLib.h"
 #include "Vec3.h"
+#include "DxLib.h"
 
 class Camera;
 
@@ -12,8 +11,7 @@ public:
 
 	Vec3  m_pos;
 	Vec3  dir;
-	float w;
-	float h;
+
 protected:
 	Camera& m_camera;
 
