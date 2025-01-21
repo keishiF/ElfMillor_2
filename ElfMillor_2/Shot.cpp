@@ -18,8 +18,8 @@ namespace
 	// 弾のグラフィックサイズ
 	constexpr int kGraphWidth   = 127;
 	constexpr int kGraphHeight  = 123;
-	/*constexpr int kGraphWidth = 100;
-	constexpr int kGraphHeight = 26;*/
+	//constexpr int kGraphWidth = 10;
+	//constexpr int kGraphHeight = 26;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
@@ -28,7 +28,7 @@ namespace
 	constexpr int kShotAnimNum = 10;
 
 	// グラフィックの拡大率
-	constexpr float kExtRate = 1.0f;
+	constexpr float kExtRate = 2.0f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 0.0f;
@@ -134,13 +134,9 @@ void Shot::Draw(Camera& camera)
 
 	if (m_isShotFlag)
 	{
-		DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
-			0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
-		//m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
-//#ifdef DISP_COLLISION
-//		DrawCircle(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
-//			kShotRadius, 0xffffff, false);
-//#endif
+		//DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + camOffset.y,
+		//	0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
+		m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 }
 

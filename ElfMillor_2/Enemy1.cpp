@@ -5,7 +5,6 @@
 #include "Map.h"
 #include <cassert>
 
-
 #ifdef _DEBUG
 #define DISP_COLLISION
 #endif

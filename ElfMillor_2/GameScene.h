@@ -26,8 +26,6 @@ private:
 	std::shared_ptr<Map>    m_map;
 	std::shared_ptr<Camera> m_camera;
 
-	//std::vector<Enemy1> m_enemy;
-
 	void FadeInUpdate(Input& input);
 	void FadeOutUpdate(Input& input);
 	void NormalUpdate(Input& input);
@@ -40,7 +38,4 @@ private:
 
 	UpdateFunc_t m_update;
 	DrawFunc_t   m_draw;
-
-	// エネミーの量産
-	void CreateEnemy(float posX, float posY);
 };

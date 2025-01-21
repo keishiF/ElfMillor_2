@@ -21,9 +21,6 @@ namespace
 	// “G‚Ì‰ŠúˆÊ’u
 	constexpr float kEnemyDefaultPosX = 450;
 	constexpr float kEnemyDefaultPosY = 4443;
-
-	constexpr float kEnemyDefaultPosX2 = 1100;
-	constexpr float kEnemyDefaultPosY2 = 3740;
 }
 
 void GameScene::FadeInUpdate(Input& input)
@@ -86,15 +83,6 @@ void GameScene::NormalDraw()
 	m_enemy1->Draw(*m_camera);
 }
 
-void GameScene::CreateEnemy(float posX, float posY)
-{
-	/*for (int i = 0; i < m_enemy.size(); i++)
-	{
-		m_enemy[i].Init(posX, posY);
-		return;
-	}*/
-}
-
 GameScene::GameScene(SceneController& controller):
 	SceneBase(controller),
 	m_update(&GameScene::FadeInUpdate),
@@ -115,10 +103,6 @@ GameScene::GameScene(SceneController& controller):
 
 	m_player = std::make_shared<Player>(*m_camera);
 	m_player->Init();
-
-	/*m_enemy.resize(10);
-	CreateEnemy(kEnemyDefaultPosX, kEnemyDefaultPosY);
-	CreateEnemy(kEnemyDefaultPosX, kEnemyDefaultPosY2);*/
 
 	m_camera->Init(m_player);
 }
