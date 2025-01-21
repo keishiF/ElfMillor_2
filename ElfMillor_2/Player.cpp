@@ -64,7 +64,7 @@ namespace
 	constexpr int kDeadFrame = 80;
 }
 
-Player::Player(Camera& camera) :
+Player::Player(std::weak_ptr<Camera> camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
 	m_handleAtk(-1),
@@ -135,70 +135,7 @@ void Player::End()
 {	
 }
 
-void Player::Update(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera)
-{
-	// 生きているときと死んでいるときで処理を切り分ける
-	if (m_hp > 0)
-	{
-		NormalUpdate(input, boss, groundEnemy, map, m_camera);
-	}
-	else
-	{
-		DeadUpdate(m_camera);
-	}
-}
-
-void Player::Draw(Camera& camera)
-{
-	// 点滅処理
-	if ((m_blinkFrameCount / 2) % 2)
-	{
-		return;
-	}
-
-	//Vec3 drawPos = m_camera.Capture(m_pos);
-
-	Vec3 camOffset = camera.GetDrawOffset();
-	camOffset.x = 0;
-
-#ifdef DISP_COLLISION
-	// プレイヤーの当たり判定の表示
-	if (m_hp >= 0)
-	{
-		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y), 
-			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
-	}
-#endif
-
-	// プレイヤーのアニメーション切り替え
-	// 走る
-	if (m_isRun)
-	{
-		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-	// 攻撃
-	else if (m_isAtk)
-	{
-		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-	// 待機
-	else
-	{
-		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
-
-	// ショット
-	for (int i = 0; i < kShot; i++)
-	{
-		m_shot[i].Draw(camera);
-	}
-
-	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
-	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
-}
-
-void Player::NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera)
+void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, Map& map)
 {
 	// 無敵時間の更新
 	m_blinkFrameCount--;
@@ -240,7 +177,7 @@ void Player::NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Ma
 	if (m_isJump)
 	{
 		// 空中にいるときの処理
-		
+
 		// 毎フレーム重力によって下方向に加速する
 		m_vec.y += kGravity;
 
@@ -430,7 +367,8 @@ void Player::NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Ma
 				m_isAtk = true;
 
 				// 弾の位置をプレイヤーの位置に補正
-				m_shot[i].m_pos = m_pos;
+				m_shot[i].m_pos.x = m_pos.x;
+				m_shot[i].m_pos.y = m_pos.y + 20;
 
 				// 弾を表示
 				m_shot[i].m_isShotFlag = true;
@@ -470,13 +408,69 @@ void Player::NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Ma
 	// 弾を発射
 	for (int i = 0; i < kShot; i++)
 	{
-		m_shot[i].Update(boss, groundEnemy, camera, map);
+		m_shot[i].Update(boss, groundEnemy, m_camera, map);
+	}
+
+	// 生きているときと死んでいるときで処理を切り分ける
+	if (m_hp <= 0)
+	{
+		DeadUpdate();
 	}
 }
 
-void Player::DeadUpdate(Camera& camera)
+void Player::Draw()
 {
-	Vec3 camOffset = camera.GetDrawOffset();
+	// 点滅処理
+	if ((m_blinkFrameCount / 2) % 2)
+	{
+		return;
+	}
+
+	//Vec3 drawPos = m_camera.Capture(m_pos);
+
+	Vec3 camOffset = m_camera.lock()->GetDrawOffset();
+	camOffset.x = 0;
+
+#ifdef DISP_COLLISION
+	// プレイヤーの当たり判定の表示
+	if (m_hp >= 0)
+	{
+		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y), 
+			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
+	}
+#endif
+
+	// プレイヤーのアニメーション切り替え
+	// 走る
+	if (m_isRun)
+	{
+		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+	// 攻撃
+	else if (m_isAtk)
+	{
+		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+	// 待機
+	else
+	{
+		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+
+	// ショット
+	for (int i = 0; i < kShot; i++)
+	{
+		m_shot[i].Draw(m_camera);
+	}
+
+	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	//DrawFormatString(0, 15, 0xffffff, "DrawPos.X=%f,Y=%f", drawPos.x, m_pos.y);
+	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
+}
+
+void Player::DeadUpdate()
+{
+	Vec3 camOffset = m_camera.lock()->GetDrawOffset();
 	camOffset.x = 0;
 
 	m_deadAnim.Update();

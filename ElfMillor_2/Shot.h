@@ -4,6 +4,9 @@
 #include "Animation.h"
 #include "GameObject.h"
 
+#include <vector>
+#include <memory>
+
 class Input;
 class Boss;
 class GroundEnemy;
@@ -17,8 +20,8 @@ public:
 	~Shot();
 
 	void Init();
-	void Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map);
-	void Draw(Camera& camera);
+	void Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, std::weak_ptr<Camera> camera, Map& map);
+	void Draw(std::weak_ptr<Camera> camera);
 
 	float GetLeft();
 	float GetRight();

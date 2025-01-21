@@ -8,12 +8,12 @@ class Camera;
 class Boss : public EnemyBase
 {
 public:
-	Boss(Camera& camera);
+	Boss(std::weak_ptr<Camera> camera);
 	~Boss();
 
-	virtual void Init(float posX, float posY) override;
-	virtual void Update() override;
-	virtual void Draw() override;
+	void Init(float posX, float posY) override;
+	void Update(Map& map) override;
+	void Draw() override;
 
 	void End();
 	void Shot();

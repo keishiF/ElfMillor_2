@@ -2,6 +2,8 @@
 #include "Vec3.h"
 #include "DxLib.h"
 
+#include <memory>
+
 class Camera;
 
 class GameObject
@@ -13,9 +15,9 @@ public:
 	Vec3  dir;
 
 protected:
-	Camera& m_camera;
+	std::weak_ptr<Camera> m_camera;
 
-	GameObject(Vec3 initPos, Camera& camera) :
+	GameObject(Vec3 initPos, std::weak_ptr<Camera> camera) :
 		m_pos(initPos),
 		m_camera(camera)
 	{

@@ -54,7 +54,7 @@ void Map::InitMap()
 	}
 }
 
-void Map::DrawMap(Camera& camera)
+void Map::DrawMap(std::weak_ptr<Camera> camera)
 {
 	// マップの描画
 	for (int hIndex = 0; hIndex < MapConsts::kMapHeight; hIndex++)
@@ -67,7 +67,7 @@ void Map::DrawMap(Camera& camera)
 				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
-				DrawRectGraph(leftTopX, leftTopY + camera.GetDrawOffset().y,
+				DrawRectGraph(leftTopX, leftTopY + camera.lock()->GetDrawOffset().y,
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					MapConsts::kMapChipSize, MapConsts::kMapChipSize,
 					m_graphHandle, true);
@@ -81,7 +81,7 @@ void Map::DrawMap(Camera& camera)
 	}
 }
 
-bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
+bool Map::IsCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 {	
 	// マップの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
@@ -95,7 +95,7 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 				if (mapChips[y][x].chipNo != MapConsts::kWhiteList[i]) continue;
 
 				// カメラに応じて補正
-				Vec3 camOffset = camera.GetDrawOffset();
+				Vec3 camOffset = camera.lock()->GetDrawOffset();
 
 				// 当たり判定したいやつの上下左右を取る
 				MapChip chip = mapChips[y][x];
@@ -129,7 +129,7 @@ bool Map::IsCol(Rect rect, Rect& chipRect, Camera& camera)
 	return false;
 }
 
-bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
+bool Map::IsCol2(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 {
 	// マップの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
@@ -143,7 +143,7 @@ bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
 				if (mapChips[y][x].chipNo != MapConsts::kWhiteList2[i]) continue;
 
 				// カメラに応じて補正
-				Vec3 camOffset = camera.GetDrawOffset();
+				Vec3 camOffset = camera.lock()->GetDrawOffset();
 
 				// 当たり判定したいやつの上下左右を取る
 				MapChip chip = mapChips[y][x];
@@ -177,7 +177,7 @@ bool Map::IsCol2(Rect rect, Rect& chipRect, Camera& camera)
 	return false;
 }
 
-bool Map::IsDamageCol(Rect rect, Rect& chipRect, Camera& camera)
+bool Map::IsDamageCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 {
 	// マップの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
@@ -191,7 +191,7 @@ bool Map::IsDamageCol(Rect rect, Rect& chipRect, Camera& camera)
 				if (mapChips[y][x].chipNo != MapConsts::kDamageList[i]) continue;
 
 				// カメラに応じて補正
-				Vec3 camOffset = camera.GetDrawOffset();
+				Vec3 camOffset = camera.lock()->GetDrawOffset();
 
 				// 当たり判定したいやつの上下左右を取る
 				MapChip chip     = mapChips[y][x];

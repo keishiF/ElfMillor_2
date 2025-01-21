@@ -5,6 +5,9 @@
 #include "GameObject.h"
 #include "Shot.h"
 
+#include <vector>
+#include <memory>
+
 class Boss;
 class GroundEnemy;
 class Map;
@@ -19,18 +22,17 @@ class Player : public GameObject
 {
 public:
 	// プレイヤーのコンストラクタとデストラクタ
-	Player(Camera& camera);
+	Player(std::weak_ptr<Camera> camera);
 	~Player();
 
 	// プレイヤーの初期化、終了処理、更新処理、描画処理
 	void Init();
 	void End();
-	void Draw(Camera& camera);
-	void Update(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera);
+	void Draw();
+	void Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, Map& map);
 
 	// 状態ごとのアップデート
-	void NormalUpdate(Input& input, Boss& boss, GroundEnemy& groundEnemy, Map& map, Camera& camera);
-	void DeadUpdate(Camera& camera);
+	void DeadUpdate();
 	
 	// ダメージ処理
 	void OnDamage();

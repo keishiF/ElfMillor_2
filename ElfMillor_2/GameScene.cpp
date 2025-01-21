@@ -25,6 +25,12 @@ namespace
 
 	constexpr float kEnemyDefaultPosX2 = 1100;
 	constexpr float kEnemyDefaultPosY2 = 3740;
+
+	constexpr float kEnemyDefaultPosX3 = 160;
+	constexpr float kEnemyDefaultPosY3 = 2400;
+
+	constexpr float kEnemyDefaultPosX4 = 160;
+	constexpr float kEnemyDefaultPosY4 = 2400;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -39,16 +45,16 @@ GameScene::GameScene(SceneController& controller) :
 
 	m_camera = std::make_shared<Camera>();
 
-	m_boss = std::make_shared<Boss>(*m_camera);
+	m_boss = std::make_shared<Boss>(m_camera);
 	m_boss->Init(0.0f, 0.0f);
 
-	m_groundEnemy = std::make_shared<GroundEnemy>(*m_camera);
-	m_groundEnemy->Init(kEnemyDefaultPosX1, kEnemyDefaultPosY1);
-
-	m_player = std::make_shared<Player>(*m_camera);
+	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
 
-	//m_pEnemy.resize(10);
+	m_groundEnemyArray.resize(3);
+	CreateGroundEnemy(kEnemyDefaultPosX1, kEnemyDefaultPosY1);
+	CreateGroundEnemy(kEnemyDefaultPosX2, kEnemyDefaultPosY2);
+	CreateGroundEnemy(kEnemyDefaultPosX3, kEnemyDefaultPosY3);
 
 	m_camera->Init(m_player);
 }
@@ -61,9 +67,16 @@ void GameScene::Update(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
-	m_player->Update(input, *m_boss, *m_groundEnemy, *m_map, *m_camera);
+	m_player->Update(input, *m_boss, m_groundEnemyArray, *m_map);
 	//m_boss->Update();
-	m_groundEnemy->Update(*m_map);
+
+	for (int i = 0; i < m_groundEnemyArray.size(); i++)
+	{
+		if (m_groundEnemyArray[i])
+		{
+			m_groundEnemyArray[i]->Update(*m_map);
+		}
+	}
 
 	float disX = m_boss->m_pos.x - m_player->m_pos.x;
 	if (disX > 50)
@@ -109,10 +122,17 @@ void GameScene::Draw()
 
 void GameScene::NormalDraw()
 {
-	m_map->DrawMap(*m_camera);
-	m_player->Draw(*m_camera);
+	m_map->DrawMap(m_camera);
+	m_player->Draw();
 	//m_boss->Draw();
-	m_groundEnemy->Draw(*m_camera);
+
+	for (int i = 0; i < m_groundEnemyArray.size(); i++)
+	{
+		if (m_groundEnemyArray[i])
+		{
+			m_groundEnemyArray[i]->Draw();
+		}
+	}
 }
 
 void GameScene::FadeDraw()
@@ -125,8 +145,13 @@ void GameScene::FadeDraw()
 
 void GameScene::CreateGroundEnemy(float posX, float posY)
 {
-	//for (int i = 0; i < m_pEnemy.size(); i++)
-	//{
-	//	m_pEnemy[i] = new GroundEnemy;
-	//}
+	for (int i = 0; i < m_groundEnemyArray.size(); i++)
+	{
+		if (!m_groundEnemyArray[i])
+		{
+			m_groundEnemyArray[i] = std::make_shared<GroundEnemy>(m_camera);
+			m_groundEnemyArray[i]->Init(posX, posY);
+			return;
+		}
+	}
 }

@@ -49,17 +49,17 @@ class Map
 public:
 	void InitMap();
 	// マップの描画
-	void DrawMap(Camera& camera);
+	void DrawMap(std::weak_ptr<Camera> camera);
 
 	MapChip mapChips[MapConsts::kMapHeight][MapConsts::kMapWidth];
 	int m_graphHandle;
 	PlatinumLoader loader;
 	// マップの当たり判定
-	bool IsCol(Rect rect, Rect& chipRect, Camera& camera);
+	bool IsCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 
 	// 下からはすり抜け、上からは乗れる床の判定
-	bool IsCol2(Rect rect, Rect& chipRect, Camera& camera);
+	bool IsCol2(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 
 	// ダメージを受ける床の判定
-	bool IsDamageCol(Rect rect, Rect& chipRect, Camera& camera);
+	bool IsDamageCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 };

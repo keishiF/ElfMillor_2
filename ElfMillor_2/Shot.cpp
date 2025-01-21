@@ -66,7 +66,7 @@ void Shot::Init()
 	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
 }
 
-void Shot::Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map)
+void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, std::weak_ptr<Camera> camera, Map& map)
 {
 	m_shotAnim.Update();
 
@@ -103,17 +103,20 @@ void Shot::Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map
 		}
 	}
 
-	if (groundEnemy.m_hp > 0)
+	for (int i = 0; i < groundEnemy.size(); i++)
 	{
-		if (GetRight()  > groundEnemy.GetLeft()   &&
-			GetLeft()   < groundEnemy.GetRight()  &&
-			GetTop()    < groundEnemy.GetBottom() &&
-			GetBottom() > groundEnemy.GetTop())
+		if (groundEnemy[i]->m_hp > 0)
 		{
-			if (m_isShotFlag)
+			if (GetRight() > groundEnemy[i]->GetLeft() &&
+				GetLeft() < groundEnemy[i]->GetRight() &&
+				GetTop() < groundEnemy[i]->GetBottom() &&
+				GetBottom() > groundEnemy[i]->GetTop())
 			{
-				m_isShotFlag = false;
-				groundEnemy.OnDamage();
+				if (m_isShotFlag)
+				{
+					m_isShotFlag = false;
+					groundEnemy[i]->OnDamage();
+				}
 			}
 		}
 	}
@@ -128,9 +131,9 @@ void Shot::Update(Boss& boss, GroundEnemy& groundEnemy, Camera& camera, Map& map
 	}
 }
 
-void Shot::Draw(Camera& camera)
+void Shot::Draw(std::weak_ptr<Camera> camera)
 {
-	Vec3 camOffset = camera.GetDrawOffset();
+	Vec3 camOffset = camera.lock()->GetDrawOffset();
 	camOffset.x = 0;
 
 	if (m_isShotFlag)

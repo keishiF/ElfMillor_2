@@ -30,7 +30,7 @@ namespace
 	constexpr float kBossPosY = -330;
 }
 
-Boss::Boss(Camera& camera) :
+Boss::Boss(std::weak_ptr<Camera> camera) :
 	m_handleIdle(-1),
 	m_handleShot(-1),
 	m_isDirLeft(false),
@@ -58,7 +58,7 @@ void Boss::Init(float posX, float posY)
 	m_hp = 3;
 }
 
-void Boss::Update()
+void Boss::Update(Map& map)
 {
 	m_idleAnim.Update();
 

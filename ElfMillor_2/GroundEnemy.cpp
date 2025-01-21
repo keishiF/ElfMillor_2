@@ -16,9 +16,9 @@ namespace
 	constexpr int kGraphWidth  = 100;
 	constexpr int kGraphHeight = 100;
 
-	// 初期位置
-	//constexpr float kEnemyDefaultPosX = 500;
-	//constexpr float kEnemyDefaultPosY = 4443;
+	// 画面端
+	constexpr int kLeftEndWidth = 160;
+	constexpr int kRightEndWidth = 1120;
 
 	// 初期HP
 	constexpr int kDefaultHp = 3;
@@ -48,11 +48,15 @@ namespace
 	constexpr int kDamageBlinkFrame = 30;
 }
 
-GroundEnemy::GroundEnemy(Camera& camera) :
+GroundEnemy::GroundEnemy(std::weak_ptr<Camera> camera):
 	m_handleRun(-1),
 	m_isDirLeft(false),
 	m_blinkFrameCount(0),
 	EnemyBase(Vec3(0.0f, 0.0f), camera)
+{
+}
+
+GroundEnemy::~GroundEnemy()
 {
 }
 
@@ -113,6 +117,17 @@ void GroundEnemy::Update(Map& map)
 		}
 	}
 
+	// 右端に行ったら左端に
+	if (m_pos.x <= kLeftEndWidth)
+	{
+		m_pos.x = kRightEndWidth;
+	}
+	// 左端に行ったら右端に
+	else if (m_pos.x >= kRightEndWidth)
+	{
+		m_pos.x = kLeftEndWidth;
+	}
+
 	// 死亡
 	if (m_hp <= 0)
 	{
@@ -120,7 +135,7 @@ void GroundEnemy::Update(Map& map)
 	}
 }
 
-void GroundEnemy::Draw(Camera& camera)
+void GroundEnemy::Draw()
 {
 	// 点滅処理
 	if ((m_blinkFrameCount / 2) % 2)
@@ -130,7 +145,7 @@ void GroundEnemy::Draw(Camera& camera)
 
 	//Vec3 drawPos = m_camera.Capture(m_pos);
 
-	Vec3 camOffset = camera.GetDrawOffset();
+	Vec3 camOffset = m_camera.lock()->GetDrawOffset();
 	camOffset.x = 0;
 
 #ifdef DISP_COLLISION

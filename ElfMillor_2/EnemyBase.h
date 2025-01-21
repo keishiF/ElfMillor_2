@@ -3,12 +3,15 @@
 #include "Animation.h"
 #include "GameObject.h"
 
+#include <memory>
+
 class Camera;
+class Map;
 
 class EnemyBase : public GameObject
 {
 public:
-	EnemyBase(Vec3 initPos, Camera& camera) :
+	EnemyBase(Vec3 initPos, std::weak_ptr<Camera> camera) :
 		m_hp(),
 		m_handle(),
 		m_idleAnim(),
@@ -21,7 +24,7 @@ public:
 	void SetHandle(int handle) { m_handle = handle; }
 
 	virtual void Init(float posX, float posY) { m_pos.x = posX, m_pos.y = posY; };
-	virtual void Update() = 0;
+	virtual void Update(Map& map) = 0;
 	virtual void Draw() = 0;
 
 	// •\Ž¦ˆÊ’u

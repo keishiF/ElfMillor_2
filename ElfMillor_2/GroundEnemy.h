@@ -10,12 +10,12 @@ class Map;
 class GroundEnemy :public EnemyBase
 {
 public:
-	GroundEnemy(Camera& camera);
-	virtual ~GroundEnemy() {};
+	GroundEnemy(std::weak_ptr<Camera> camera);
+	~GroundEnemy();
 
-	virtual void Init(float posX, float posY) override;
-	void Update(Map& map);
-	void Draw(Camera& camera);
+	void Init(float posX, float posY) override;
+	void Update(Map& map) override;
+	void Draw() override;
 	void End();
 
 	float GetLeft();

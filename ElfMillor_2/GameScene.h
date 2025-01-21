@@ -8,7 +8,7 @@ class Boss;
 class Camera;
 class Map;
 class GroundEnemy;
-//class EnemyBase;
+class EnemyBase;
 
 class GameScene : public SceneBase
 {
@@ -22,11 +22,10 @@ private:
     int m_frame = 60;
 	std::shared_ptr<Player> m_player;
 	std::shared_ptr<Boss>   m_boss;
-	std::shared_ptr<GroundEnemy> m_groundEnemy;
 	std::shared_ptr<Map>    m_map;
 	std::shared_ptr<Camera> m_camera;
 
-	//std::vector<EnemyBase*> m_pEnemy;
+	std::vector<std::shared_ptr<GroundEnemy>> m_groundEnemyArray;
 
 	using UpdateFunc_t = void(GameScene::*)(Input& input);
 	using DrawFunc_t   = void(GameScene::*)();
