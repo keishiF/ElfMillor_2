@@ -12,6 +12,7 @@ public:
 	virtual ~GameObject() {};
 
 	Vec3  m_pos;
+	Vec3  m_vec;
 	Vec3  dir;
 
 protected:
