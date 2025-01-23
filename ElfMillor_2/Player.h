@@ -35,6 +35,9 @@ public:
     // ダメージを受けた時の処理
     void OnDamage();
 
+	// プレイヤーのHPを取得
+	int GetHp() { return m_hp; }
+
     // プレイヤーの矩形当たり判定を取得
     float GetLeft();
     float GetRight();
