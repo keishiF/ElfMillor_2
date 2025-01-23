@@ -64,6 +64,8 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 			const MapChip& mapChip = mapChips[hIndex][wIndex];
 			if (mapChip.chipNo > 0)
 			{
+				if (mapChips[hIndex][wIndex].chipNo == 2) continue;
+				
 				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
@@ -71,6 +73,19 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					MapConsts::kMapChipSize, MapConsts::kMapChipSize,
 					m_graphHandle, true);
+
+#ifdef DISP_COLLISION
+				float chipBottom = mapChip.m_pos.y + MapConsts::kMapChipSize;
+				float chipTop = mapChip.m_pos.y;
+				float chipRight = mapChip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = mapChip.m_pos.x + MapConsts::kMapOffsetX;
+				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camera.lock()->GetDrawOffset().y),
+					static_cast<int>(chipRight), static_cast<int>(chipBottom + camera.lock()->GetDrawOffset().y), 0xff0000, false);
+
+				DrawCircle(static_cast<int>((chipLeft + chipRight) * 0.5f),
+					static_cast<int>((chipTop + chipBottom) * 0.5f) + camera.lock()->GetDrawOffset().y,
+					10, 0xff00ff, false);
+#endif
 
 				if (mapChip.chipNo == 1308)
 				{
@@ -82,7 +97,7 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 }
 
 bool Map::IsCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
-{	
+{
 	// マップの当たり判定
 	for (int y = 0; y < MapConsts::kMapHeight; y++)
 	{
@@ -100,14 +115,10 @@ bool Map::IsCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 				// 当たり判定したいやつの上下左右を取る
 				MapChip chip = mapChips[y][x];
 				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize;
-				float chipTop    = chip.m_pos.y;
-				float chipRight  = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
-				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
+				float chipTop = chip.m_pos.y;
+				float chipRight = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
 
-#ifdef DISP_COLLISION
-				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y),
-					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
-#endif
 				// 絶対に当たっていない場合continue
 				if (chipTop > rect.bottom) continue;
 				if (chipBottom < rect.top) continue;
@@ -115,16 +126,16 @@ bool Map::IsCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 				if (chipLeft > rect.right) continue;
 
 				// 当たったマップチップの矩形を設定する
-				chipRect.top    = chipTop;
+				chipRect.top = chipTop;
 				chipRect.bottom = chipBottom;
-				chipRect.right  = chipRight;
-				chipRect.left   = chipLeft;
+				chipRect.right = chipRight;
+				chipRect.left = chipLeft;
 
 				// 当たっている
 				return true;
 			}
 		}
-	}	
+	}
 
 	return false;
 }
@@ -149,24 +160,20 @@ bool Map::IsCol2(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 				MapChip chip = mapChips[y][x];
 				float chipTop = chip.m_pos.y;
 				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize;
-				float chipRight  = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
-				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
+				float chipRight = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
 
-#ifdef DISP_COLLISION
-				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y),
-					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
-#endif
 				// 絶対に当たっていない場合continue
-				if (chipTop    > rect.bottom) continue;
+				if (chipTop > rect.bottom) continue;
 				if (chipBottom < rect.top)    continue;
-				if (chipRight  < rect.left)   continue;
-				if (chipLeft   > rect.right)  continue;
+				if (chipRight < rect.left)   continue;
+				if (chipLeft > rect.right)  continue;
 
 				// 当たったマップチップの矩形を設定する
-				chipRect.top    = chipTop;
+				chipRect.top = chipTop;
 				chipRect.bottom = chipBottom;
-				chipRect.right  = chipRight;
-				chipRect.left   = chipLeft;
+				chipRect.right = chipRight;
+				chipRect.left = chipLeft;
 
 				// 当たっている
 				return true;
@@ -194,27 +201,23 @@ bool Map::IsDamageCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera)
 				Vec3 camOffset = camera.lock()->GetDrawOffset();
 
 				// 当たり判定したいやつの上下左右を取る
-				MapChip chip     = mapChips[y][x];
+				MapChip chip = mapChips[y][x];
 				float chipBottom = chip.m_pos.y + MapConsts::kMapChipSize;
-				float chipTop    = chip.m_pos.y;
-				float chipRight  = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
-				float chipLeft   = chip.m_pos.x + MapConsts::kMapOffsetX;
+				float chipTop = chip.m_pos.y;
+				float chipRight = chip.m_pos.x + MapConsts::kMapOffsetX + MapConsts::kMapChipSize;
+				float chipLeft = chip.m_pos.x + MapConsts::kMapOffsetX;
 
-#ifdef DISP_COLLISION
-				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camOffset.y), 
-					static_cast<int>(chipRight), static_cast<int>(chipBottom + camOffset.y), 0xff0000, false);
-#endif
 				// 絶対に当たっていない場合continue
-				if (chipTop    > rect.bottom) continue;
+				if (chipTop > rect.bottom) continue;
 				if (chipBottom < rect.top)    continue;
-				if (chipRight  < rect.left)   continue;
-				if (chipLeft   > rect.right)  continue;
+				if (chipRight < rect.left)   continue;
+				if (chipLeft > rect.right)  continue;
 
 				// 当たったマップチップの矩形を設定する
-				chipRect.top    = chipTop;
+				chipRect.top = chipTop;
 				chipRect.bottom = chipBottom;
-				chipRect.right  = chipRight;
-				chipRect.left   = chipLeft;
+				chipRect.right = chipRight;
+				chipRect.left = chipLeft;
 
 				// 当たっている
 				return true;

@@ -62,6 +62,10 @@ namespace
 
 	// 死亡時の演出再生時間
 	constexpr int kDeadFrame = 80;
+
+	// プレイヤーの当たり判定
+	constexpr int kPlayerColWidth = 80;
+	constexpr int kPlayerColHeight = kGraphHeight - 36;
 }
 
 Player::Player(std::weak_ptr<Camera> camera) :
@@ -198,15 +202,6 @@ void Player::Draw()
 	Vec3 camOffset = m_camera.lock()->GetDrawOffset();
 	camOffset.x = 0;
 
-#ifdef DISP_COLLISION
-	// プレイヤーの当たり判定の表示
-	if (m_hp >= 0)
-	{
-		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y),
-			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
-	}
-#endif
-
 	// プレイヤーのアニメーション切り替え
 	// 走る
 	if (m_isRun)
@@ -223,6 +218,17 @@ void Player::Draw()
 	{
 		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
+
+#ifdef DISP_COLLISION
+	// プレイヤーの当たり判定の表示
+	if (m_hp >= 0)
+	{
+		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y),
+			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
+		DrawCircle(static_cast<int>(m_pos.x) + camOffset.x,
+			static_cast<int>(m_pos.y) + camOffset.y, 10, 0xff00ff, false);
+	}
+#endif
 
 	// ショット
 	for (int i = 0; i < kShot; i++)
@@ -263,21 +269,25 @@ void Player::OnDamage()
 float Player::GetLeft()
 {
 	return (m_pos.x - 40);
+	//return (m_pos.x - kPlayerColWidth * 0.5f);
 }
 
 float Player::GetRight()
 {
 	return (m_pos.x + 40);
+	//return (m_pos.x + kPlayerColWidth * 0.5f);
 }
 
 float Player::GetTop()
 {
 	return (m_pos.y);
+	//return (m_pos.y - kPlayerColHeight * 0.5f);
 }
 
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 35);
+	//return (m_pos.y + kPlayerColHeight * 0.5f);
 }
 
 Rect Player::GetRect()
@@ -378,7 +388,7 @@ void Player::HandleJump(Map& map)
 		{
 			// 天井に当たっているので下に押し戻す
 			m_pos.y = chipRect.bottom + kVerticalHit;
-			m_vec.y *= -1.0f;
+			m_vec.y = 0.0f;
 		}
 	}
 
@@ -390,10 +400,20 @@ void Player::HandleJump(Map& map)
 		// プレイヤーが下方向に移動している
 		if (m_vec.y > 0.0f)
 		{
-			// 床に当たっているので上に押し戻す
-			m_pos.y -= m_vec.y;
-			m_vec.y = 0.0f;
-			m_isJump = false;
+			// 前フレームのプレイヤーの位置
+			Vec3 posTemp = m_pos - m_vec;
+			// プレイヤーの頂点から床の中心までの距離
+			float playerMapDistance = chipRect.GetCenter().y - posTemp.y;
+			// 判定を取ってほしい距離
+			float distance = MapConsts::kMapChipSize * 0.5f + GetBottom() - GetTop() - 5;
+			// プレイヤーの頂点から床の中心までの距離が判定を取ってほしい距離より大きい
+			if (playerMapDistance > distance)
+			{
+				// 床に当たっているので上に押し戻す
+				m_pos.y -= m_vec.y;
+				m_vec.y = 0.0f;
+				m_isJump = false;
+			}
 		}
 	}
 
@@ -459,7 +479,7 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 		// プレイヤーが下方向に移動している
 		if (m_vec.y > 0.0f)
 		{
-			// 床に当たっているので上に押し戻す
+			// 床に当たっているのでその高さに合わせる
 			m_pos.y = chipRect.top;
 			m_isJump = false;
 		}
@@ -468,7 +488,7 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 		{
 			// 天井に当たっているので下に押し戻す
 			m_pos.y = chipRect.bottom + kVerticalHit;
-			m_vec.y *= -1.0f;
+			m_vec.y = 0.0f;
 		}
 	}
 	else
@@ -484,9 +504,19 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 		// プレイヤーが下方向に移動している
 		if (m_vec.y > 0.0f)
 		{
-			// 床に当たっているので上に押し戻す
-			m_pos.y = chipRect.top;
-			m_isJump = false;
+			// 前フレームのプレイヤーの位置
+			Vec3 posTemp = m_pos - m_vec;
+			// プレイヤーの頂点から床の中心までの距離
+			float playerMapDistance = chipRect.GetCenter().y - posTemp.y;
+			// 判定を取ってほしい距離
+			float distance = MapConsts::kMapChipSize * 0.5f + GetBottom() - GetTop() - 5;
+			// プレイヤーの頂点から床の中心までの距離が判定を取ってほしい距離より大きい
+			if (playerMapDistance > distance)
+			{
+				// 床に当たっているのでその高さに合わせる
+				m_pos.y = chipRect.top;
+				m_isJump = false;
+			}
 		}
 	}
 	else
@@ -514,7 +544,7 @@ void Player::HandleAttack(Input& input)
 
 				// 弾の位置をプレイヤーの位置に補正
 				m_shot[i].m_pos.x = m_pos.x;
-				m_shot[i].m_pos.y = m_pos.y + 20;
+				m_shot[i].m_pos.y = m_pos.y + 35;
 
 				// 弾を表示
 				m_shot[i].m_isShotFlag = true;
