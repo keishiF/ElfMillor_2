@@ -36,11 +36,14 @@ namespace
 	constexpr float kGroundEnemyInitPosX5 = 250.0f;
 	constexpr float kGroundEnemyInitPosY5 = 2140.0f;
 
-	constexpr float kFlyingEnemyInitPosX1 = 200.0f;
-	constexpr float kFlyingEnemyInitPosY1 = 4800.0f;
+	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
+	constexpr float kFlyingEnemyInitPosY1 = 3300.0f;
 
 	constexpr float kFlyingEnemyInitPosX2 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY2 = 4400.0f;
+	constexpr float kFlyingEnemyInitPosY2 = 2800.0f;
+
+	constexpr float kFlyingEnemyInitPosX3 = 320.0f;
+	constexpr float kFlyingEnemyInitPosY3 = 2500.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -68,9 +71,10 @@ GameScene::GameScene(SceneController& controller) :
 	CreateGroundEnemy(kGroundEnemyInitPosX4, kGroundEnemyInitPosY4);
 	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
 
-	m_flyingEnemyArray.resize(2);
+	m_flyingEnemyArray.resize(3);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX2, kFlyingEnemyInitPosY2);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX3, kFlyingEnemyInitPosY3);
 
 	m_camera->Init(m_player);
 }
@@ -83,7 +87,7 @@ void GameScene::Update(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
-	m_player->Update(input, *m_boss, m_groundEnemyArray, *m_map);
+	m_player->Update(input, *m_boss, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
 	//m_boss->Update();
 
 	for (int i = 0; i < m_groundEnemyArray.size(); i++)
@@ -100,12 +104,6 @@ void GameScene::NormalUpdate(Input& input)
 		{
 			m_flyingEnemyArray[i]->Update(*m_map);
 		}
-	}
-
-	float disX = m_boss->m_pos.x - m_player->m_pos.x;
-	if (disX > 50)
-	{
-		m_boss->Shot();
 	}
 
 	if (m_player->GetHp() <= 0)

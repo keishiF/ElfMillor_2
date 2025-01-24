@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "Boss.h"
 #include "GroundEnemy.h"
+#include "FlyingEnemy.h"
 #include "Map.h"
 #include <memory>
 #include <vector>
@@ -26,7 +27,8 @@ public:
     void End();
 
     // プレイヤーの更新、描画処理
-    void Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, Map& map);
+    void Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+        std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map);
     void Draw();
 
     // 死亡時の更新処理

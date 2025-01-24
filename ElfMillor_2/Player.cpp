@@ -138,7 +138,8 @@ void Player::End()
 {
 }
 
-void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, Map& map)
+void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map)
 {
 	// –³“GŠÔ‚ÌXV
 	UpdateBlinkFrame();
@@ -187,7 +188,7 @@ void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<Ground
 	// ’e‚ğ”­Ë
 	for (int i = 0; i < kShot; i++)
 	{
-		m_shot[i].Update(boss, groundEnemy, m_camera, map);
+		m_shot[i].Update(boss, groundEnemy, flyingEnemy, m_camera, map);
 	}
 }
 

@@ -90,6 +90,12 @@ void FlyingEnemy::Update(Map& map)
 	{
 		m_moveDir *= -1;
 	}
+
+	// Ž€–S
+	if (m_hp <= 0)
+	{
+		DeleteGraph(m_handleFly);
+	}
 }
 
 void FlyingEnemy::Draw()

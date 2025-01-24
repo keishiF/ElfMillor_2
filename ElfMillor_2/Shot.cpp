@@ -1,6 +1,7 @@
 #include "Shot.h"
 #include "Boss.h"
 #include "GroundEnemy.h"
+#include "FlyingEnemy.h"
 #include "Camera.h"
 #include "Map.h"
 
@@ -66,7 +67,8 @@ void Shot::Init()
 	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
 }
 
-void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, std::weak_ptr<Camera> camera, Map& map)
+void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, std::weak_ptr<Camera> camera, Map& map)
 {
 	m_shotAnim.Update();
 
@@ -116,6 +118,24 @@ void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEn
 				{
 					m_isShotFlag  = false;
 					groundEnemy[i]->OnDamage();
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < flyingEnemy.size(); i++)
+	{
+		if (flyingEnemy[i]->m_hp > 0)
+		{
+			if (GetRight() > flyingEnemy[i]->GetLeft() &&
+				GetLeft() < flyingEnemy[i]->GetRight() &&
+				GetTop() < flyingEnemy[i]->GetBottom() &&
+				GetBottom() > flyingEnemy[i]->GetTop())
+			{
+				if (m_isShotFlag)
+				{
+					m_isShotFlag = false;
+					flyingEnemy[i]->OnDamage();
 				}
 			}
 		}
