@@ -14,7 +14,7 @@ public:
 	~GroundEnemy();
 
 	void Init(float posX, float posY) override;
-	void Update(Map& map) override;
+	void Update(Player& player, Map& map) override;
 	void Draw() override;
 	void End();
 
@@ -26,6 +26,9 @@ public:
 	Rect  GetRect();
 
 	void OnDamage();
+
+	// Enemy‚ÌÀ•W‚ğæ“¾
+	Vec3 GetPos() { return m_pos; }
 
 private:
 	void UpdateBlinkFrame();

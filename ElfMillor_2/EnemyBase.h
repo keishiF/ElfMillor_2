@@ -5,6 +5,7 @@
 
 #include <memory>
 
+class Player;
 class Camera;
 class Map;
 
@@ -24,7 +25,7 @@ public:
 	void SetHandle(int handle) { m_handle = handle; }
 
 	virtual void Init(float posX, float posY) { m_pos.x = posX, m_pos.y = posY; };
-	virtual void Update(Map& map) = 0;
+	virtual void Update(Player& player, Map& map) = 0;
 	virtual void Draw() = 0;
 
 	// •\Ž¦ˆÊ’u

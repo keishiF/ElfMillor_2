@@ -73,7 +73,7 @@ void GroundEnemy::Init(float posX, float posY)
 	m_pos.y = posY;
 }
 
-void GroundEnemy::Update(Map& map)
+void GroundEnemy::Update(Player& player, Map& map)
 {
 	UpdateBlinkFrame();
 
@@ -109,6 +109,34 @@ void GroundEnemy::Update(Map& map)
 			// 左壁に当たっているので右向きにする
 			m_isDirLeft = false;
 			m_pos.x = chipRect.right + kBesideHit + 30;
+		}
+	}
+
+	if (m_hp > 0)
+	{
+		// プレイヤーと当たった時の処理
+		if (GetLeft() < player.GetRight() &&
+			GetRight() > player.GetLeft() &&
+			GetTop() < player.GetBottom() &&
+			GetBottom() > player.GetTop())
+		{
+			// プレイヤーにダメージ
+			player.OnDamage();
+			// 当たった時にプレイヤーの反対側に向く
+			if (player.GetPos().x < m_pos.x)
+			{
+				if (m_isDirLeft)
+				{
+					m_isDirLeft = false;
+				}
+			}
+			else if (player.GetPos().x > m_pos.x)
+			{
+				if (!m_isDirLeft)
+				{
+					m_isDirLeft = true;
+				}
+			}
 		}
 	}
 

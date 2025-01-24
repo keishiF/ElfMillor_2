@@ -23,7 +23,7 @@ namespace
 	constexpr int kRightEndWidth = 1120;
 
 	// プレイヤーの初期HP
-	constexpr int kDefaultHp = 3;
+	constexpr int kDefaultHp = 10;
 
 	// プレイヤーの移動速度
 	constexpr float kSpeed = 5.0f;
@@ -62,10 +62,6 @@ namespace
 
 	// 死亡時の演出再生時間
 	constexpr int kDeadFrame = 80;
-
-	// プレイヤーの当たり判定
-	constexpr int kPlayerColWidth = 80;
-	constexpr int kPlayerColHeight = kGraphHeight - 36;
 }
 
 Player::Player(std::weak_ptr<Camera> camera) :
@@ -270,25 +266,21 @@ void Player::OnDamage()
 float Player::GetLeft()
 {
 	return (m_pos.x - 40);
-	//return (m_pos.x - kPlayerColWidth * 0.5f);
 }
 
 float Player::GetRight()
 {
 	return (m_pos.x + 40);
-	//return (m_pos.x + kPlayerColWidth * 0.5f);
 }
 
 float Player::GetTop()
 {
 	return (m_pos.y);
-	//return (m_pos.y - kPlayerColHeight * 0.5f);
 }
 
 float Player::GetBottom()
 {
 	return (m_pos.y + kGraphHeight - 35);
-	//return (m_pos.y + kPlayerColHeight * 0.5f);
 }
 
 Rect Player::GetRect()

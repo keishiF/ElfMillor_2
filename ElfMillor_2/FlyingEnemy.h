@@ -14,7 +14,7 @@ public:
 	~FlyingEnemy();
 
 	void Init(float posX, float posY) override;
-	void Update(Map& map) override;
+	void Update(Player& player, Map& map) override;
 	void Draw() override;
 	void End();
 

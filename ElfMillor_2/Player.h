@@ -47,6 +47,9 @@ public:
     float GetBottom();
     Rect GetRect();
 
+    // プレイヤーの座標を取得
+    Vec3 GetPos() { return m_pos; }
+
 private:
     // 無敵時間の更新
     void UpdateBlinkFrame();

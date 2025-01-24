@@ -94,7 +94,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		if (m_groundEnemyArray[i])
 		{
-			m_groundEnemyArray[i]->Update(*m_map);
+			m_groundEnemyArray[i]->Update(*m_player, *m_map);
 		}
 	}
 
@@ -102,7 +102,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		if (m_flyingEnemyArray[i])
 		{
-			m_flyingEnemyArray[i]->Update(*m_map);
+			m_flyingEnemyArray[i]->Update(*m_player, *m_map);
 		}
 	}
 

@@ -76,7 +76,7 @@ void FlyingEnemy::Init(float posX, float posY)
 	m_initPosY = posY;
 }
 
-void FlyingEnemy::Update(Map& map)
+void FlyingEnemy::Update(Player& player, Map& map)
 {
 	UpdateBlinkFrame();
 

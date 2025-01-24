@@ -58,7 +58,7 @@ void Boss::Init(float posX, float posY)
 	m_hp = 3;
 }
 
-void Boss::Update(Map& map)
+void Boss::Update(Player& player, Map& map)
 {
 	m_idleAnim.Update();
 
