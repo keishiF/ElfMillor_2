@@ -28,6 +28,8 @@ public:
 	void OnDamage();
 
 private:
+	void UpdateBlinkFrame();
+
 	int  m_handleRun;
 
 	bool m_isDirLeft;

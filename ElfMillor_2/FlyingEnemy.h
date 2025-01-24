@@ -28,10 +28,18 @@ public:
 	void OnDamage();
 
 private:
-	int  m_handleRun;
+	void UpdateBlinkFrame();
+
+	int  m_handleFly;
 
 	bool m_isDirLeft;
 
 	// ”í’e‚Ì“_–Å
 	int m_blinkFrameCount;
+
+	// ˆÚ“®•ûŒü
+	int m_moveDir;
+
+	// ‰ŠúˆÊ’u‚ğ•Û‘¶‚·‚é
+	float m_initPosY;
 };

@@ -75,12 +75,7 @@ void GroundEnemy::Init(float posX, float posY)
 
 void GroundEnemy::Update(Map& map)
 {
-	// 無敵時間の更新
-	m_blinkFrameCount--;
-	if (m_blinkFrameCount < 0)
-	{
-		m_blinkFrameCount = 0;
-	}
+	UpdateBlinkFrame();
 
 	m_runAnim.Update();
 
@@ -189,7 +184,7 @@ float GroundEnemy::GetBottom()
 
 Rect GroundEnemy::GetRect()
 {
-	// プレイヤーの矩形当たり判定を作成
+	// 矩形当たり判定を作成
 	Rect rect;
 	rect.top    = GetTop();
 	rect.bottom = GetBottom();
@@ -209,4 +204,13 @@ void GroundEnemy::OnDamage()
 
 	// ダメージを受ける
 	m_hp--;
+}
+
+void GroundEnemy::UpdateBlinkFrame()
+{
+	m_blinkFrameCount--;
+	if (m_blinkFrameCount < 0)
+	{
+		m_blinkFrameCount = 0;
+	}
 }

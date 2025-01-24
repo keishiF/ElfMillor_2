@@ -8,6 +8,7 @@ class Boss;
 class Camera;
 class Map;
 class GroundEnemy;
+class FlyingEnemy;
 class EnemyBase;
 
 class GameScene : public SceneBase
@@ -26,6 +27,7 @@ private:
 	std::shared_ptr<Camera> m_camera;
 
 	std::vector<std::shared_ptr<GroundEnemy>> m_groundEnemyArray;
+	std::vector<std::shared_ptr<FlyingEnemy>> m_flyingEnemyArray;
 
 	using UpdateFunc_t = void(GameScene::*)(Input& input);
 	using DrawFunc_t   = void(GameScene::*)();
@@ -41,4 +43,5 @@ private:
 	void FadeDraw();
 
 	void CreateGroundEnemy(float posX, float posY);
+	void CreateFlyingEnemy(float posX, float posY);
 };

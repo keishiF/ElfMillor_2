@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Boss.h"
 #include "GroundEnemy.h"
+#include "FlyingEnemy.h"
 #include "Camera.h"
 #include "Map.h"
 
@@ -20,20 +21,23 @@ namespace
 	constexpr int kFadeInterval = 60;
 
 	// “G‚Ì‰ŠúˆÊ’u
-	constexpr float kEnemyInitPosX1 = 450.0f;
-	constexpr float kEnemyInitPosY1 = 6044.0f;
+	constexpr float kGroundEnemyInitPosX1 = 450.0f;
+	constexpr float kGroundEnemyInitPosY1 = 6044.0f;
 
-	constexpr float kEnemyInitPosX2 = 1100.0f;
-	constexpr float kEnemyInitPosY2 = 5340.0f;
+	constexpr float kGroundEnemyInitPosX2 = 1100.0f;
+	constexpr float kGroundEnemyInitPosY2 = 5340.0f;
 
-	constexpr float kEnemyInitPosX3 = 160.0f;
-	constexpr float kEnemyInitPosY3 = 3997.0f;
+	constexpr float kGroundEnemyInitPosX3 = 160.0f;
+	constexpr float kGroundEnemyInitPosY3 = 3997.0f;
 
-	constexpr float kEnemyInitPosX4 = 900.0f;
-	constexpr float kEnemyInitPosY4 = 3484.0f;
+	constexpr float kGroundEnemyInitPosX4 = 900.0f;
+	constexpr float kGroundEnemyInitPosY4 = 3484.0f;
 
-	constexpr float kEnemyInitPosX5 = 250.0f;
-	constexpr float kEnemyInitPosY5 = 2140.0f;
+	constexpr float kGroundEnemyInitPosX5 = 250.0f;
+	constexpr float kGroundEnemyInitPosY5 = 2140.0f;
+
+	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
+	constexpr float kFlyingEnemyInitPosY1 = 4800.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -55,11 +59,14 @@ GameScene::GameScene(SceneController& controller) :
 	m_player->Init();
 
 	m_groundEnemyArray.resize(5);
-	CreateGroundEnemy(kEnemyInitPosX1, kEnemyInitPosY1);
-	CreateGroundEnemy(kEnemyInitPosX2, kEnemyInitPosY2);
-	CreateGroundEnemy(kEnemyInitPosX3, kEnemyInitPosY3);
-	CreateGroundEnemy(kEnemyInitPosX4, kEnemyInitPosY4);
-	CreateGroundEnemy(kEnemyInitPosX5, kEnemyInitPosY5);
+	CreateGroundEnemy(kGroundEnemyInitPosX1, kGroundEnemyInitPosY1);
+	CreateGroundEnemy(kGroundEnemyInitPosX2, kGroundEnemyInitPosY2);
+	CreateGroundEnemy(kGroundEnemyInitPosX3, kGroundEnemyInitPosY3);
+	CreateGroundEnemy(kGroundEnemyInitPosX4, kGroundEnemyInitPosY4);
+	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
+
+	m_flyingEnemyArray.resize(1);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
 
 	m_camera->Init(m_player);
 }
@@ -80,6 +87,14 @@ void GameScene::NormalUpdate(Input& input)
 		if (m_groundEnemyArray[i])
 		{
 			m_groundEnemyArray[i]->Update(*m_map);
+		}
+	}
+
+	for (int i = 0; i < m_flyingEnemyArray.size(); i++)
+	{
+		if (m_flyingEnemyArray[i])
+		{
+			m_flyingEnemyArray[i]->Update(*m_map);
 		}
 	}
 
@@ -138,6 +153,14 @@ void GameScene::NormalDraw()
 			m_groundEnemyArray[i]->Draw();
 		}
 	}
+
+	for (int i = 0; i < m_flyingEnemyArray.size(); i++)
+	{
+		if (m_flyingEnemyArray[i])
+		{
+			m_flyingEnemyArray[i]->Draw();
+		}
+	}
 }
 
 void GameScene::FadeDraw()
@@ -156,6 +179,20 @@ void GameScene::CreateGroundEnemy(float posX, float posY)
 		{
 			m_groundEnemyArray[i] = std::make_shared<GroundEnemy>(m_camera);
 			m_groundEnemyArray[i]->Init(posX, posY);
+			return;
+		}
+	}
+}
+
+void GameScene::CreateFlyingEnemy(float posX, float posY)
+{
+
+	for (int i = 0; i < m_flyingEnemyArray.size(); i++)
+	{
+		if (!m_flyingEnemyArray[i])
+		{
+			m_flyingEnemyArray[i] = std::make_shared<FlyingEnemy>(m_camera);
+			m_flyingEnemyArray[i]->Init(posX, posY);
 			return;
 		}
 	}
