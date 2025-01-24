@@ -36,8 +36,11 @@ namespace
 	constexpr float kGroundEnemyInitPosX5 = 250.0f;
 	constexpr float kGroundEnemyInitPosY5 = 2140.0f;
 
-	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
+	constexpr float kFlyingEnemyInitPosX1 = 200.0f;
 	constexpr float kFlyingEnemyInitPosY1 = 4800.0f;
+
+	constexpr float kFlyingEnemyInitPosX2 = 320.0f;
+	constexpr float kFlyingEnemyInitPosY2 = 4400.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -65,8 +68,9 @@ GameScene::GameScene(SceneController& controller) :
 	CreateGroundEnemy(kGroundEnemyInitPosX4, kGroundEnemyInitPosY4);
 	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
 
-	m_flyingEnemyArray.resize(1);
+	m_flyingEnemyArray.resize(2);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX2, kFlyingEnemyInitPosY2);
 
 	m_camera->Init(m_player);
 }
