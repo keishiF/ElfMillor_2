@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "GameOverScene.h"
+#include "ClearScene.h"
 #include "SceneController.h"
 
 #include "Player.h"
@@ -109,6 +110,13 @@ void GameScene::NormalUpdate(Input& input)
 		}
 	}
 
+	if (m_player->m_isClearFlag)
+	{
+		m_update = &GameScene::FadeOutUpdate;
+		m_draw = &GameScene::FadeDraw;
+		m_frame = 0;
+	}
+
 	if (m_player->GetHp() <= 0)
 	{
 		m_update = &GameScene::FadeOutUpdate;
@@ -128,16 +136,27 @@ void GameScene::FadeInUpdate(Input& input)
 
 void GameScene::FadeOutUpdate(Input& input)
 {
-	if (m_frame++ >= 60)
+	if (m_player->m_isClearFlag)
 	{
 		// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
-		m_controller.ChangeScene(std::make_shared<GameOverScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
 
 		// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
 		return;
 	}
-	// ここに何か処理があった場合、上記のreturnがなければ
-	// 持ち主が死んでいるのに何かゾンビ処理をすることになる←色々まっずい
+	else
+	{
+		if (m_frame++ >= 60)
+		{
+			// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
+			m_controller.ChangeScene(std::make_shared<GameOverScene>(m_controller));
+
+			// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
+			return;
+		}
+		// ここに何か処理があった場合、上記のreturnがなければ
+		// 持ち主が死んでいるのに何かゾンビ処理をすることになる←色々まっずい
+	}
 }
 
 void GameScene::Draw()

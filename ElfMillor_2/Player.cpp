@@ -54,7 +54,7 @@ namespace
 	constexpr float kRotaRate = 0.0f;
 
 	// ノックバック距離
-	constexpr int kBesideHit = 43;
+	constexpr int kBesideHit = 35;
 	constexpr int kVerticalHit = 1;
 
 	// ダメージ食らった後の無敵時間
@@ -84,6 +84,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_isCeilingHit(false),
 	m_isLastJump(false),
 	m_isLastJumpButton(false),
+	m_isClearFlag(false),
 	m_shot(),
 	m_idleAnim(),
 	m_runAnim(),
@@ -124,6 +125,8 @@ void Player::Init()
 	}
 
 	m_hp = kDefaultHp;
+
+	m_isClearFlag = false;
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
@@ -216,11 +219,6 @@ void Player::Draw()
 	{
 		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
-	// 攻撃
-	else if (m_isAtk)
-	{
-		m_atkAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
 	// 待機
 	else
 	{
@@ -233,8 +231,8 @@ void Player::Draw()
 	{
 		DrawBox(static_cast<int>(GetLeft()), static_cast<int>(GetTop() + camOffset.y),
 			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
-		DrawCircle(static_cast<int>(m_pos.x) + camOffset.x,
-			static_cast<int>(m_pos.y) + camOffset.y, 10, 0xff00ff, false);
+	//	DrawCircle(static_cast<int>(m_pos.x) + camOffset.x,
+	//		static_cast<int>(m_pos.y) + camOffset.y, 10, 0xff00ff, false);
 	}
 #endif
 
@@ -244,8 +242,8 @@ void Player::Draw()
 		m_shot[i].Draw(m_camera);
 	}
 
-	DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
-	DrawFormatString(0, 30, 0xffffff, "Hp = %d", m_hp);
+	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::DeadUpdate()
@@ -276,17 +274,17 @@ void Player::OnDamage()
 
 float Player::GetLeft()
 {
-	return (m_pos.x - 40);
+	return (m_pos.x - 30);
 }
 
 float Player::GetRight()
 {
-	return (m_pos.x + 40);
+	return (m_pos.x + 30);
 }
 
 float Player::GetTop()
 {
-	return (m_pos.y);
+	return (m_pos.y +5);
 }
 
 float Player::GetBottom()
@@ -426,6 +424,12 @@ void Player::HandleJump(Map& map)
 	{
 		OnDamage();
 	}
+
+	// クリアのフラグとなっている鍵との当たり判定
+	if (map.IsClearCol(GetRect(), chipRect, m_camera))
+	{
+		m_isClearFlag = true;
+	}
 }
 
 void Player::HandleGroundMovement(Input& input, Map& map)
@@ -532,6 +536,12 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 	if (map.IsDamageCol(GetRect(), chipRect, m_camera))
 	{
 		OnDamage();
+	}
+
+	// クリアのフラグとなっている鍵との当たり判定
+	if (map.IsClearCol(GetRect(), chipRect, m_camera))
+	{
+		m_isClearFlag = true;
 	}
 }
 

@@ -50,6 +50,9 @@ public:
     // プレイヤーの座標を取得
     Vec3 GetPos() { return m_pos; }
 
+    // クリアフラグ
+    bool m_isClearFlag;
+
 private:
     // 無敵時間の更新
     void UpdateBlinkFrame();

@@ -37,7 +37,12 @@ namespace MapConsts
 
 	constexpr int kDamageList[] =
 	{
-		4617,4618,4619,4873,4874,4875
+		4874,4875
+	};
+
+	constexpr int kClearList[] = 
+	{
+		1052,1053,1308,1309
 	};
 
 	constexpr int kMapOffsetX = 160;
@@ -62,4 +67,6 @@ public:
 
 	// ƒ_ƒ[ƒW‚ğó‚¯‚é°‚Ì”»’è
 	bool IsDamageCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
+
+	bool IsClearCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 };
