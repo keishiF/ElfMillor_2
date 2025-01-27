@@ -91,6 +91,17 @@ void FlyingEnemy::Update(Player& player, Map& map)
 		m_moveDir *= -1;
 	}
 
+	if (m_hp > 0)
+	{
+		if (GetLeft() < player.GetRight() &&
+			GetRight() > player.GetLeft() &&
+			GetTop() < player.GetBottom() &&
+			GetBottom() > player.GetTop())
+		{
+			player.OnDamage();
+		}
+	}
+
 	// Ž€–S
 	if (m_hp <= 0)
 	{
@@ -132,7 +143,7 @@ float FlyingEnemy::GetLeft()
 
 float FlyingEnemy::GetRight()
 {
-	return (m_pos.x + 50);
+	return (m_pos.x + 40);
 }
 
 float FlyingEnemy::GetTop()

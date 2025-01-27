@@ -76,6 +76,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_jumpSpeed(-10.0f),
 	m_jumpCount(0),
 	m_isDirLeft(false),
+	m_isUpFlag(false),
 	m_blinkFrameCount(0),
 	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
@@ -158,6 +159,16 @@ void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<Ground
 
 	// 前フレームでジャンプしていたかを確認
 	m_isLastJumpButton = input.IsTrigger(PAD_INPUT_1);
+
+	// 上入力
+	if (input.IsPress(PAD_INPUT_UP))
+	{
+		m_isUpFlag = true;
+	}
+	else
+	{
+		m_isUpFlag = false;
+	}
 
 	// 攻撃
 	HandleAttack(input);
@@ -544,6 +555,9 @@ void Player::HandleAttack(Input& input)
 
 				// 弾の向きをプレイヤーと同じ向きに補正
 				m_shot[i].m_isDirLeft = m_isDirLeft;
+
+				// 上入力されているかどうかをプレイヤーと同じ状態にする
+				m_shot[i].m_isUpFlag = m_isUpFlag;
 
 				// 弾を1発出してループから抜ける
 				break;

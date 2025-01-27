@@ -41,15 +41,18 @@ namespace
 
 	// íeÇÃîºåa
 	constexpr int kShotRadius = 15;
+
+	// íeÇÃë¨ìx
+	constexpr float kShotSpeed = 5.0f;
 }
 
 Shot::Shot():
 	m_isShotFlag(false),
 	m_handle(-1),
 	m_isDirLeft(true),
+	m_isUpFlag(false),
 	m_pos(0,0),
-	m_velocity(5.0f,0.0f),
-	m_isUp(false),
+	m_velocity(kShotSpeed,kShotSpeed),
 	m_shotAnim()
 {
 }
@@ -72,13 +75,22 @@ void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEn
 {
 	m_shotAnim.Update();
 
-	if (!m_isDirLeft)
+	if (m_isUpFlag)
 	{
-		m_pos += m_velocity;
-	}
-	else if (m_isDirLeft)
-	{
+		m_velocity = { 0.0f, kShotSpeed };
 		m_pos -= m_velocity;
+	}
+	else
+	{
+		m_velocity = { kShotSpeed, 0.0f };
+		if (!m_isDirLeft)
+		{
+			m_pos += m_velocity;
+		}
+		else if (m_isDirLeft)
+		{
+			m_pos -= m_velocity;
+		}
 	}
 
 	// âEí[Ç…çsÇ¡ÇΩÇÁç∂í[Ç…
@@ -158,9 +170,16 @@ void Shot::Draw(std::weak_ptr<Camera> camera)
 
 	if (m_isShotFlag)
 	{
-		DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
-			0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
-		//m_shotAnim.Play(m_pos + camOffset, m_isDirLeft);
+		if (m_isUpFlag)
+		{
+			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
+				0, 0, kGraphWidth, kGraphHeight, 1.0f, -42.5f, m_handle, true, m_isDirLeft);
+		}
+		else
+		{
+			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
+				0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
+		}
 	}
 }
 

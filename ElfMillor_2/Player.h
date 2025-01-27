@@ -81,6 +81,9 @@ private:
     // プレイヤーの向き
     bool m_isDirLeft;
 
+    // プレイヤーが上入力をしているかどうか
+    bool m_isUpFlag;
+
     // 無敵時間関連
     int m_blinkFrameCount;
     int m_deadFrameCount;

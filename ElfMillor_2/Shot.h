@@ -42,8 +42,8 @@ public:
 	// 左向きかどうか
 	bool m_isDirLeft;
 
-	// 上入力されているかどうか
-	bool m_isUp;
+	// 上入力されているかのフラグ
+	bool m_isUpFlag;
 
 private:
 	// 弾のグラフィックハンドル
