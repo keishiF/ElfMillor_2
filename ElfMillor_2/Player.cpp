@@ -73,7 +73,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_isJump(false),
 	m_isAtk(false),
 	m_isDead(false),
-	m_jumpSpeed(-10.0f),
+	m_jumpSpeed(-10.5f),
 	m_jumpCount(0),
 	m_isDirLeft(false),
 	m_isUpFlag(false),
