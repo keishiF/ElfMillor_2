@@ -87,10 +87,10 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 					10, 0xff00ff, false);*/
 #endif
 
-				if (mapChip.chipNo == 1308)
+				/*if (mapChip.chipNo == 1308)
 				{
 					assert(false);
-				}
+				}*/
 			}
 		}
 	}

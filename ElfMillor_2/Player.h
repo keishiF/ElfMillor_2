@@ -27,7 +27,7 @@ public:
     void End();
 
     // プレイヤーの更新、描画処理
-    void Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+    void Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
         std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map);
     void Draw();
 

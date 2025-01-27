@@ -16,7 +16,7 @@ namespace
 {
 	// 初期位置
 	constexpr int kPlayerInitPosX = 360;
-	constexpr int kPlayerInitPosY = 6150;
+	constexpr int kPlayerInitPosY = 7600;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -135,7 +135,7 @@ void Player::End()
 {
 }
 
-void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map)
 {
 	// 無敵時間の更新
@@ -195,7 +195,7 @@ void Player::Update(Input& input, Boss& boss, std::vector<std::shared_ptr<Ground
 	// 弾を発射
 	for (int i = 0; i < kShot; i++)
 	{
-		m_shot[i].Update(boss, groundEnemy, flyingEnemy, m_camera, map);
+		m_shot[i].Update(groundEnemy, flyingEnemy, m_camera, map);
 	}
 }
 

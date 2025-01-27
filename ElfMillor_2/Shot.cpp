@@ -70,7 +70,7 @@ void Shot::Init()
 	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
 }
 
-void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, std::weak_ptr<Camera> camera, Map& map)
 {
 	m_shotAnim.Update();
@@ -102,19 +102,6 @@ void Shot::Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEn
 	else if (m_pos.x >= kRightEndWidth)
 	{
 		m_isShotFlag = false;
-	}
-
-	if (boss.m_hp > 0)
-	{
-		if (5 + 100 > std::abs(m_pos.x - boss.m_pos.x) &&
-			5 + 100 > std::abs(m_pos.y - boss.m_pos.y))
-		{
-			if (m_isShotFlag)
-			{
-				m_isShotFlag = false;
-				boss.m_hp--;
-			}
-		}
 	}
 
 	for (int i = 0; i < groundEnemy.size(); i++)

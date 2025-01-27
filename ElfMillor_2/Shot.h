@@ -21,7 +21,7 @@ public:
 	~Shot();
 
 	void Init();
-	void Update(Boss& boss, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
+	void Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 		std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, std::weak_ptr<Camera> camera, Map& map);
 	void Draw(std::weak_ptr<Camera> camera);
 

@@ -3,7 +3,6 @@
 #include "SceneController.h"
 
 #include "Player.h"
-#include "Boss.h"
 #include "GroundEnemy.h"
 #include "FlyingEnemy.h"
 #include "Camera.h"
@@ -22,28 +21,34 @@ namespace
 
 	// ìGÇÃèâä˙à íu
 	constexpr float kGroundEnemyInitPosX1 = 450.0f;
-	constexpr float kGroundEnemyInitPosY1 = 6044.0f;
+	constexpr float kGroundEnemyInitPosY1 = 7483.0f;
 
 	constexpr float kGroundEnemyInitPosX2 = 1100.0f;
-	constexpr float kGroundEnemyInitPosY2 = 5340.0f;
+	constexpr float kGroundEnemyInitPosY2 = 6780.0f;
 
 	constexpr float kGroundEnemyInitPosX3 = 160.0f;
-	constexpr float kGroundEnemyInitPosY3 = 3997.0f;
+	constexpr float kGroundEnemyInitPosY3 = 5435.0f;
 
 	constexpr float kGroundEnemyInitPosX4 = 900.0f;
-	constexpr float kGroundEnemyInitPosY4 = 3484.0f;
+	constexpr float kGroundEnemyInitPosY4 = 4923.0f;
 
 	constexpr float kGroundEnemyInitPosX5 = 250.0f;
-	constexpr float kGroundEnemyInitPosY5 = 2140.0f;
+	constexpr float kGroundEnemyInitPosY5 = 3585.0f;
 
 	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY1 = 3300.0f;
+	constexpr float kFlyingEnemyInitPosY1 = 4750.0f;
 
 	constexpr float kFlyingEnemyInitPosX2 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY2 = 2800.0f;
+	constexpr float kFlyingEnemyInitPosY2 = 4250.0f;
 
 	constexpr float kFlyingEnemyInitPosX3 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY3 = 2500.0f;
+	constexpr float kFlyingEnemyInitPosY3 = 3950.0f;
+
+	constexpr float kFlyingEnemyInitPosX4 = 370.0f;
+	constexpr float kFlyingEnemyInitPosY4 = 3000.0f;
+
+	constexpr float kFlyingEnemyInitPosX5 = 640.0f;
+	constexpr float kFlyingEnemyInitPosY5 = 2700.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -58,9 +63,6 @@ GameScene::GameScene(SceneController& controller) :
 
 	m_camera = std::make_shared<Camera>();
 
-	m_boss = std::make_shared<Boss>(m_camera);
-	m_boss->Init(0.0f, 0.0f);
-
 	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
 
@@ -71,10 +73,12 @@ GameScene::GameScene(SceneController& controller) :
 	CreateGroundEnemy(kGroundEnemyInitPosX4, kGroundEnemyInitPosY4);
 	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
 
-	m_flyingEnemyArray.resize(3);
+	m_flyingEnemyArray.resize(5);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX2, kFlyingEnemyInitPosY2);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX3, kFlyingEnemyInitPosY3);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX4, kFlyingEnemyInitPosY4);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX5, kFlyingEnemyInitPosY5);
 
 	m_camera->Init(m_player);
 }
@@ -87,8 +91,7 @@ void GameScene::Update(Input& input)
 void GameScene::NormalUpdate(Input& input)
 {
 	m_camera->Update();
-	m_player->Update(input, *m_boss, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
-	//m_boss->Update();
+	m_player->Update(input, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
 
 	for (int i = 0; i < m_groundEnemyArray.size(); i++)
 	{
@@ -146,7 +149,6 @@ void GameScene::NormalDraw()
 {
 	m_map->DrawMap(m_camera);
 	m_player->Draw();
-	//m_boss->Draw();
 
 	for (int i = 0; i < m_groundEnemyArray.size(); i++)
 	{

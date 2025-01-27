@@ -4,7 +4,6 @@
 #include <vector>
 
 class Player;
-class Boss;
 class Camera;
 class Map;
 class GroundEnemy;
@@ -22,7 +21,6 @@ public:
 private:
     int m_frame = 60;
 	std::shared_ptr<Player> m_player;
-	std::shared_ptr<Boss>   m_boss;
 	std::shared_ptr<Map>    m_map;
 	std::shared_ptr<Camera> m_camera;
 
