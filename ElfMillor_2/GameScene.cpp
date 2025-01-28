@@ -54,8 +54,8 @@ namespace
 	constexpr float kFlyingEnemyInitPosX6 = 1008.0f;
 	constexpr float kFlyingEnemyInitPosY6 = 1600.0f;
 
-	constexpr float kFlyingEnemyInitPosX7 = 720.0f;
-	constexpr float kFlyingEnemyInitPosY7 = 1400.0f;
+	constexpr float kFlyingEnemyInitPosX7 = 728.0f;
+	constexpr float kFlyingEnemyInitPosY7 = 1000.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -95,6 +95,8 @@ GameScene::GameScene(SceneController& controller) :
 	CreateFlyingEnemy(kFlyingEnemyInitPosX3, kFlyingEnemyInitPosY3);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX4, kFlyingEnemyInitPosY4);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX5, kFlyingEnemyInitPosY5);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX6, kFlyingEnemyInitPosY6);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX7, kFlyingEnemyInitPosY7);
 
 	// ƒJƒƒ‰‚Ì‰Šú‰»
 	m_camera->Init(m_player);

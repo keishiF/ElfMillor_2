@@ -223,6 +223,7 @@ void Player::Draw()
 			static_cast<int>(GetRight()), static_cast<int>(GetBottom() + camOffset.y), 0xff0000, false);
 	//	DrawCircle(static_cast<int>(m_pos.x) + camOffset.x,
 	//		static_cast<int>(m_pos.y) + camOffset.y, 10, 0xff00ff, false);
+		DrawFormatString(5, 30, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	}
 #endif
 
@@ -232,7 +233,6 @@ void Player::Draw()
 		m_shot[i].Draw(m_camera);
 	}
 
-	DrawFormatString(5, 30, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
 }
 

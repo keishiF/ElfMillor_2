@@ -44,7 +44,7 @@ namespace
 	constexpr int kDamageBlinkFrame = 30;
 
 	// ˆÚ“®‹——£‚Ì§ŒÀ
-	constexpr float kMoveDistance = 150.0f;
+	constexpr float kMoveDistance = 175.0f;
 }
 
 FlyingEnemy::FlyingEnemy(std::weak_ptr<Camera> camera):
