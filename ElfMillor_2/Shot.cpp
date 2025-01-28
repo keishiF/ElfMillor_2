@@ -25,10 +25,7 @@ namespace
 	constexpr int kEffectGraphHeight = 64;
 
 	// アニメーション1コマのフレーム数
-	constexpr int kAnimSingleFrame = 8;
-
-	// アニメーションのコマ数
-	constexpr int kShotAnimNum = 10;
+	constexpr int kAnimSingleFrame = 4;
 
 	// エフェクトのアニメーションのコマ数
 	constexpr int kEffectAnimNum = 14;
@@ -52,21 +49,20 @@ namespace
 
 Shot::Shot() :
 	m_isShot(false),
-	//m_isEffect(false),
+	m_isEffect(false),
 	m_shotHandle(-1),
+	m_effectHandle(-1),
 	m_isDirLeft(true),
-	m_isUpFlag(false),
 	m_pos(0,0),
 	m_velocity(kShotSpeed,kShotSpeed),
-	m_shotAnim()
-	//m_effectAnim()
+	m_effectAnim()
 {
 }
 
 Shot::~Shot()
 {
 	DeleteGraph(m_shotHandle);
-	//DeleteGraph(m_effectHandle);
+	DeleteGraph(m_effectHandle);
 }
 
 void Shot::Init()
@@ -74,31 +70,35 @@ void Shot::Init()
 	m_shotHandle = LoadGraph("data/image/Bullet/Bullet.png");
 	assert(m_shotHandle != -1);
 
-	/*m_effectHandle = LoadGraph("data/image/Effect/effect.png");
-	assert(m_effectHandle != -1);*/
+	m_effectHandle = LoadGraph("data/image/Effect/effect.png");
+	assert(m_effectHandle != -1);
 
-	m_shotAnim.Init(m_shotHandle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
+	m_effectAnim.Init(m_effectHandle, kAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kEffectAnimNum);
 }
 
 void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, std::weak_ptr<Camera> camera, Map& map)
 {
-	m_shotAnim.Update();
-
-	if (m_isUpFlag)
+	// 弾が出たときに上入力されているかどうか
+	if (m_isUp)
 	{
+		// されていたら横の力をなくして上にしか進まないようにする
 		m_velocity = { 0.0f, kShotSpeed };
 		m_pos -= m_velocity;
 	}
 	else
 	{
+		// されていなかったら縦の力をなくして横にしか進まないようにする
 		m_velocity = { kShotSpeed, 0.0f };
+		// 左向きかどうか
 		if (!m_isDirLeft)
 		{
+			// 左向きじゃないので右に進む
 			m_pos += m_velocity;
 		}
 		else if (m_isDirLeft)
 		{
+			// 左向きなので左に進む
 			m_pos -= m_velocity;
 		}
 	}
@@ -126,7 +126,6 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 				if (m_isShot)
 				{
 					m_isShot  = false;
-					//m_isEffect = true;
 					groundEnemy[i]->OnDamage();
 				}
 			}
@@ -145,7 +144,6 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 				if (m_isShot)
 				{
 					m_isShot = false;
-					//m_isEffect = true;
 					flyingEnemy[i]->OnDamage();
 				}
 			}
@@ -169,7 +167,7 @@ void Shot::Draw(std::weak_ptr<Camera> camera)
 
 	if (m_isShot)
 	{
-		if (m_isUpFlag)
+		if (m_isUp)
 		{
 			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
 				0, 0, kGraphWidth, kGraphHeight, 1.0f, -42.5f, m_shotHandle, true, m_isDirLeft);

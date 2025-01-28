@@ -28,6 +28,7 @@ namespace
 
 	// 各アニメーションのコマ数
 	constexpr int kWalkAnimNum = 8;
+	constexpr int kDeadAnimNum = 4;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
@@ -50,8 +51,10 @@ namespace
 
 GroundEnemy::GroundEnemy(std::weak_ptr<Camera> camera):
 	m_handleRun(-1),
+	m_handleDead(-1),
 	m_isDirLeft(false),
 	m_blinkFrameCount(0),
+	m_deadAnim(),
 	EnemyBase(Vec3(0.0f, 0.0f), camera)
 {
 }
@@ -65,7 +68,11 @@ void GroundEnemy::Init(float posX, float posY)
 	m_handleRun = LoadGraph("data/image/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
 
+	m_handleDead = LoadGraph("data/image/Enemy/Orc/OrcDead.png");
+	assert(m_handleDead != -1);
+
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
+	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
 
 	m_hp = kDefaultHp;
 
@@ -154,6 +161,7 @@ void GroundEnemy::Update(Player& player, Map& map)
 	// 死亡
 	if (m_hp <= 0)
 	{
+		m_deadAnim.Update();
 		DeleteGraph(m_handleRun);
 	}
 }
@@ -179,7 +187,15 @@ void GroundEnemy::Draw()
 	}
 #endif
 
-	m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
+	if (m_hp <= 0)
+	{
+		//m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+		DeleteGraph(m_handleRun);
+	}
+	else
+	{
+		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
 
 	/*DrawFormatString(0, 30, 0xffffff, "EnemyPos.X~%f, Y=%f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 45, 0xffffff, "drawPos.X~%f, Y=%f", drawPos.x, drawPos.y);*/

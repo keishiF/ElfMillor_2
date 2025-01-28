@@ -50,6 +50,12 @@ namespace
 
 	constexpr float kFlyingEnemyInitPosX5 = 640.0f;
 	constexpr float kFlyingEnemyInitPosY5 = 2700.0f;
+
+	constexpr float kFlyingEnemyInitPosX6 = 1008.0f;
+	constexpr float kFlyingEnemyInitPosY6 = 1600.0f;
+
+	constexpr float kFlyingEnemyInitPosX7 = 720.0f;
+	constexpr float kFlyingEnemyInitPosY7 = 1400.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -57,16 +63,24 @@ GameScene::GameScene(SceneController& controller) :
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
+	// フェード用のカウント変数
 	m_frame = kFadeInterval;
 
+	// BGMの読み込み
+	m_bgmHandle = LoadSoundMem("data/sound/BGM3.mp3");
+	assert(m_bgmHandle != -1);
+
+	// マップの初期化
 	m_map = std::make_shared<Map>();
 	m_map->InitMap();
 
 	m_camera = std::make_shared<Camera>();
 
+	// プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
 
+	// 地上エネミーの初期化
 	m_groundEnemyArray.resize(5);
 	CreateGroundEnemy(kGroundEnemyInitPosX1, kGroundEnemyInitPosY1);
 	CreateGroundEnemy(kGroundEnemyInitPosX2, kGroundEnemyInitPosY2);
@@ -74,14 +88,24 @@ GameScene::GameScene(SceneController& controller) :
 	CreateGroundEnemy(kGroundEnemyInitPosX4, kGroundEnemyInitPosY4);
 	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
 
-	m_flyingEnemyArray.resize(5);
+	// 飛行エネミーの初期化
+	m_flyingEnemyArray.resize(7);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX2, kFlyingEnemyInitPosY2);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX3, kFlyingEnemyInitPosY3);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX4, kFlyingEnemyInitPosY4);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX5, kFlyingEnemyInitPosY5);
 
+	// カメラの初期化
 	m_camera->Init(m_player);
+
+	// BGMの再生
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+}
+
+GameScene::~GameScene()
+{
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void GameScene::Update(Input& input)
@@ -119,6 +143,7 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_player->GetHp() <= 0)
 	{
+		m_player->DeadUpdate();
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
 		m_frame = 0;

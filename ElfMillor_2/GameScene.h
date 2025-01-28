@@ -14,16 +14,22 @@ class GameScene : public SceneBase
 {
 public:
 	GameScene(SceneController& controller);
+	~GameScene();
 
 	virtual void Update(Input& input)override;
 	virtual void Draw()override;
 
 private:
+	// フェード用のカウント変数
     int m_frame = 60;
+
+	// BGMハンドル
+	int m_bgmHandle;
+
+	// ゲームオブジェクト
 	std::shared_ptr<Player> m_player;
 	std::shared_ptr<Map>    m_map;
 	std::shared_ptr<Camera> m_camera;
-
 	std::vector<std::shared_ptr<GroundEnemy>> m_groundEnemyArray;
 	std::vector<std::shared_ptr<FlyingEnemy>> m_flyingEnemyArray;
 

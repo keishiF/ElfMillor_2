@@ -7,7 +7,8 @@ public:
 	void Init(int drawHandle, int animSingleFrame, int graphWidth, int graphHeight, float extRate, float rotaRate, int animNum);
 	void Update();
 	void Play(Vec3 pos, bool isDirLeft);
-	void ResetAnimFrame() { m_animFrame = 0; }
+
+	float GetFrame() { return m_animFrame; }
 
 private:
 	int   m_animFrame;

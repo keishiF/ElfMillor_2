@@ -21,9 +21,8 @@ public:
     Player(std::weak_ptr<Camera> camera);
     ~Player();
 
-    // プレイヤーの初期化、終了処理
+    // プレイヤーの初期化
     void Init();
-    void End();
 
     // プレイヤーの更新、描画処理
     void Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
@@ -69,10 +68,12 @@ private:
     int m_handleRun;
     int m_handleDead;
 
+    // SEハンドル
+    int m_seHandle;
+
     // アニメーションフラグ
     bool m_isRun;
     bool m_isJump;
-    bool m_isAtk;
     bool m_isDead;
 
     // ジャンプ関連
@@ -92,12 +93,7 @@ private:
     // プレイヤーのHP
     int m_hp;
 
-    // 地面、天井との当たり判定フラグ
-    bool m_isGroundHit;
-    bool m_isCeilingHit;
-
     // ジャンプボタンの状態
-    bool m_isLastJump;
     bool m_isLastJumpButton;
 
     // ショット

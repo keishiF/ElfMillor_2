@@ -36,7 +36,7 @@ public:
 	bool m_isShot;
 
 	// エフェクトが出るかどうか
-	//bool m_isEffect;
+	bool m_isEffect;
 
 	// 弾の位置座標
 	Vec3 m_pos;
@@ -46,18 +46,15 @@ public:
 	bool m_isDirLeft;
 
 	// 上入力されているかのフラグ
-	bool m_isUpFlag;
+	bool m_isUp;
 
 private:
 	// 弾のグラフィックハンドル
 	int m_shotHandle;
 
 	// 弾が消えるときのエフェクトハンドル
-	//int m_effectHandle;
-
-	// アニメーション
-	Animation m_shotAnim;
+	int m_effectHandle;
 
 	// エフェクトのアニメーション
-	//Animation m_effectAnim;
+	Animation m_effectAnim;
 };

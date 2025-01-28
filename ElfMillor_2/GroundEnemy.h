@@ -33,10 +33,16 @@ public:
 private:
 	void UpdateBlinkFrame();
 
+	// グラフィックハンドル
 	int  m_handleRun;
+	int  m_handleDead;
 
+	// 左向きかどうか
 	bool m_isDirLeft;
 
 	// 被弾時の点滅
 	int m_blinkFrameCount;
+
+	// アニメーション
+	Animation m_deadAnim;
 };

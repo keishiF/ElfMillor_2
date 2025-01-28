@@ -68,9 +68,9 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
 	m_handleDead(-1),
+	m_seHandle(-1),
 	m_isRun(false),
 	m_isJump(false),
-	m_isAtk(false),
 	m_isDead(false),
 	m_jumpSpeed(-10.5f),
 	m_jumpCount(0),
@@ -79,9 +79,6 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_blinkFrameCount(0),
 	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
-	m_isGroundHit(false),
-	m_isCeilingHit(false),
-	m_isLastJump(false),
 	m_isLastJumpButton(false),
 	m_isClearFlag(false),
 	m_shot(),
@@ -99,6 +96,9 @@ Player::~Player()
 	DeleteGraph(m_handleIdle);
 	DeleteGraph(m_handleRun);
 	DeleteGraph(m_handleDead);
+
+	// SEの解放
+	DeleteSoundMem(m_seHandle);
 }
 
 void Player::Init()
@@ -112,6 +112,10 @@ void Player::Init()
 	m_handleDead = LoadGraph("data/image/Player/Dead.png");
 	assert(m_handleDead != -1);
 
+	// SEの読み込み
+	m_seHandle = LoadSoundMem("data/sound/shotSE2.mp3");
+	assert(m_seHandle != -1);
+
 	for (int i = 0; i < kShot; i++)
 	{
 		m_shot[i].Init();
@@ -124,10 +128,6 @@ void Player::Init()
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
 	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
-}
-
-void Player::End()
-{
 }
 
 void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
@@ -175,11 +175,9 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 		m_pos.x = kLeftEndWidth;
 	}
 
-	// HPがなくなったら死ぬ
 	if (m_hp <= 0)
 	{
-		DeleteGraph(m_handleIdle);
-		DeleteGraph(m_handleRun);
+		m_isDead = true;
 	}
 
 	// 弾を発射
@@ -206,6 +204,11 @@ void Player::Draw()
 	{
 		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
+	// 死んだ
+	else if (m_isDead)
+	{
+		m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
 	// 待機
 	else
 	{
@@ -229,17 +232,18 @@ void Player::Draw()
 		m_shot[i].Draw(m_camera);
 	}
 
-	//DrawFormatString(0, 0, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
+	DrawFormatString(5, 30, 0xffffff, "PlayerPos.X=%f,Y=%f", m_pos.x, m_pos.y);
 	DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::DeadUpdate()
 {
-	Vec3 camOffset = m_camera.lock()->GetDrawOffset();
-	camOffset.x = 0;
-
 	m_deadAnim.Update();
-	m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+
+	if (m_deadAnim.GetFrame() > 80)
+	{
+		return;
+	}
 }
 
 void Player::OnDamage()
@@ -540,8 +544,8 @@ void Player::HandleAttack(Input& input)
 		{
 			if (!m_shot[i].m_isShot)
 			{
-				// アニメーション切り替え
-				m_isAtk = true;
+				// ショット時の音の再生
+				PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 
 				// 弾の位置をプレイヤーの位置に補正
 				m_shot[i].m_pos.x = m_pos.x;
@@ -554,15 +558,11 @@ void Player::HandleAttack(Input& input)
 				m_shot[i].m_isDirLeft = m_isDirLeft;
 
 				// 上入力されているかどうかをプレイヤーと同じ状態にする
-				m_shot[i].m_isUpFlag = m_isUp;
+				m_shot[i].m_isUp = m_isUp;
 
 				// 弾を1発出してループから抜ける
 				break;
 			}
 		}
-	}
-	else
-	{
-		m_isAtk = false;
 	}
 }
