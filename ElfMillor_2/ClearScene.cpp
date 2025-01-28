@@ -57,7 +57,7 @@ void ClearScene::FadeOutUpdate(Input&)
 	{
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
-		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
 
 		// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
 		return;
