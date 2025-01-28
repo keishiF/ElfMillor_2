@@ -25,7 +25,7 @@ GameOverScene::GameOverScene(SceneController& controller) :
 	m_handle(-1)
 {
 	m_frame = kFadeInterval;
-	m_handle = LoadGraph("img/BackGround/GameOver.png");
+	m_handle = LoadGraph("data/image/BackGround/GameOver.png");
 }
 
 void GameOverScene::Update(Input& input)

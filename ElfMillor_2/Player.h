@@ -4,7 +4,6 @@
 #include "Animation.h"
 #include "Shot.h"
 #include "Input.h"
-#include "Boss.h"
 #include "GroundEnemy.h"
 #include "FlyingEnemy.h"
 #include "Map.h"
@@ -68,7 +67,6 @@ private:
     // プレイヤーのグラフィックハンドル
     int m_handleIdle;
     int m_handleRun;
-    int m_handleAtk;
     int m_handleDead;
 
     // アニメーションフラグ
@@ -108,6 +106,5 @@ private:
     // アニメーション
     Animation m_idleAnim;
     Animation m_runAnim;
-    Animation m_atkAnim;
     Animation m_deadAnim;
 };

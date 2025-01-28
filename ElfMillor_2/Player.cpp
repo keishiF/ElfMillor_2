@@ -67,7 +67,6 @@ namespace
 Player::Player(std::weak_ptr<Camera> camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
-	m_handleAtk(-1),
 	m_handleDead(-1),
 	m_isRun(false),
 	m_isJump(false),
@@ -88,7 +87,6 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_shot(),
 	m_idleAnim(),
 	m_runAnim(),
-	m_atkAnim(),
 	m_deadAnim(),
 	// 基底クラスの初期化
 	GameObject(Vec3(kPlayerInitPosX, kPlayerInitPosY), camera)
@@ -100,23 +98,18 @@ Player::~Player()
 	// グラフィックの解放
 	DeleteGraph(m_handleIdle);
 	DeleteGraph(m_handleRun);
-	DeleteGraph(m_handleAtk);
 	DeleteGraph(m_handleDead);
 }
 
 void Player::Init()
 {
 	// グラフィックの読み込み
-	m_handleIdle = LoadGraph("img/Player/Idle.png");
+	m_handleIdle = LoadGraph("data/image/Player/Idle.png");
 	assert(m_handleIdle != -1);
 
-	m_handleRun = LoadGraph("img/Player/Run.png");
-	assert(m_handleRun != -1);
+	m_handleRun = LoadGraph("data/image/Player/Run.png");
 
-	m_handleAtk = LoadGraph("img/Player/Atk.png");
-	assert(m_handleAtk != -1);
-
-	m_handleDead = LoadGraph("img/Player/Dead.png");
+	m_handleDead = LoadGraph("data/image/Player/Dead.png");
 	assert(m_handleDead != -1);
 
 	for (int i = 0; i < kShot; i++)
@@ -130,7 +123,6 @@ void Player::Init()
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
-	m_atkAnim.Init(m_handleAtk, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kAtkAnimNum);
 	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
 }
 
@@ -152,10 +144,6 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 	if (m_isRun)
 	{
 		m_runAnim.Update();
-	}
-	if (m_isAtk)
-	{
-		m_atkAnim.Update();
 	}
 
 	HandleMovement(input, map);
@@ -192,7 +180,6 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 	{
 		DeleteGraph(m_handleIdle);
 		DeleteGraph(m_handleRun);
-		DeleteGraph(m_handleAtk);
 	}
 
 	// 弾を発射

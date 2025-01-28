@@ -62,7 +62,7 @@ GroundEnemy::~GroundEnemy()
 
 void GroundEnemy::Init(float posX, float posY)
 {
-	m_handleRun = LoadGraph("img/Enemy/Orc/OrcWalk.png");
+	m_handleRun = LoadGraph("data/image/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
 
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);

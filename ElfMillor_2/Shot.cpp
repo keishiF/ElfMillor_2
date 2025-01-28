@@ -1,5 +1,4 @@
 #include "Shot.h"
-#include "Boss.h"
 #include "GroundEnemy.h"
 #include "FlyingEnemy.h"
 #include "Camera.h"
@@ -72,15 +71,13 @@ Shot::~Shot()
 
 void Shot::Init()
 {
-	m_shotHandle = LoadGraph("img/Bullet/Bullet.png");
+	m_shotHandle = LoadGraph("data/image/Bullet/Bullet.png");
 	assert(m_shotHandle != -1);
 
-	/*m_effectHandle = LoadGraph("img/Effect/effect.png");
+	/*m_effectHandle = LoadGraph("data/image/Effect/effect.png");
 	assert(m_effectHandle != -1);*/
 
 	m_shotAnim.Init(m_shotHandle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
-
-	//m_effectAnim.Init(m_effectHandle, kAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kEffectAnimNum);
 }
 
 void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 

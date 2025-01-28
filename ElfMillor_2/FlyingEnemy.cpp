@@ -63,7 +63,7 @@ FlyingEnemy::~FlyingEnemy()
 
 void FlyingEnemy::Init(float posX, float posY)
 {
-	m_handleFly = LoadGraph("img/Enemy/But/Flight.png");
+	m_handleFly = LoadGraph("data/image/Enemy/But/Flight.png");
 	assert(m_handleFly != -1);
 
 	m_idleAnim.Init(m_handleFly, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
