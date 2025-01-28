@@ -76,7 +76,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_jumpSpeed(-10.5f),
 	m_jumpCount(0),
 	m_isDirLeft(false),
-	m_isUpFlag(false),
+	m_isUp(false),
 	m_blinkFrameCount(0),
 	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
@@ -166,11 +166,11 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 	// 上入力
 	if (input.IsPress(PAD_INPUT_UP))
 	{
-		m_isUpFlag = true;
+		m_isUp = true;
 	}
 	else
 	{
-		m_isUpFlag = false;
+		m_isUp = false;
 	}
 
 	// 攻撃
@@ -551,7 +551,7 @@ void Player::HandleAttack(Input& input)
 	{
 		for (int i = 0; i < kShot; ++i)
 		{
-			if (!m_shot[i].m_isShotFlag)
+			if (!m_shot[i].m_isShot)
 			{
 				// アニメーション切り替え
 				m_isAtk = true;
@@ -561,13 +561,13 @@ void Player::HandleAttack(Input& input)
 				m_shot[i].m_pos.y = m_pos.y + 35;
 
 				// 弾を表示
-				m_shot[i].m_isShotFlag = true;
+				m_shot[i].m_isShot = true;
 
 				// 弾の向きをプレイヤーと同じ向きに補正
 				m_shot[i].m_isDirLeft = m_isDirLeft;
 
 				// 上入力されているかどうかをプレイヤーと同じ状態にする
-				m_shot[i].m_isUpFlag = m_isUpFlag;
+				m_shot[i].m_isUpFlag = m_isUp;
 
 				// 弾を1発出してループから抜ける
 				break;

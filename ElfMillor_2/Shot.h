@@ -33,7 +33,10 @@ public:
 	Rect GetRect();
 
 	// 弾が出ているかどうかのフラグ
-	bool m_isShotFlag;
+	bool m_isShot;
+
+	// エフェクトが出るかどうか
+	//bool m_isEffect;
 
 	// 弾の位置座標
 	Vec3 m_pos;
@@ -47,8 +50,14 @@ public:
 
 private:
 	// 弾のグラフィックハンドル
-	int m_handle;
+	int m_shotHandle;
+
+	// 弾が消えるときのエフェクトハンドル
+	//int m_effectHandle;
 
 	// アニメーション
 	Animation m_shotAnim;
+
+	// エフェクトのアニメーション
+	//Animation m_effectAnim;
 };

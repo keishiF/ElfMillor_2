@@ -85,7 +85,7 @@ private:
     bool m_isDirLeft;
 
     // プレイヤーが上入力をしているかどうか
-    bool m_isUpFlag;
+    bool m_isUp;
 
     // 無敵時間関連
     int m_blinkFrameCount;

@@ -20,14 +20,19 @@ namespace
 	// 弾のグラフィックサイズ
 	constexpr int kGraphWidth   = 127;
 	constexpr int kGraphHeight  = 123;
-	//constexpr int kGraphWidth = 10;
-	//constexpr int kGraphHeight = 26;
+
+	// エフェクトのグラフィックサイズ
+	constexpr int kEffectGraphWidth = 64;
+	constexpr int kEffectGraphHeight = 64;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
 
 	// アニメーションのコマ数
 	constexpr int kShotAnimNum = 10;
+
+	// エフェクトのアニメーションのコマ数
+	constexpr int kEffectAnimNum = 14;
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 2.0f;
@@ -46,28 +51,36 @@ namespace
 	constexpr float kShotSpeed = 5.0f;
 }
 
-Shot::Shot():
-	m_isShotFlag(false),
-	m_handle(-1),
+Shot::Shot() :
+	m_isShot(false),
+	//m_isEffect(false),
+	m_shotHandle(-1),
 	m_isDirLeft(true),
 	m_isUpFlag(false),
 	m_pos(0,0),
 	m_velocity(kShotSpeed,kShotSpeed),
 	m_shotAnim()
+	//m_effectAnim()
 {
 }
 
 Shot::~Shot()
 {
-	DeleteGraph(m_handle);
+	DeleteGraph(m_shotHandle);
+	//DeleteGraph(m_effectHandle);
 }
 
 void Shot::Init()
 {
-	m_handle = LoadGraph("img/Bullet/Bullet.png");
-	assert(m_handle != -1);
+	m_shotHandle = LoadGraph("img/Bullet/Bullet.png");
+	assert(m_shotHandle != -1);
 
-	m_shotAnim.Init(m_handle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
+	/*m_effectHandle = LoadGraph("img/Effect/effect.png");
+	assert(m_effectHandle != -1);*/
+
+	m_shotAnim.Init(m_shotHandle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kShotAnimNum);
+
+	//m_effectAnim.Init(m_effectHandle, kAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kEffectAnimNum);
 }
 
 void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
@@ -96,12 +109,12 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 	// 右端に行ったら左端に
 	if (m_pos.x <= kLeftEndWidth)
 	{
-		m_isShotFlag = false;
+		m_isShot = false;
 	}
 	// 左端に行ったら右端に
 	else if (m_pos.x >= kRightEndWidth)
 	{
-		m_isShotFlag = false;
+		m_isShot = false;
 	}
 
 	for (int i = 0; i < groundEnemy.size(); i++)
@@ -113,9 +126,10 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 				GetTop()    < groundEnemy[i]->GetBottom() &&
 				GetBottom() > groundEnemy[i]->GetTop())
 			{
-				if (m_isShotFlag)
+				if (m_isShot)
 				{
-					m_isShotFlag  = false;
+					m_isShot  = false;
+					//m_isEffect = true;
 					groundEnemy[i]->OnDamage();
 				}
 			}
@@ -131,9 +145,10 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 				GetTop() < flyingEnemy[i]->GetBottom() &&
 				GetBottom() > flyingEnemy[i]->GetTop())
 			{
-				if (m_isShotFlag)
+				if (m_isShot)
 				{
-					m_isShotFlag = false;
+					m_isShot = false;
+					//m_isEffect = true;
 					flyingEnemy[i]->OnDamage();
 				}
 			}
@@ -143,9 +158,9 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 	Rect chipRect;
 	if (map.IsCol(GetRect(), chipRect, camera))
 	{
-		if (m_isShotFlag)
+		if (m_isShot)
 		{
-			m_isShotFlag = false;
+			m_isShot = false;
 		}
 	}
 }
@@ -155,17 +170,17 @@ void Shot::Draw(std::weak_ptr<Camera> camera)
 	Vec3 camOffset = camera.lock()->GetDrawOffset();
 	camOffset.x    = 0;
 
-	if (m_isShotFlag)
+	if (m_isShot)
 	{
 		if (m_isUpFlag)
 		{
 			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
-				0, 0, kGraphWidth, kGraphHeight, 1.0f, -42.5f, m_handle, true, m_isDirLeft);
+				0, 0, kGraphWidth, kGraphHeight, 1.0f, -42.5f, m_shotHandle, true, m_isDirLeft);
 		}
 		else
 		{
 			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
-				0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_handle, true, m_isDirLeft);
+				0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_shotHandle, true, m_isDirLeft);
 		}
 	}
 }
