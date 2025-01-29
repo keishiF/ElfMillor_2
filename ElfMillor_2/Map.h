@@ -37,7 +37,7 @@ namespace MapConsts
 
 	constexpr int kDamageList[] =
 	{
-		4874,4875
+		4874,4875,5129,5385,5132,5388
 	};
 
 	constexpr int kClearList[] = 

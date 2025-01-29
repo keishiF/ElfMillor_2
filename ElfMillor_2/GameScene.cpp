@@ -48,14 +48,17 @@ namespace
 	constexpr float kFlyingEnemyInitPosX4 = 370.0f;
 	constexpr float kFlyingEnemyInitPosY4 = 3000.0f;
 
-	constexpr float kFlyingEnemyInitPosX5 = 640.0f;
+	constexpr float kFlyingEnemyInitPosX5 = 630.0f;
 	constexpr float kFlyingEnemyInitPosY5 = 2700.0f;
 
-	constexpr float kFlyingEnemyInitPosX6 = 1008.0f;
-	constexpr float kFlyingEnemyInitPosY6 = 1450.0f;
+	constexpr float kFlyingEnemyInitPosX6 = 800.0f;
+	constexpr float kFlyingEnemyInitPosY6 = 2600.0f;
 
-	constexpr float kFlyingEnemyInitPosX7 = 728.0f;
-	constexpr float kFlyingEnemyInitPosY7 = 1100.0f;
+	constexpr float kFlyingEnemyInitPosX7 = 1008.0f;
+	constexpr float kFlyingEnemyInitPosY7 = 1400.0f;
+
+	constexpr float kFlyingEnemyInitPosX8 = 728.0f;
+	constexpr float kFlyingEnemyInitPosY8 = 1150.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -89,7 +92,7 @@ GameScene::GameScene(SceneController& controller) :
 	CreateGroundEnemy(kGroundEnemyInitPosX5, kGroundEnemyInitPosY5);
 
 	// 飛行エネミーの初期化
-	m_flyingEnemyArray.resize(7);
+	m_flyingEnemyArray.resize(8);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX1, kFlyingEnemyInitPosY1);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX2, kFlyingEnemyInitPosY2);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX3, kFlyingEnemyInitPosY3);
@@ -97,6 +100,7 @@ GameScene::GameScene(SceneController& controller) :
 	CreateFlyingEnemy(kFlyingEnemyInitPosX5, kFlyingEnemyInitPosY5);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX6, kFlyingEnemyInitPosY6);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX7, kFlyingEnemyInitPosY7);
+	CreateFlyingEnemy(kFlyingEnemyInitPosX8, kFlyingEnemyInitPosY8);
 
 	// カメラの初期化
 	m_camera->Init(m_player);

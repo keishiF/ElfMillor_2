@@ -17,14 +17,17 @@
 namespace
 {
 	// 弾のグラフィックサイズ
-	constexpr int kGraphWidth   = 127;
-	constexpr int kGraphHeight  = 123;
+	//constexpr int kGraphWidth   = 127;
+	//constexpr int kGraphHeight  = 123;
+	constexpr int kGraphWidth = 26;
+	constexpr int kGraphHeight = 10;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 4;
 
 	// グラフィックの拡大率
-	constexpr float kExtRate = 1.0f;
+	//constexpr float kExtRate = 1.0f;
+	constexpr float kExtRate = 2.5f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 42.5f;
@@ -57,7 +60,7 @@ Shot::~Shot()
 
 void Shot::Init()
 {
-	m_shotHandle = LoadGraph("data/image/Bullet/Bullet.png");
+	m_shotHandle = LoadGraph("data/image/Bullet/Bullet3.png");
 	assert(m_shotHandle != -1);
 }
 

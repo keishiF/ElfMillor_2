@@ -113,7 +113,7 @@ void Player::Init()
 	assert(m_handleDead != -1);
 
 	// SEの読み込み
-	m_seHandle = LoadSoundMem("data/sound/shotSE2.mp3");
+	m_seHandle = LoadSoundMem("data/sound/shotSE3.mp3");
 	assert(m_seHandle != -1);
 
 	for (int i = 0; i < kShot; i++)
@@ -365,10 +365,10 @@ void Player::HandleJump(Map& map)
 		// プレイヤーが下方向に移動している
 		if (m_vec.y > 0.0f)
 		{
+			m_isJump = false;
 			// 床に当たっているので上に押し戻す
 			m_pos.y -= m_vec.y;
 			m_vec.y = 0.0f;
-			m_isJump = false;
 		}
 		// プレイヤーが上方向に移動している
 		else if (m_vec.y < 0.0f)
@@ -396,10 +396,10 @@ void Player::HandleJump(Map& map)
 			// プレイヤーの頂点から床の中心までの距離が判定を取ってほしい距離より大きい
 			if (playerMapDistance > distance)
 			{
+				m_isJump = false;
 				// 床に当たっているので上に押し戻す
 				m_pos.y -= m_vec.y;
 				m_vec.y = 0.0f;
-				m_isJump = false;
 			}
 		}
 	}
@@ -472,9 +472,9 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 		// プレイヤーが下方向に移動している
 		if (m_vec.y > 0.0f)
 		{
+			m_isJump = false;
 			// 床に当たっているのでその高さに合わせる
 			m_pos.y = chipRect.top;
-			m_isJump = false;
 		}
 		// プレイヤーが上方向に移動している
 		else if (m_vec.y < 0.0f)
@@ -506,9 +506,9 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 			// プレイヤーの頂点から床の中心までの距離が判定を取ってほしい距離より大きい
 			if (playerMapDistance > distance)
 			{
+				m_isJump = false;
 				// 床に当たっているのでその高さに合わせる
 				m_pos.y = chipRect.top;
-				m_isJump = false;
 			}
 		}
 	}
