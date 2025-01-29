@@ -34,3 +34,8 @@ void Animation::Play(Vec3 pos, bool isDirLeft)
 		m_extRate, m_rotationRate,
 		m_drawHandle, true, isDirLeft);
 }
+
+bool Animation::IsEnd() const
+{
+	return m_animFrame >= m_totalFrame - 1;
+}

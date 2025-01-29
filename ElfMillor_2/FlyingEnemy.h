@@ -31,11 +31,16 @@ private:
 	void UpdateBlinkFrame();
 
 	int  m_handleFly;
+	int  m_handleDead;
+	int  m_seHandle;
 
 	bool m_isDirLeft;
 
 	// ”í’eŽž‚Ì“_–Å
 	int m_blinkFrameCount;
+
+	bool m_isDead;
+	Animation m_deadAnim;
 
 	// ˆÚ“®•ûŒü
 	int m_moveDir;

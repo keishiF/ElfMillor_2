@@ -35,9 +35,6 @@ public:
 	// 弾が出ているかどうかのフラグ
 	bool m_isShot;
 
-	// エフェクトが出るかどうか
-	bool m_isEffect;
-
 	// 弾の位置座標
 	Vec3 m_pos;
 	Vec3 m_velocity;
@@ -49,12 +46,7 @@ public:
 	bool m_isUp;
 
 private:
+
 	// 弾のグラフィックハンドル
 	int m_shotHandle;
-
-	// 弾が消えるときのエフェクトハンドル
-	int m_effectHandle;
-
-	// エフェクトのアニメーション
-	Animation m_effectAnim;
 };

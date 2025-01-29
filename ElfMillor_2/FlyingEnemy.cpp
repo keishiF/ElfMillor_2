@@ -12,9 +12,13 @@
 
 namespace
 {
-	// グラフィックのサイズ
+	// 敵のグラフィックのサイズ
 	constexpr int kGraphWidth = 150;
 	constexpr int kGraphHeight = 120;
+
+	// 死亡時のエフェクトのグラフィックサイズ
+	constexpr int kEffectGraphWidth = 48;
+	constexpr int kEffectGraphHeight = 48;
 
 	// 初期HP
 	constexpr int kDefaultHp = 3;
@@ -24,9 +28,11 @@ namespace
 
 	// 各アニメーションのコマ数
 	constexpr int kWalkAnimNum = 8;
+	constexpr int kDeadAnimNum = 18;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
+	constexpr int kDeadAnimSingleFrame = 2;
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 2.5f;
@@ -47,10 +53,14 @@ namespace
 	constexpr float kMoveDistance = 175.0f;
 }
 
-FlyingEnemy::FlyingEnemy(std::weak_ptr<Camera> camera):
+FlyingEnemy::FlyingEnemy(std::weak_ptr<Camera> camera) :
 	m_handleFly(-1),
+	m_handleDead(-1),
+	m_seHandle(-1),
 	m_isDirLeft(false),
 	m_blinkFrameCount(0),
+	m_isDead(false),
+	m_deadAnim(),
 	m_moveDir(1),
 	m_initPosY(0.0f),
 	EnemyBase(Vec3(0.0f, 0.0f), camera)
@@ -66,7 +76,13 @@ void FlyingEnemy::Init(float posX, float posY)
 	m_handleFly = LoadGraph("data/image/Enemy/But/Flight.png");
 	assert(m_handleFly != -1);
 
+	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
+	assert(m_handleDead != -1);
+
+	m_seHandle = LoadSoundMem("data/sound/deadSE1.mp3");
+
 	m_idleAnim.Init(m_handleFly, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
+	m_deadAnim.Init(m_handleDead, kDeadAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
 
 	m_hp = kDefaultHp;
 
@@ -79,6 +95,20 @@ void FlyingEnemy::Init(float posX, float posY)
 void FlyingEnemy::Update(Player& player, Map& map)
 {
 	UpdateBlinkFrame();
+
+	if (m_isDead)
+	{
+		m_deadAnim.Update();
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
+		if (m_deadAnim.IsEnd())
+		{
+			m_isDead = false;
+			DeleteGraph(m_handleFly);
+			DeleteGraph(m_handleDead);
+			DeleteGraph(m_seHandle);
+		}
+		return;
+	}
 
 	m_idleAnim.Update();
 
@@ -105,7 +135,7 @@ void FlyingEnemy::Update(Player& player, Map& map)
 	// 死亡
 	if (m_hp <= 0)
 	{
-		DeleteGraph(m_handleFly);
+		m_isDead = true;
 	}
 }
 
@@ -128,7 +158,14 @@ void FlyingEnemy::Draw()
 	}
 #endif
 
-	m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
+	if (m_isDead)
+	{
+		m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+	else
+	{
+		m_idleAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
 }
 
 void FlyingEnemy::End()

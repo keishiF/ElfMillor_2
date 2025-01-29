@@ -27,6 +27,7 @@ bool Application::Init()
 	// 画面のサイズを変更する
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
 
+	SetWindowText("魔法使いの鏡");
 	if (DxLib_Init())		// ＤＸライブラリ初期化処理
 	{
 		return false;			// エラーが起きたら直ちに終了

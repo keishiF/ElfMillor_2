@@ -16,6 +16,10 @@ namespace
 	constexpr int kGraphWidth  = 100;
 	constexpr int kGraphHeight = 100;
 
+	// 死亡時のエフェクトのグラフィックサイズ
+	constexpr int kEffectGraphWidth = 48;
+	constexpr int kEffectGraphHeight = 48;
+
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
 	constexpr int kRightEndWidth = 1120;
@@ -28,10 +32,11 @@ namespace
 
 	// 各アニメーションのコマ数
 	constexpr int kWalkAnimNum = 8;
-	constexpr int kDeadAnimNum = 4;
+	constexpr int kDeadAnimNum = 18;
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
+	constexpr int kDeadAnimSingleFrame = 2;
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 3.5f;
@@ -52,6 +57,7 @@ namespace
 GroundEnemy::GroundEnemy(std::weak_ptr<Camera> camera):
 	m_handleRun(-1),
 	m_handleDead(-1),
+	m_seHandle(-1),
 	m_isDirLeft(false),
 	m_blinkFrameCount(0),
 	m_deadAnim(),
@@ -68,11 +74,14 @@ void GroundEnemy::Init(float posX, float posY)
 	m_handleRun = LoadGraph("data/image/Enemy/Orc/OrcWalk.png");
 	assert(m_handleRun != -1);
 
-	m_handleDead = LoadGraph("data/image/Enemy/Orc/OrcDead.png");
+	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
 	assert(m_handleDead != -1);
 
+	m_seHandle = LoadSoundMem("data/sound/deadSE1.mp3");
+	assert(m_seHandle != -1);
+
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
-	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
+	m_deadAnim.Init(m_handleDead, kDeadAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
 
 	m_hp = kDefaultHp;
 
@@ -84,43 +93,43 @@ void GroundEnemy::Update(Player& player, Map& map)
 {
 	UpdateBlinkFrame();
 
-	m_runAnim.Update();
-
-	// 移動処理
-	if (!m_isDirLeft)
-	{
-		m_vec.x = kSpeed;
-	}
-	else if (m_isDirLeft)
-	{
-		m_vec.x = -kSpeed;
-	}
-
-	m_pos.x += m_vec.x;
-	// 横から当たっているかどうかを確認する
-	Rect chipRect;
-	if (map.IsCol(GetRect(), chipRect, m_camera))
-	{
-		// 左右どっちから当たったか
-
-		// 右方向に移動している
-		if (m_vec.x > 0.0f)
-		{
-			// 右壁に当たっているので左向きにする
-			m_isDirLeft = true;
-			m_pos.x = chipRect.left - kBesideHit;
-		}
-		// 左方向に移動している
-		else if (m_vec.x < 0.0f)
-		{
-			// 左壁に当たっているので右向きにする
-			m_isDirLeft = false;
-			m_pos.x = chipRect.right + kBesideHit + 30;
-		}
-	}
-
 	if (m_hp > 0)
 	{
+		m_runAnim.Update();
+
+		// 移動処理
+		if (!m_isDirLeft)
+		{
+			m_vec.x = kSpeed;
+		}
+		else if (m_isDirLeft)
+		{
+			m_vec.x = -kSpeed;
+		}
+
+		m_pos.x += m_vec.x;
+		// 横から当たっているかどうかを確認する
+		Rect chipRect;
+		if (map.IsCol(GetRect(), chipRect, m_camera))
+		{
+			// 左右どっちから当たったか
+
+			// 右方向に移動している
+			if (m_vec.x > 0.0f)
+			{
+				// 右壁に当たっているので左向きにする
+				m_isDirLeft = true;
+				m_pos.x = chipRect.left - kBesideHit;
+			}
+			// 左方向に移動している
+			else if (m_vec.x < 0.0f)
+			{
+				// 左壁に当たっているので右向きにする
+				m_isDirLeft = false;
+				m_pos.x = chipRect.right + kBesideHit + 30;
+			}
+		}
+
 		// プレイヤーと当たった時の処理
 		if (GetLeft() < player.GetRight() &&
 			GetRight() > player.GetLeft() &&
@@ -145,24 +154,28 @@ void GroundEnemy::Update(Player& player, Map& map)
 				}
 			}
 		}
-	}
 
-	// 左端に行ったら右向きにする
-	if (m_pos.x <= kLeftEndWidth)
-	{
-		m_isDirLeft = false;
+		// 左端に行ったら右向きにする
+		if (m_pos.x <= kLeftEndWidth)
+		{
+			m_isDirLeft = false;
+		}
+		// 右端に行ったら左向きにする
+		else if (m_pos.x >= kRightEndWidth)
+		{
+			m_isDirLeft = true;
+		}
 	}
-	// 右端に行ったら左向きにする
-	else if (m_pos.x >= kRightEndWidth)
-	{
-		m_isDirLeft = true;
-	}
-
-	// 死亡
-	if (m_hp <= 0)
+	else
 	{
 		m_deadAnim.Update();
-		DeleteGraph(m_handleRun);
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
+		if (m_deadAnim.IsEnd())
+		{
+			DeleteGraph(m_handleRun);
+			DeleteGraph(m_handleDead);
+			DeleteGraph(m_seHandle);
+		}
 	}
 }
 
@@ -189,8 +202,7 @@ void GroundEnemy::Draw()
 
 	if (m_hp <= 0)
 	{
-		//m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
-		DeleteGraph(m_handleRun);
+		m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 	else
 	{
@@ -199,11 +211,6 @@ void GroundEnemy::Draw()
 
 	/*DrawFormatString(0, 30, 0xffffff, "EnemyPos.X~%f, Y=%f", m_pos.x, m_pos.y);
 	DrawFormatString(0, 45, 0xffffff, "drawPos.X~%f, Y=%f", drawPos.x, drawPos.y);*/
-}
-
-void GroundEnemy::End()
-{
-	DeleteGraph(m_handleRun);
 }
 
 float GroundEnemy::GetLeft()

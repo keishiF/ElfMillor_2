@@ -239,11 +239,6 @@ void Player::Draw()
 void Player::DeadUpdate()
 {
 	m_deadAnim.Update();
-
-	if (m_deadAnim.GetFrame() > 80)
-	{
-		return;
-	}
 }
 
 void Player::OnDamage()

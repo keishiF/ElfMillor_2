@@ -20,21 +20,14 @@ namespace
 	constexpr int kGraphWidth   = 127;
 	constexpr int kGraphHeight  = 123;
 
-	// エフェクトのグラフィックサイズ
-	constexpr int kEffectGraphWidth = 64;
-	constexpr int kEffectGraphHeight = 64;
-
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 4;
 
-	// エフェクトのアニメーションのコマ数
-	constexpr int kEffectAnimNum = 14;
-
 	// グラフィックの拡大率
-	constexpr float kExtRate = 2.0f;
+	constexpr float kExtRate = 1.0f;
 
 	// グラフィックの回転率
-	constexpr float kRotaRate = 0.0f;
+	constexpr float kRotaRate = 42.5f;
 
 	// 画面端
 	constexpr int kLeftEndWidth  = 160;
@@ -44,36 +37,28 @@ namespace
 	constexpr int kShotRadius = 15;
 
 	// 弾の速度
-	constexpr float kShotSpeed = 5.0f;
+	constexpr float kShotSpeed = 10.0f;
 }
 
 Shot::Shot() :
 	m_isShot(false),
-	m_isEffect(false),
 	m_shotHandle(-1),
-	m_effectHandle(-1),
 	m_isDirLeft(true),
+	m_isUp(false),
 	m_pos(0,0),
-	m_velocity(kShotSpeed,kShotSpeed),
-	m_effectAnim()
+	m_velocity(kShotSpeed,kShotSpeed)
 {
 }
 
 Shot::~Shot()
 {
 	DeleteGraph(m_shotHandle);
-	DeleteGraph(m_effectHandle);
 }
 
 void Shot::Init()
 {
 	m_shotHandle = LoadGraph("data/image/Bullet/Bullet.png");
 	assert(m_shotHandle != -1);
-
-	m_effectHandle = LoadGraph("data/image/Effect/effect.png");
-	assert(m_effectHandle != -1);
-
-	m_effectAnim.Init(m_effectHandle, kAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kEffectAnimNum);
 }
 
 void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
@@ -145,6 +130,7 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 				{
 					m_isShot = false;
 					flyingEnemy[i]->OnDamage();
+
 				}
 			}
 		}
@@ -169,13 +155,21 @@ void Shot::Draw(std::weak_ptr<Camera> camera)
 	{
 		if (m_isUp)
 		{
-			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
-				0, 0, kGraphWidth, kGraphHeight, 1.0f, -42.5f, m_shotHandle, true, m_isDirLeft);
+			if (m_isDirLeft)
+			{
+				DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
+					0, 0, kGraphWidth, kGraphHeight, kExtRate, -kRotaRate, m_shotHandle, true, m_isDirLeft);
+			}
+			else
+			{
+				DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
+					0, 0, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, m_shotHandle, true, m_isDirLeft);
+			}
 		}
 		else
 		{
 			DrawRectRotaGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y + camOffset.y),
-				0, 0, kGraphWidth, kGraphHeight, 1.0f, 0.0f, m_shotHandle, true, m_isDirLeft);
+				0, 0, kGraphWidth, kGraphHeight, kExtRate, 0.0f, m_shotHandle, true, m_isDirLeft);
 		}
 	}
 }

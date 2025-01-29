@@ -16,7 +16,6 @@ public:
 	void Init(float posX, float posY) override;
 	void Update(Player& player, Map& map) override;
 	void Draw() override;
-	void End();
 
 	float GetLeft();
 	float GetRight();
@@ -37,12 +36,14 @@ private:
 	int  m_handleRun;
 	int  m_handleDead;
 
+	// SEハンドル
+	int  m_seHandle;
+
 	// 左向きかどうか
 	bool m_isDirLeft;
 
 	// 被弾時の点滅
 	int m_blinkFrameCount;
 
-	// アニメーション
 	Animation m_deadAnim;
 };

@@ -37,13 +37,13 @@ namespace
 	constexpr float kGroundEnemyInitPosY5 = 3585.0f;
 
 	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY1 = 4750.0f;
+	constexpr float kFlyingEnemyInitPosY1 = 4775.0f;
 
 	constexpr float kFlyingEnemyInitPosX2 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY2 = 4250.0f;
+	constexpr float kFlyingEnemyInitPosY2 = 4275.0f;
 
 	constexpr float kFlyingEnemyInitPosX3 = 320.0f;
-	constexpr float kFlyingEnemyInitPosY3 = 3950.0f;
+	constexpr float kFlyingEnemyInitPosY3 = 3960.0f;
 
 	constexpr float kFlyingEnemyInitPosX4 = 370.0f;
 	constexpr float kFlyingEnemyInitPosY4 = 3000.0f;
@@ -52,10 +52,10 @@ namespace
 	constexpr float kFlyingEnemyInitPosY5 = 2700.0f;
 
 	constexpr float kFlyingEnemyInitPosX6 = 1008.0f;
-	constexpr float kFlyingEnemyInitPosY6 = 1600.0f;
+	constexpr float kFlyingEnemyInitPosY6 = 1450.0f;
 
 	constexpr float kFlyingEnemyInitPosX7 = 728.0f;
-	constexpr float kFlyingEnemyInitPosY7 = 1000.0f;
+	constexpr float kFlyingEnemyInitPosY7 = 1100.0f;
 }
 
 GameScene::GameScene(SceneController& controller) :
@@ -145,7 +145,6 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_player->GetHp() <= 0)
 	{
-		m_player->DeadUpdate();
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
 		m_frame = 0;
