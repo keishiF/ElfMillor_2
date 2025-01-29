@@ -36,6 +36,7 @@ namespace
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 2.5f;
+	constexpr float kEffectExtRate = 5.0f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 0.0f;
@@ -79,10 +80,11 @@ void FlyingEnemy::Init(float posX, float posY)
 	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
 	assert(m_handleDead != -1);
 
-	m_seHandle = LoadSoundMem("data/sound/deadSE1.mp3");
+	m_seHandle = LoadSoundMem("data/sound/deadSE2.mp3");
+	assert(m_seHandle != -1);
 
 	m_idleAnim.Init(m_handleFly, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
-	m_deadAnim.Init(m_handleDead, kDeadAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
+	m_deadAnim.Init(m_handleDead, kDeadAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kEffectExtRate, kRotaRate, kDeadAnimNum);
 
 	m_hp = kDefaultHp;
 
