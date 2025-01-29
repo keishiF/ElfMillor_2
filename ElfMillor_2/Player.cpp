@@ -175,11 +175,6 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 		m_pos.x = kLeftEndWidth;
 	}
 
-	if (m_hp <= 0)
-	{
-		m_isDead = true;
-	}
-
 	// ’e‚ð”­ŽË
 	for (int i = 0; i < kShot; i++)
 	{
@@ -239,6 +234,10 @@ void Player::Draw()
 void Player::DeadUpdate()
 {
 	m_deadAnim.Update();
+	if (m_deadAnim.IsEnd())
+	{
+		return;
+	}
 }
 
 void Player::OnDamage()

@@ -36,11 +36,11 @@ namespace
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
-	constexpr int kDeadAnimSingleFrame = 2;
+	constexpr int kDeadAnimSingleFrame = 3;
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 3.5f;
-	constexpr float kEffectExtRate = 5.0f;
+	constexpr float kEffectExtRate = 3.75f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 0.0f;

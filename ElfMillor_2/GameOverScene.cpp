@@ -24,7 +24,7 @@ GameOverScene::GameOverScene(SceneController& controller) :
 	m_draw(&GameOverScene::FadeDraw),
 	m_handle(-1)
 {
-	m_frame = kFadeInterval;
+	m_fadeFrameCount = kFadeInterval;
 	m_handle = LoadGraph("data/image/BackGround/GameOver.png");
 }
 
@@ -39,13 +39,13 @@ void GameOverScene::NormalUpdate(Input& input)
 	{
 		m_update = &GameOverScene::FadeOutUpdate;
 		m_draw = &GameOverScene::FadeDraw;
-		m_frame = 0;
+		m_fadeFrameCount = 0;
 	}
 }
 
 void GameOverScene::FadeInUpdate(Input& input)
 {
-	if (m_frame-- <= 0)
+	if (m_fadeFrameCount-- <= 0)
 	{
 		m_update = &GameOverScene::NormalUpdate;
 		m_draw = &GameOverScene::NormalDraw;
@@ -54,7 +54,7 @@ void GameOverScene::FadeInUpdate(Input& input)
 
 void GameOverScene::FadeOutUpdate(Input& input)
 {
-	if (m_frame++ >= kFadeInterval)
+	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
@@ -79,7 +79,7 @@ void GameOverScene::FadeDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
 
-	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

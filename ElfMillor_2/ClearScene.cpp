@@ -24,7 +24,7 @@ ClearScene::ClearScene(SceneController& controller) :
 	m_draw(&ClearScene::FadeDraw),
 	m_handle(-1)
 {
-	m_frame = kFadeInterval;
+	m_fadeFrameCount = kFadeInterval;
 }
 
 void ClearScene::Update(Input& input)
@@ -38,13 +38,13 @@ void ClearScene::NormalUpdate(Input& input)
 	{
 		m_update = &ClearScene::FadeOutUpdate;
 		m_draw = &ClearScene::FadeDraw;
-		m_frame = 0;
+		m_fadeFrameCount = 0;
 	}
 }
 
 void ClearScene::FadeInUpdate(Input&)
 {
-	if (m_frame-- <= 0)
+	if (m_fadeFrameCount-- <= 0)
 	{
 		m_update = &ClearScene::NormalUpdate;
 		m_draw = &ClearScene::NormalDraw;
@@ -53,7 +53,7 @@ void ClearScene::FadeInUpdate(Input&)
 
 void ClearScene::FadeOutUpdate(Input&)
 {
-	if (m_frame++ >= kFadeInterval)
+	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
@@ -78,7 +78,7 @@ void ClearScene::FadeDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
 
-	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

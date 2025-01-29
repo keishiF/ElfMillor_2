@@ -23,7 +23,7 @@ TitleScene::TitleScene(SceneController& controller) :
 	m_draw(&TitleScene::FadeDraw),
 	m_handle(-1)
 {
-	m_frame = kFadeInterval;
+	m_fadeFrameCount = kFadeInterval;
 
 	m_handle = LoadGraph("data/image/BackGround/title2.png");
 }
@@ -39,13 +39,13 @@ void TitleScene::NormalUpdate(Input& input)
 	{
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;
-		m_frame = 0;
+		m_fadeFrameCount = 0;
 	}
 }
 
 void TitleScene::FadeInUpdate(Input&)
 {
-	if (m_frame-- <= 0)
+	if (m_fadeFrameCount-- <= 0)
 	{
 		m_update = &TitleScene::NormalUpdate;
 		m_draw   = &TitleScene::NormalDraw;
@@ -54,7 +54,7 @@ void TitleScene::FadeInUpdate(Input&)
 
 void TitleScene::FadeOutUpdate(Input&)
 {
-	if (m_frame++ >= kFadeInterval)
+	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
@@ -79,7 +79,7 @@ void TitleScene::FadeDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
 
-	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

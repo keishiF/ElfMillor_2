@@ -81,16 +81,7 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 				float chipLeft = mapChip.m_pos.x + MapConsts::kMapOffsetX;
 				DrawBox(static_cast<int>(chipLeft), static_cast<int>(chipTop + camera.lock()->GetDrawOffset().y),
 					static_cast<int>(chipRight), static_cast<int>(chipBottom + camera.lock()->GetDrawOffset().y), 0xff0000, false);
-
-				/*DrawCircle(static_cast<int>((chipLeft + chipRight) * 0.5f),
-					static_cast<int>((chipTop + chipBottom) * 0.5f) + camera.lock()->GetDrawOffset().y,
-					10, 0xff00ff, false);*/
 #endif
-
-				/*if (mapChip.chipNo == 1308)
-				{
-					assert(false);
-				}*/
 			}
 		}
 	}

@@ -145,6 +145,8 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_player->GetHp() <= 0)
 	{
+		m_player->DeadUpdate();
+
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
 		m_frame = 0;

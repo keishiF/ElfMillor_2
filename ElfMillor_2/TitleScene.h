@@ -10,7 +10,7 @@ public:
 	virtual void Draw()override;
 
 private:
-	int m_frame;
+	int m_fadeFrameCount;
 
 	int m_handle;
 

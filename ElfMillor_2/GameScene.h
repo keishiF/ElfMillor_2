@@ -21,7 +21,7 @@ public:
 
 private:
 	// フェード用のカウント変数
-    int m_frame = 60;
+    int m_frame;
 
 	// BGMハンドル
 	int m_bgmHandle;

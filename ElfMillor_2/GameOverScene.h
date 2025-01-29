@@ -11,7 +11,7 @@ public:
 	virtual void Draw()override;
 
 private:
-	int m_frame = 60;
+	int m_fadeFrameCount = 60;
 
 	int m_handle;
 
