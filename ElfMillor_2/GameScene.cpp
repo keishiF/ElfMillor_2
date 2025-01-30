@@ -22,19 +22,19 @@ namespace
 
 	// 敵の初期位置
 	constexpr float kGroundEnemyInitPosX1 = 450.0f;
-	constexpr float kGroundEnemyInitPosY1 = 7483.0f;
+	constexpr float kGroundEnemyInitPosY1 = 7494.0f;
 
 	constexpr float kGroundEnemyInitPosX2 = 1100.0f;
-	constexpr float kGroundEnemyInitPosY2 = 6780.0f;
+	constexpr float kGroundEnemyInitPosY2 = 6790.0f;
 
 	constexpr float kGroundEnemyInitPosX3 = 160.0f;
-	constexpr float kGroundEnemyInitPosY3 = 5435.0f;
+	constexpr float kGroundEnemyInitPosY3 = 5445.0f;
 
 	constexpr float kGroundEnemyInitPosX4 = 900.0f;
-	constexpr float kGroundEnemyInitPosY4 = 4923.0f;
+	constexpr float kGroundEnemyInitPosY4 = 4934.0f;
 
 	constexpr float kGroundEnemyInitPosX5 = 250.0f;
-	constexpr float kGroundEnemyInitPosY5 = 3585.0f;
+	constexpr float kGroundEnemyInitPosY5 = 3595.0f;
 
 	constexpr float kFlyingEnemyInitPosX1 = 320.0f;
 	constexpr float kFlyingEnemyInitPosY1 = 4775.0f;
@@ -52,7 +52,7 @@ namespace
 	constexpr float kFlyingEnemyInitPosY5 = 2700.0f;
 
 	constexpr float kFlyingEnemyInitPosX6 = 800.0f;
-	constexpr float kFlyingEnemyInitPosY6 = 2600.0f;
+	constexpr float kFlyingEnemyInitPosY6 = 2700.0f;
 
 	constexpr float kFlyingEnemyInitPosX7 = 1008.0f;
 	constexpr float kFlyingEnemyInitPosY7 = 1400.0f;
@@ -69,6 +69,12 @@ GameScene::GameScene(SceneController& controller) :
 	// フェード用のカウント変数
 	m_frame = kFadeInterval;
 
+	m_lifeHandle = LoadGraph("data/image/Player/Life.png");
+	assert(m_lifeHandle != -1);
+
+	m_bgHandle = LoadGraph("data/image/BackGround/BackGround3.png");
+	assert(m_bgHandle != -1);
+
 	// BGMの読み込み
 	m_bgmHandle = LoadSoundMem("data/sound/BGM3.mp3");
 	assert(m_bgmHandle != -1);
@@ -82,6 +88,13 @@ GameScene::GameScene(SceneController& controller) :
 	// プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
+
+	for (int i = 0; i < m_player->GetHp(); i++)
+	{
+		m_life[i].Init();
+		m_life[i].SetHandle(m_lifeHandle);
+		m_life[i].SetIndex(i);
+	}
 
 	// 地上エネミーの初期化
 	m_groundEnemyArray.resize(5);
@@ -198,8 +211,15 @@ void GameScene::Draw()
 
 void GameScene::NormalDraw()
 {
+	DrawGraph(-100, -75, m_bgHandle, true);
+
 	m_map->DrawMap(m_camera);
 	m_player->Draw();
+
+	for (int i = 0; i < m_player->GetHp(); i++)
+	{
+		m_life[i].Draw();
+	}
 
 	for (int i = 0; i < m_groundEnemyArray.size(); i++)
 	{

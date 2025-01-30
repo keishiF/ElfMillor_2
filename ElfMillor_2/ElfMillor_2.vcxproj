@@ -150,6 +150,7 @@
     <ClCompile Include="EnemyBase.cpp" />
     <ClCompile Include="FlyingEnemy.cpp" />
     <ClCompile Include="GroundEnemy.cpp" />
+    <ClCompile Include="Life.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PlatinumLoader.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="FlyingEnemy.h" />
     <ClInclude Include="GroundEnemy.h" />
+    <ClInclude Include="Life.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="PlatinumLoader.h" />

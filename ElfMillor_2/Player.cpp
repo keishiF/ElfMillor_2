@@ -54,7 +54,7 @@ namespace
 	constexpr float kRotaRate = 0.0f;
 
 	// ノックバック距離
-	constexpr int kBesideHit = 35;
+	constexpr int kBesideHit = 26;
 	constexpr int kVerticalHit = 1;
 
 	// ダメージ食らった後の無敵時間
@@ -228,7 +228,7 @@ void Player::Draw()
 		m_shot[i].Draw(m_camera);
 	}
 
-	DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
+	//DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
 }
 
 void Player::DeadUpdate()
@@ -259,12 +259,12 @@ void Player::OnDamage()
 
 float Player::GetLeft()
 {
-	return (m_pos.x - 30);
+	return (m_pos.x - 25);
 }
 
 float Player::GetRight()
 {
-	return (m_pos.x + 30);
+	return (m_pos.x + 25);
 }
 
 float Player::GetTop()

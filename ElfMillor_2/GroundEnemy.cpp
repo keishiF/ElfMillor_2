@@ -231,7 +231,7 @@ float GroundEnemy::GetTop()
 
 float GroundEnemy::GetBottom()
 {
-	return (m_pos.y + 35);
+	return (m_pos.y + 25);
 }
 
 Rect GroundEnemy::GetRect()

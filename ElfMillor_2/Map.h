@@ -64,9 +64,10 @@ public:
 
 	// 下からはすり抜け、上からは乗れる床の判定
 	bool IsCol2(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
-
+	
 	// ダメージを受ける床の判定
 	bool IsDamageCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 
+	// クリアシーンに移るオブジェクトとの判定
 	bool IsClearCol(Rect rect, Rect& chipRect, std::weak_ptr<Camera> camera);
 };

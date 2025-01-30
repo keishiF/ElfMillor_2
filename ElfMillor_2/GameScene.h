@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include "Life.h"
 #include <memory>
 #include <vector>
 
@@ -23,6 +24,10 @@ private:
 	// フェード用のカウント変数
     int m_frame;
 
+	int m_lifeHandle;
+
+	int m_bgHandle;
+
 	// BGMハンドル
 	int m_bgmHandle;
 
@@ -38,6 +43,8 @@ private:
 
 	UpdateFunc_t m_update;
 	DrawFunc_t   m_draw;
+
+	Life m_life[10];
 	
 	void NormalUpdate(Input& input);
 	void FadeInUpdate(Input& input);
