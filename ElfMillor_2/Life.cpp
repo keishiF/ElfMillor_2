@@ -7,7 +7,7 @@ namespace
 	constexpr int kGraphWidth = 256;
 	constexpr int kGraphHeight = 256;
 
-	constexpr int kBasePosX = 180;
+	constexpr int kBasePosX = 20;
 	constexpr int kIntervalX = 40;
 	constexpr int kPosY = 30;
 
