@@ -26,6 +26,8 @@ public:
 
 	void OnDamage();
 
+	int GetHp() { return m_hp; }
+
 	// Enemy‚ÌÀ•W‚ğæ“¾
 	Vec3 GetPos() { return m_pos; }
 
@@ -41,6 +43,8 @@ private:
 
 	// ¶Œü‚«‚©‚Ç‚¤‚©
 	bool m_isDirLeft;
+
+	bool m_isDead;
 
 	// ”í’e‚Ì“_–Å
 	int m_blinkFrameCount;

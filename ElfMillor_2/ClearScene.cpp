@@ -18,8 +18,9 @@ namespace
 	constexpr int kFadeInterval = 60;
 }
 
-ClearScene::ClearScene(SceneController& controller) :
+ClearScene::ClearScene(SceneController& controller, int finalScore) :
 	SceneBase(controller),
+	m_finalScore(finalScore),
 	m_update(&ClearScene::FadeInUpdate),
 	m_draw(&ClearScene::FadeDraw),
 	m_handle(-1)
@@ -71,6 +72,26 @@ void ClearScene::Draw()
 
 void ClearScene::NormalDraw()
 {
+	if (m_finalScore > 55000)
+	{
+		DrawFormatString(500, 400, 0xffffff, "Sランク　Score：%d", m_finalScore);
+	}
+	else if (m_finalScore > 45000)
+	{
+		DrawFormatString(500, 400, 0xffffff, "Aランク　Score：%d", m_finalScore);
+	}
+	else if (m_finalScore > 35000)
+	{
+		DrawFormatString(500, 400, 0xffffff, "Bランク　Score：%d", m_finalScore);
+	}
+	else if (m_finalScore > 30000)
+	{
+		DrawFormatString(500, 400, 0xffffff, "Cランク　Score：%d", m_finalScore);
+	}
+	else
+	{
+		DrawFormatString(500, 400, 0xffffff, "Dランク　Score：%d", m_finalScore);
+	}
 	DrawGraph(0, 0, m_handle, true);
 }
 

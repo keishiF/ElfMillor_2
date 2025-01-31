@@ -53,13 +53,17 @@ namespace
 
 	// ダメージ食らった後の無敵時間
 	constexpr int kDamageBlinkFrame = 30;
+
+	// スコア
+	constexpr int kAddScore = 1500;
 }
 
-GroundEnemy::GroundEnemy(std::weak_ptr<Camera> camera):
+GroundEnemy::GroundEnemy(std::weak_ptr<Camera> camera) :
 	m_handleRun(-1),
 	m_handleDead(-1),
 	m_seHandle(-1),
 	m_isDirLeft(false),
+	m_isDead(false),
 	m_blinkFrameCount(0),
 	m_deadAnim(),
 	EnemyBase(Vec3(0.0f, 0.0f), camera)
@@ -94,7 +98,19 @@ void GroundEnemy::Update(Player& player, Map& map)
 {
 	UpdateBlinkFrame();
 
-	if (m_hp > 0)
+	if (m_isDead)
+	{
+		m_deadAnim.Update();
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
+		if (m_deadAnim.IsEnd())
+		{
+			DeleteGraph(m_handleRun);
+			DeleteGraph(m_handleDead);
+			DeleteGraph(m_seHandle);
+		}
+	}
+
+	if (!m_isDead)
 	{
 		m_runAnim.Update();
 
@@ -167,16 +183,12 @@ void GroundEnemy::Update(Player& player, Map& map)
 			m_isDirLeft = true;
 		}
 	}
-	else
+
+	// 死亡
+	if (m_hp <= 0 && !m_isDead)
 	{
-		m_deadAnim.Update();
-		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
-		if (m_deadAnim.IsEnd())
-		{
-			DeleteGraph(m_handleRun);
-			DeleteGraph(m_handleDead);
-			DeleteGraph(m_seHandle);
-		}
+		m_isDead = true;
+		player.GetScoreManager().AddScore(kAddScore);
 	}
 }
 

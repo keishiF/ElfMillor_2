@@ -27,6 +27,8 @@ public:
 
 	void OnDamage();
 
+	int GetHp() { return m_hp; }
+
 private:
 	void UpdateBlinkFrame();
 

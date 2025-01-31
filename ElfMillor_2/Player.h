@@ -7,6 +7,7 @@
 #include "GroundEnemy.h"
 #include "FlyingEnemy.h"
 #include "Map.h"
+#include "ScoreManager.h"
 #include <memory>
 #include <vector>
 
@@ -47,6 +48,8 @@ public:
 
     // プレイヤーの座標を取得
     Vec3 GetPos() { return m_pos; }
+
+    ScoreManager& GetScoreManager() { return m_scoreManager; }
 
     // クリアフラグ
     bool m_isClearFlag;
@@ -95,6 +98,8 @@ private:
 
     // ジャンプボタンの状態
     bool m_isLastJumpButton;
+
+    ScoreManager m_scoreManager;
 
     // ショット
     Shot m_shot[kShot];

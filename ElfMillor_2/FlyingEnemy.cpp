@@ -52,6 +52,8 @@ namespace
 
 	// ˆÚ“®‹——£‚Ì§ŒÀ
 	constexpr float kMoveDistance = 175.0f;
+
+	constexpr int kAddScore = 1000;
 }
 
 FlyingEnemy::FlyingEnemy(std::weak_ptr<Camera> camera) :
@@ -104,40 +106,42 @@ void FlyingEnemy::Update(Player& player, Map& map)
 		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		if (m_deadAnim.IsEnd())
 		{
-			m_isDead = false;
 			DeleteGraph(m_handleFly);
 			DeleteGraph(m_handleDead);
 			DeleteGraph(m_seHandle);
 		}
-		return;
 	}
 
-	m_idleAnim.Update();
-
-	// ˆÚ“®ˆ—
-	m_pos.y += kSpeed * m_moveDir;
-
-	// ˆê’è‹——£ˆÚ“®‚µ‚½‚ç•ûŒü‚ğ”½“]
-	if (std::abs(m_pos.y - m_initPosY) >= kMoveDistance)
+	if (!m_isDead)
 	{
-		m_moveDir *= -1;
-	}
+		m_idleAnim.Update();
 
-	if (m_hp > 0)
-	{
-		if (GetLeft() < player.GetRight() &&
-			GetRight() > player.GetLeft() &&
-			GetTop() < player.GetBottom() &&
-			GetBottom() > player.GetTop())
+		// ˆÚ“®ˆ—
+		m_pos.y += kSpeed * m_moveDir;
+
+		// ˆê’è‹——£ˆÚ“®‚µ‚½‚ç•ûŒü‚ğ”½“]
+		if (std::abs(m_pos.y - m_initPosY) >= kMoveDistance)
 		{
-			player.OnDamage();
+			m_moveDir *= -1;
+		}
+
+		if (m_hp > 0)
+		{
+			if (GetLeft() < player.GetRight() &&
+				GetRight() > player.GetLeft() &&
+				GetTop() < player.GetBottom() &&
+				GetBottom() > player.GetTop())
+			{
+				player.OnDamage();
+			}
 		}
 	}
 
 	// €–S
-	if (m_hp <= 0)
+	if (m_hp <= 0 && !m_isDead)
 	{
 		m_isDead = true;
+		player.GetScoreManager().AddScore(kAddScore);
 	}
 }
 

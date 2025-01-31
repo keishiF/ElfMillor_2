@@ -20,6 +20,8 @@ namespace
 {
 	constexpr int kFadeInterval = 60;
 
+	constexpr int kClearScore = 5000;
+
 	// 敵の初期位置
 	constexpr float kGroundEnemyInitPosX1 = 450.0f;
 	constexpr float kGroundEnemyInitPosY1 = 7494.0f;
@@ -63,6 +65,8 @@ namespace
 
 GameScene::GameScene(SceneController& controller) :
 	SceneBase(controller),
+	m_timeCount(0),
+	m_clearScore(0),
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
@@ -72,7 +76,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_lifeHandle = LoadGraph("data/image/Player/Life.png");
 	assert(m_lifeHandle != -1);
 
-	m_bgHandle = LoadGraph("data/image/BackGround/BackGround3.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/BackGround1.png");
 	assert(m_bgHandle != -1);
 
 	// BGMの読み込み
@@ -134,6 +138,8 @@ void GameScene::Update(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
+	m_timeCount++;
+
 	m_camera->Update();
 	m_player->Update(input, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
 
@@ -183,8 +189,31 @@ void GameScene::FadeOutUpdate(Input& input)
 {
 	if (m_player->m_isClearFlag)
 	{
+		if (m_timeCount <= 600)
+		{
+			m_clearScore = 2000;
+		}
+		else if (m_timeCount <= 900)
+		{
+			m_clearScore = 1750;
+		}
+		else if (m_timeCount <= 1200)
+		{
+			m_clearScore = 1500;
+		}
+		else if (m_timeCount <= 1800)
+		{
+			m_clearScore = 1000;
+		}
+		else
+		{
+			m_clearScore = 500;
+		}
+
+		int finalScore = (kClearScore + m_clearScore + m_player->GetScoreManager().GetScore()) * m_player->GetHp();
+
 		// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
-		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
 
 		// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
 		return;
@@ -215,6 +244,8 @@ void GameScene::NormalDraw()
 
 	m_map->DrawMap(m_camera);
 	m_player->Draw();
+
+	m_player->GetScoreManager().Draw();
 
 	for (int i = 0; i < m_player->GetHp(); i++)
 	{

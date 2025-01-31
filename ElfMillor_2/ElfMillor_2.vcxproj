@@ -155,6 +155,7 @@
     <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PlatinumLoader.cpp" />
     <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="ScoreManager.cpp" />
     <ClCompile Include="Shot.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="PlatinumLoader.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="ScoreManager.h" />
     <ClInclude Include="Shot.h" />
     <ClInclude Include="EnemyBase.h" />
     <ClInclude Include="game.h" />

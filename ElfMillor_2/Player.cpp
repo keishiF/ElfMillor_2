@@ -62,6 +62,8 @@ namespace
 
 	// 死亡時の演出再生時間
 	constexpr int kDeadFrame = 80;
+
+	constexpr int kSubScore = 500;
 }
 
 Player::Player(std::weak_ptr<Camera> camera) :
@@ -255,6 +257,8 @@ void Player::OnDamage()
 
 	// ダメージを受ける
 	m_hp--;
+
+	GetScoreManager().SubScore(kSubScore);
 }
 
 float Player::GetLeft()

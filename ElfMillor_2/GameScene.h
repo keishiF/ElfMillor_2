@@ -23,13 +23,19 @@ public:
 private:
 	// フェード用のカウント変数
     int m_frame;
+	int m_timeCount;
 
+	// HP(ハート)のハンドル
 	int m_lifeHandle;
 
+	// 背景のハンドル
 	int m_bgHandle;
 
 	// BGMハンドル
 	int m_bgmHandle;
+
+	// クリアタイムに応じて変動するスコア
+	int m_clearScore;
 
 	// ゲームオブジェクト
 	std::shared_ptr<Player> m_player;
