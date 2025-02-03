@@ -4,7 +4,7 @@
 ScoreManager::ScoreManager():
 	m_score(0)
 {
-	m_fontHandle = CreateFontToHandle("Algerian", 32, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	m_fontHandle = CreateFontToHandle("Algerian", 25, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 }
 
 ScoreManager::~ScoreManager()

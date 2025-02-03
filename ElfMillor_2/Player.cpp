@@ -58,7 +58,7 @@ namespace
 	constexpr int kVerticalHit = 1;
 
 	// ダメージ食らった後の無敵時間
-	constexpr int kDamageBlinkFrame = 30;
+	constexpr int kDamageBlinkFrame = 45;
 
 	// 死亡時の演出再生時間
 	constexpr int kDeadFrame = 80;
@@ -258,7 +258,10 @@ void Player::OnDamage()
 	// ダメージを受ける
 	m_hp--;
 
-	GetScoreManager().SubScore(kSubScore);
+	if (GetScoreManager().GetScore() > 0)
+	{
+		GetScoreManager().SubScore(kSubScore);
+	}
 }
 
 float Player::GetLeft()

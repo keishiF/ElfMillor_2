@@ -30,6 +30,9 @@ private:
 
 	// 背景のハンドル
 	int m_bgHandle;
+	int m_fogHandle;
+	int m_leftFogHandle;
+	int m_rightFogHandle;
 
 	// BGMハンドル
 	int m_bgmHandle;
