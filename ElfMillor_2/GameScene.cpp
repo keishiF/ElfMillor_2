@@ -75,7 +75,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_lifeHandle = LoadGraph("data/image/Player/Life.png");
 	assert(m_lifeHandle != -1);
 
-	m_bgHandle = LoadGraph("data/image/BackGround/BackGround3.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/BackGround4.png");
 	assert(m_bgHandle != -1);
 
 	m_fogHandle = LoadGraph("data/image/BackGround/Fog2.png");
@@ -254,8 +254,8 @@ void GameScene::NormalDraw()
 
 	// Œ³
 	DrawGraph(-100, -75, m_bgHandle, true);
-	//DrawBox(0, 0, 160, 720, 0x000000, true);
-	//DrawBox(1120, 0, 1280, 720, 0x000000, true);
+	DrawBox(0, 0, 160, 720, 0x000000, true);
+	DrawBox(1120, 0, 1280, 720, 0x000000, true);
 
 	m_map->DrawMap(m_camera);
 	m_player->Draw();
