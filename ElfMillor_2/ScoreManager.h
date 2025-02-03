@@ -13,4 +13,6 @@ public:
 
 private:
 	int m_score;
+
+	int m_fontHandle;
 };

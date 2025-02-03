@@ -25,7 +25,8 @@ TitleScene::TitleScene(SceneController& controller) :
 {
 	m_fadeFrameCount = kFadeInterval;
 
-	m_handle = LoadGraph("data/image/BackGround/title2.png");
+	m_handle = LoadGraph("data/image/BackGround/title.png");
+	assert(m_handle != -1);
 }
 
 void TitleScene::Update(Input& input)

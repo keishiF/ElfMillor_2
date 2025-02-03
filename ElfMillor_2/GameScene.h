@@ -34,8 +34,8 @@ private:
 	// BGMハンドル
 	int m_bgmHandle;
 
-	// クリアタイムに応じて変動するスコア
-	int m_clearScore;
+	// クリア時のHPによって変動するスコア
+	float m_clearHpScore;
 
 	// ゲームオブジェクト
 	std::shared_ptr<Player> m_player;
@@ -61,4 +61,6 @@ private:
 
 	void CreateGroundEnemy(float posX, float posY);
 	void CreateFlyingEnemy(float posX, float posY);
+
+	void ClearHpScore();
 };

@@ -14,6 +14,8 @@ private:
 
 	int m_handle;
 
+	int m_fontHandle;
+
 	int m_finalScore;
 
 	using UpdateFunc_t = void(ClearScene::*)(Input&);

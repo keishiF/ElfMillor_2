@@ -23,8 +23,14 @@ ClearScene::ClearScene(SceneController& controller, int finalScore) :
 	m_finalScore(finalScore),
 	m_update(&ClearScene::FadeInUpdate),
 	m_draw(&ClearScene::FadeDraw),
-	m_handle(-1)
+	m_handle(-1),
+	m_fontHandle(-1)
 {
+	m_fontHandle = CreateFontToHandle("Algerian", 64, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+
+	m_handle = LoadGraph("data/image/BackGround/GameClear.png");
+	assert(m_handle != -1);
+
 	m_fadeFrameCount = kFadeInterval;
 }
 
@@ -72,27 +78,38 @@ void ClearScene::Draw()
 
 void ClearScene::NormalDraw()
 {
-	if (m_finalScore > 55000)
+	DrawGraph(0, 0, m_handle, true);
+
+	if (m_finalScore > 40000)
 	{
-		DrawFormatString(500, 400, 0xffffff, "Sランク　Score：%d", m_finalScore);
-	}
-	else if (m_finalScore > 45000)
-	{
-		DrawFormatString(500, 400, 0xffffff, "Aランク　Score：%d", m_finalScore);
+		DrawFormatStringToHandle(475, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(730, 400, 0xffedab, m_fontHandle, "S");
+		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:%d", m_finalScore);
 	}
 	else if (m_finalScore > 35000)
 	{
-		DrawFormatString(500, 400, 0xffffff, "Bランク　Score：%d", m_finalScore);
+		DrawFormatStringToHandle(475, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(730, 400, 0xff0000, m_fontHandle, "A");
+		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:%d", m_finalScore);
 	}
 	else if (m_finalScore > 30000)
 	{
-		DrawFormatString(500, 400, 0xffffff, "Cランク　Score：%d", m_finalScore);
+		DrawFormatStringToHandle(475, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(730, 400, 0x0000ff, m_fontHandle, "B");
+		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:%d", m_finalScore);
+	}
+	else if (m_finalScore > 25000)
+	{
+		DrawFormatStringToHandle(475, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(730, 400, 0x00ff00, m_fontHandle, "C");
+		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:%d", m_finalScore);
 	}
 	else
 	{
-		DrawFormatString(500, 400, 0xffffff, "Dランク　Score：%d", m_finalScore);
+		DrawFormatStringToHandle(475, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(730, 400, 0xff00ff, m_fontHandle, "D");
+		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:%d", m_finalScore);
 	}
-	DrawGraph(0, 0, m_handle, true);
 }
 
 void ClearScene::FadeDraw()

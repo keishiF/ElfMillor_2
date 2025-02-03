@@ -66,7 +66,6 @@ namespace
 GameScene::GameScene(SceneController& controller) :
 	SceneBase(controller),
 	m_timeCount(0),
-	m_clearScore(0),
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
@@ -76,7 +75,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_lifeHandle = LoadGraph("data/image/Player/Life.png");
 	assert(m_lifeHandle != -1);
 
-	m_bgHandle = LoadGraph("data/image/BackGround/BackGround1.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/BackGround3.png");
 	assert(m_bgHandle != -1);
 
 	// BGMの読み込み
@@ -174,6 +173,15 @@ void GameScene::NormalUpdate(Input& input)
 		m_draw = &GameScene::FadeDraw;
 		m_frame = 0;
 	}
+
+#ifdef _DEBUG
+	if (input.IsPress(PAD_INPUT_3))
+	{
+		m_update = &GameScene::FadeOutUpdate;
+		m_draw = &GameScene::FadeDraw;
+		m_frame = 0;
+	}
+#endif
 }
 
 void GameScene::FadeInUpdate(Input& input)
@@ -189,28 +197,9 @@ void GameScene::FadeOutUpdate(Input& input)
 {
 	if (m_player->m_isClearFlag)
 	{
-		if (m_timeCount <= 600)
-		{
-			m_clearScore = 2000;
-		}
-		else if (m_timeCount <= 900)
-		{
-			m_clearScore = 1750;
-		}
-		else if (m_timeCount <= 1200)
-		{
-			m_clearScore = 1500;
-		}
-		else if (m_timeCount <= 1800)
-		{
-			m_clearScore = 1000;
-		}
-		else
-		{
-			m_clearScore = 500;
-		}
+		ClearHpScore();
 
-		int finalScore = (kClearScore + m_clearScore + m_player->GetScoreManager().GetScore()) * m_player->GetHp();
+		int finalScore = (kClearScore + m_player->GetScoreManager().GetScore()) * m_clearHpScore;
 
 		// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
@@ -231,6 +220,16 @@ void GameScene::FadeOutUpdate(Input& input)
 		// ここに何か処理があった場合、上記のreturnがなければ
 		// 持ち主が死んでいるのに何かゾンビ処理をすることになる←色々まっずい
 	}
+
+#ifdef _DEBUG
+	int finalScore = 30000;
+
+	// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
+	m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
+
+	// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
+	return;
+#endif
 }
 
 void GameScene::Draw()
@@ -241,6 +240,8 @@ void GameScene::Draw()
 void GameScene::NormalDraw()
 {
 	DrawGraph(-100, -75, m_bgHandle, true);
+	DrawBox(0, 0, 160, 720, 0x000000, true);
+	DrawBox(1120, 0, 1280, 720, 0x000000, true);
 
 	m_map->DrawMap(m_camera);
 	m_player->Draw();
@@ -301,5 +302,29 @@ void GameScene::CreateFlyingEnemy(float posX, float posY)
 			m_flyingEnemyArray[i]->Init(posX, posY);
 			return;
 		}
+	}
+}
+
+void GameScene::ClearHpScore()
+{
+	if (m_player->GetHp() == 5)
+	{
+		m_clearHpScore = 2.5f;
+	}
+	else if (m_player->GetHp() == 4)
+	{
+		m_clearHpScore = 2.0f;
+	}
+	else if (m_player->GetHp() == 3)
+	{
+		m_clearHpScore = 1.75f;
+	}
+	else if (m_player->GetHp() == 2)
+	{
+		m_clearHpScore = 1.5f;
+	}
+	else
+	{
+		m_clearHpScore = 1.0f;
 	}
 }
