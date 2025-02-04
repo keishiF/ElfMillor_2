@@ -21,12 +21,16 @@ TitleScene::TitleScene(SceneController& controller) :
 	SceneBase(controller),
 	m_update(&TitleScene::FadeInUpdate),
 	m_draw(&TitleScene::FadeDraw),
-	m_handle(-1)
+	m_handle(-1),
+	m_backMovieHandle(-1)
 {
 	m_fadeFrameCount = kFadeInterval;
 
-	m_handle = LoadGraph("data/image/BackGround/title.png");
+	m_handle = LoadGraph("data/image/BackGround/title2.png");
 	assert(m_handle != -1);
+
+	m_backMovieHandle = LoadGraph("data/movie/TitleMovie.mp4");
+	PlayMovieToGraph(m_backMovieHandle);
 }
 
 void TitleScene::Update(Input& input)
@@ -36,6 +40,8 @@ void TitleScene::Update(Input& input)
 
 void TitleScene::NormalUpdate(Input& input)
 {
+	ChangeMovieVolumeToGraph(0, m_backMovieHandle);
+
 	if (input.IsPress(PAD_INPUT_3))
 	{
 		m_update = &TitleScene::FadeOutUpdate;
@@ -57,6 +63,7 @@ void TitleScene::FadeOutUpdate(Input&)
 {
 	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
+		PauseMovieToGraph(m_backMovieHandle);
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
 		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
@@ -73,11 +80,13 @@ void TitleScene::Draw()
 
 void TitleScene::NormalDraw()
 {
+	DrawExtendGraph(0, 0, 1280, 720, m_backMovieHandle, true);
 	DrawGraph(0, 0, m_handle, true);
 }
 
 void TitleScene::FadeDraw()
 {
+	DrawExtendGraph(0, 0, 1280, 720, m_backMovieHandle, true);
 	DrawGraph(0, 0, m_handle, true);
 
 	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);

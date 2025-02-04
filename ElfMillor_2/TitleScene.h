@@ -13,6 +13,7 @@ private:
 	int m_fadeFrameCount;
 
 	int m_handle;
+	int m_backMovieHandle;
 
 	using UpdateFunc_t = void(TitleScene::*)(Input&);
 	using DrawFunc_t = void(TitleScene::*)();

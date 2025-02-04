@@ -17,7 +17,7 @@ void Map::InitMap()
 	loader.GetMapSize(mapW, mapH);
 
 	// マップ画像読み込み
-	m_graphHandle = LoadGraph("data/image/Map/Map2.png");
+	m_graphHandle = LoadGraph("data/image/Map/Map3.png");
 	// マップデータ読み込み
 	for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
 	{

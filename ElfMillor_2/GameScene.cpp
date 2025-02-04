@@ -18,9 +18,14 @@
 
 namespace
 {
+	// フェードの時間
 	constexpr int kFadeInterval = 60;
 
+	// クリア時に加算されるスコア
 	constexpr int kClearScore = 5000;
+
+	// 音量
+	constexpr int kVolume = 32;
 
 	// 敵の初期位置
 	constexpr float kGroundEnemyInitPosX1 = 450.0f;
@@ -65,7 +70,6 @@ namespace
 
 GameScene::GameScene(SceneController& controller) :
 	SceneBase(controller),
-	m_timeCount(0),
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
@@ -145,8 +149,10 @@ void GameScene::Update(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-	m_timeCount++;
+	// 音量を変更
+	ChangeVolumeSoundMem(kVolume, m_bgHandle);
 
+	// 各オブジェクトのアップデート
 	m_camera->Update();
 	m_player->Update(input, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
 
@@ -230,7 +236,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	}
 
 #ifdef _DEBUG
-	int finalScore = 40000;
+	int finalScore = 45000;
 
 	// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 	m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));

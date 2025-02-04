@@ -23,7 +23,6 @@ public:
 private:
 	// フェード用のカウント変数
     int m_frame;
-	int m_timeCount;
 
 	// HP(ハート)のハンドル
 	int m_lifeHandle;

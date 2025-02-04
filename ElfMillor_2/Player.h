@@ -73,6 +73,7 @@ private:
 
     // SEハンドル
     int m_seHandle;
+    int m_loopSEHandle;
 
     // アニメーションフラグ
     bool m_isRun;

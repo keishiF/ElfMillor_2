@@ -82,38 +82,38 @@ void ClearScene::NormalDraw()
 
 	if (m_finalScore >= 40000)
 	{
-		DrawFormatStringToHandle(403, 400, 0xffffff, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(403, 400, 0xfdeff2, m_fontHandle, "Rank:");
 		DrawFormatStringToHandle(655, 400, 0xffedab, m_fontHandle, "S");
-		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:");
+		DrawFormatStringToHandle(375, 400, 0xfdeff2, m_fontHandle, "\nScore:");
 		DrawFormatStringToHandle(650, 400, 0xffedab, m_fontHandle, "\n%d", m_finalScore);
 	}
 	else if (m_finalScore >= 35000)
 	{
-		DrawFormatStringToHandle(403, 400, 0xffffff, m_fontHandle, "Rank:");
-		DrawFormatStringToHandle(655, 400, 0xff0000, m_fontHandle, "A");
-		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:");
-		DrawFormatStringToHandle(650, 400, 0xff0000, m_fontHandle, "\n%d", m_finalScore);
+		DrawFormatStringToHandle(403, 400, 0xfdeff2, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(655, 400, 0xcc0033, m_fontHandle, "A");
+		DrawFormatStringToHandle(375, 400, 0xfdeff2, m_fontHandle, "\nScore:");
+		DrawFormatStringToHandle(650, 400, 0xcc0033, m_fontHandle, "\n%d", m_finalScore);
 	}
 	else if (m_finalScore >= 30000)
 	{
-		DrawFormatStringToHandle(403, 400, 0xffffff, m_fontHandle, "Rank:");
-		DrawFormatStringToHandle(655, 400, 0x0000ff, m_fontHandle, "B");
-		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:");
-		DrawFormatStringToHandle(650, 400, 0x0000ff, m_fontHandle, "\n%d", m_finalScore);
+		DrawFormatStringToHandle(403, 400, 0xfdeff2, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(655, 400, 0x00ccff, m_fontHandle, "B");
+		DrawFormatStringToHandle(375, 400, 0xfdeff2, m_fontHandle, "\nScore:");
+		DrawFormatStringToHandle(650, 400, 0x00ccff, m_fontHandle, "\n%d", m_finalScore);
 	}
 	else if (m_finalScore >= 25000)
 	{
-		DrawFormatStringToHandle(403, 400, 0xffffff, m_fontHandle, "Rank:");
-		DrawFormatStringToHandle(655, 400, 0x00ff00, m_fontHandle, "C");
-		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:");
-		DrawFormatStringToHandle(650, 400, 0x00ff00, m_fontHandle, "\n%d", m_finalScore);
+		DrawFormatStringToHandle(403, 400, 0xfdeff2, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(655, 400, 0x99ff99, m_fontHandle, "C");
+		DrawFormatStringToHandle(375, 400, 0xfdeff2, m_fontHandle, "\nScore:");
+		DrawFormatStringToHandle(650, 400, 0x99ff99, m_fontHandle, "\n%d", m_finalScore);
 	}
 	else
 	{
-		DrawFormatStringToHandle(403, 400, 0xffffff, m_fontHandle, "Rank:");
-		DrawFormatStringToHandle(655, 400, 0xff00ff, m_fontHandle, "D");
-		DrawFormatStringToHandle(375, 400, 0xffffff, m_fontHandle, "\nScore:");
-		DrawFormatStringToHandle(650, 400, 0xff00ff, m_fontHandle, "\n%d", m_finalScore);
+		DrawFormatStringToHandle(403, 400, 0xfdeff2, m_fontHandle, "Rank:");
+		DrawFormatStringToHandle(655, 400, 0xcc33ff, m_fontHandle, "D");
+		DrawFormatStringToHandle(375, 400, 0xfdeff2, m_fontHandle, "\nScore:");
+		DrawFormatStringToHandle(650, 400, 0xcc33ff, m_fontHandle, "\n%d", m_finalScore);
 	}
 }
 

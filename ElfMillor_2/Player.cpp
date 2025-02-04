@@ -16,7 +16,8 @@ namespace
 {
 	// 初期位置
 	constexpr int kPlayerInitPosX = 360;
-	constexpr int kPlayerInitPosY = 7600;
+	//constexpr int kPlayerInitPosY = 7600;
+	constexpr int kPlayerInitPosY = 6980;
 
 	// 画面端
 	constexpr int kLeftEndWidth = 160;
@@ -71,6 +72,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_handleRun(-1),
 	m_handleDead(-1),
 	m_seHandle(-1),
+	m_loopSEHandle(-1),
 	m_isRun(false),
 	m_isJump(false),
 	m_isDead(false),
@@ -117,6 +119,9 @@ void Player::Init()
 	// SEの読み込み
 	m_seHandle = LoadSoundMem("data/sound/shotSE3.mp3");
 	assert(m_seHandle != -1);
+
+	m_loopSEHandle = LoadSoundMem("data/sound/loopSE1.mp3");
+	assert(m_loopSEHandle != -1);
 
 	for (int i = 0; i < kShot; i++)
 	{
@@ -169,11 +174,13 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 	// 右端に行ったら左端に
 	if (m_pos.x <= kLeftEndWidth)
 	{
+		PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
 		m_pos.x = kRightEndWidth;
 	}
 	// 左端に行ったら右端に
 	else if (m_pos.x >= kRightEndWidth)
 	{
+		PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
 		m_pos.x = kLeftEndWidth;
 	}
 

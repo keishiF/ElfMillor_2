@@ -1,5 +1,6 @@
 #include "GameOverScene.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 #include "SceneController.h"
 
 #include "game.h"
@@ -58,7 +59,7 @@ void GameOverScene::FadeOutUpdate(Input& input)
 	{
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
-		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
+		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
 
 		// 自分が死んでいるのでもし余計な処理が入っているとまずいのでreturn;
 		return;
