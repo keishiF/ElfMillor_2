@@ -17,16 +17,37 @@ namespace
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 
 	constexpr int kFadeInterval = 60;
+
+	// ボタンの座標
+	constexpr int kTitleButtonPosX = 360;
+	constexpr int kTitleButtonPosY = 360;
 }
 
 GameOverScene::GameOverScene(SceneController& controller) :
 	SceneBase(controller),
+	m_blinkFrameCount(0),
 	m_update(&GameOverScene::FadeInUpdate),
 	m_draw(&GameOverScene::FadeDraw),
-	m_handle(-1)
+	m_handle(-1),
+	m_fontHandle(-1),
+	m_seHandle(-1),
+	m_bgmHandle(-1)
 {
 	m_fadeFrameCount = kFadeInterval;
 	m_handle = LoadGraph("data/image/BackGround/GameOver.png");
+
+	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	assert(m_fontHandle != -1);
+
+	m_seHandle = LoadSoundMem("data/sound/GameOverButtonSE.mp3");
+	assert(m_seHandle != -1);
+
+	// BGMの読み込み
+	m_bgmHandle = LoadSoundMem("data/sound/GameBGM2.mp3");
+	assert(m_bgmHandle != -1);
+
+	// BGMの再生
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 void GameOverScene::Update(Input& input)
@@ -36,8 +57,11 @@ void GameOverScene::Update(Input& input)
 
 void GameOverScene::NormalUpdate(Input& input)
 {
+	++m_blinkFrameCount;
+
 	if (input.IsPress(PAD_INPUT_3))
 	{
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &GameOverScene::FadeOutUpdate;
 		m_draw = &GameOverScene::FadeDraw;
 		m_fadeFrameCount = 0;
@@ -57,6 +81,8 @@ void GameOverScene::FadeOutUpdate(Input& input)
 {
 	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
+		StopSoundMem(m_bgmHandle);
+
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
 		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
@@ -74,6 +100,13 @@ void GameOverScene::Draw()
 void GameOverScene::NormalDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
+
+	// 点滅効果のための条件
+	if ((m_blinkFrameCount / 30) % 2 == 0)
+	{
+		// 文字を描画
+		DrawStringToHandle(kTitleButtonPosX, kTitleButtonPosY, "PRESS ANY BUTTON\n　　　　　　　　　RESTART", 0xa0d8ef, m_fontHandle);
+	}
 }
 
 void GameOverScene::FadeDraw()

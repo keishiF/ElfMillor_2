@@ -52,6 +52,8 @@ namespace MapConsts
 class Map
 {
 public:
+	Map();
+
 	void InitMap();
 	// ƒ}ƒbƒv‚Ì•`‰æ
 	void DrawMap(std::weak_ptr<Camera> camera);

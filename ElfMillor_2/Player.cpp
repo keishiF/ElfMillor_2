@@ -16,8 +16,7 @@ namespace
 {
 	// ‰ŠúˆÊ’u
 	constexpr int kPlayerInitPosX = 360;
-	//constexpr int kPlayerInitPosY = 7600;
-	constexpr int kPlayerInitPosY = 6980;
+	constexpr int kPlayerInitPosY = 7600;
 
 	// ‰æ–Ê’[
 	constexpr int kLeftEndWidth = 160;

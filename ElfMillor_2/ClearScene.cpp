@@ -16,22 +16,40 @@ namespace
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 
 	constexpr int kFadeInterval = 60;
+
+	// ボタンの座標
+	constexpr int kTitleStringPosX = 330;
+	constexpr int kTitleStringPosY = 560;
 }
 
 ClearScene::ClearScene(SceneController& controller, int finalScore) :
 	SceneBase(controller),
+	m_blinkFrameCount(0),
 	m_finalScore(finalScore),
 	m_update(&ClearScene::FadeInUpdate),
 	m_draw(&ClearScene::FadeDraw),
 	m_handle(-1),
-	m_fontHandle(-1)
+	m_fontHandle(-1),
+	m_seHandle(-1),
+	m_bgmHandle(-1)
 {
-	m_fontHandle = CreateFontToHandle("Algerian", 64, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	assert(m_fontHandle != -1);
 
 	m_handle = LoadGraph("data/image/BackGround/GameClear.png");
 	assert(m_handle != -1);
 
 	m_fadeFrameCount = kFadeInterval;
+
+	m_seHandle = LoadSoundMem("data/sound/ClearButtonSE.mp3");
+	assert(m_seHandle != -1);
+
+	// BGMの読み込み
+	m_bgmHandle = LoadSoundMem("data/sound/ClearBGM.mp3");
+	assert(m_bgmHandle != -1);
+
+	// BGMの再生
+	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 void ClearScene::Update(Input& input)
@@ -41,8 +59,11 @@ void ClearScene::Update(Input& input)
 
 void ClearScene::NormalUpdate(Input& input)
 {
+	++m_blinkFrameCount;
+
 	if (input.IsPress(PAD_INPUT_3))
 	{
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &ClearScene::FadeOutUpdate;
 		m_draw = &ClearScene::FadeDraw;
 		m_fadeFrameCount = 0;
@@ -62,6 +83,8 @@ void ClearScene::FadeOutUpdate(Input&)
 {
 	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
+		StopSoundMem(m_bgmHandle);
+
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
 		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
@@ -79,6 +102,13 @@ void ClearScene::Draw()
 void ClearScene::NormalDraw()
 {
 	DrawGraph(0, 0, m_handle, true);
+
+	// 点滅効果のための条件
+	if ((m_blinkFrameCount / 30) % 2 == 0)
+	{
+		// 文字を描画
+		DrawStringToHandle(kTitleStringPosX, kTitleStringPosY, "PRESS ANY BUTTON\n　　　　　　　　　Go Title", 0xa0d8ef, m_fontHandle);
+	}
 
 	if (m_finalScore >= 40000)
 	{

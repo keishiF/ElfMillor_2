@@ -15,10 +15,15 @@ namespace
 	constexpr int kGameScreenHalfWidth  = Game::kScreenWidth / 2;
 	constexpr int kGameScreenHalfHeight = Game::kScreenHeight / 2;
 	constexpr int kFadeInterval = 60;
+
+	// ボタンの座標
+	constexpr int kTitleStringPosX = 330;
+	constexpr int kTitleStringPosY = 400;
 }
 
 TitleScene::TitleScene(SceneController& controller) :
 	SceneBase(controller),
+	m_blinkFrameCount(0),
 	m_update(&TitleScene::FadeInUpdate),
 	m_draw(&TitleScene::FadeDraw),
 	m_handle(-1),
@@ -26,10 +31,18 @@ TitleScene::TitleScene(SceneController& controller) :
 {
 	m_fadeFrameCount = kFadeInterval;
 
-	m_handle = LoadGraph("data/image/BackGround/title2.png");
+	m_handle = LoadGraph("data/image/BackGround/title3.png");
 	assert(m_handle != -1);
 
+	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
+	assert(m_fontHandle != -1);
+
+	// SEの読み込み
+	m_seHandle = LoadSoundMem("data/sound/TitleButtonSE.mp3");
+	assert(m_seHandle != -1);
+
 	m_backMovieHandle = LoadGraph("data/movie/TitleMovie.mp4");
+	ChangeMovieVolumeToGraph(0, m_backMovieHandle);
 	PlayMovieToGraph(m_backMovieHandle);
 }
 
@@ -40,10 +53,11 @@ void TitleScene::Update(Input& input)
 
 void TitleScene::NormalUpdate(Input& input)
 {
-	ChangeMovieVolumeToGraph(0, m_backMovieHandle);
+	++m_blinkFrameCount;
 
 	if (input.IsPress(PAD_INPUT_3))
 	{
+		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &TitleScene::FadeOutUpdate;
 		m_draw = &TitleScene::FadeDraw;
 		m_fadeFrameCount = 0;
@@ -82,6 +96,14 @@ void TitleScene::NormalDraw()
 {
 	DrawExtendGraph(0, 0, 1280, 720, m_backMovieHandle, true);
 	DrawGraph(0, 0, m_handle, true);
+
+	// 点滅効果のための条件
+	if ((m_blinkFrameCount / 30) % 2 == 0)
+	{
+		// 文字を描画
+		DrawStringToHandle(kTitleStringPosX, kTitleStringPosY, 
+			"PRESS ANY BUTTON\n　　　　　　　　　　　START", 0xa0d8ef, m_fontHandle);
+	}
 }
 
 void TitleScene::FadeDraw()

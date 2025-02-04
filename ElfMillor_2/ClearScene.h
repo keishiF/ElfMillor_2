@@ -11,10 +11,15 @@ public:
 
 private:
 	int m_fadeFrameCount;
+	int m_blinkFrameCount;
 
 	int m_handle;
-
 	int m_fontHandle;
+	// SEハンドル
+	int m_seHandle;
+
+	// BGMハンドル
+	int m_bgmHandle;
 
 	int m_finalScore;
 

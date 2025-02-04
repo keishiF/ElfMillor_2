@@ -8,6 +8,11 @@
 #define DISP_COLLISION
 #endif
 
+Map::Map():
+	m_graphHandle(-1)
+{
+}
+
 void Map::InitMap()
 {
 	// Platinumデータ読み込み
@@ -17,7 +22,7 @@ void Map::InitMap()
 	loader.GetMapSize(mapW, mapH);
 
 	// マップ画像読み込み
-	m_graphHandle = LoadGraph("data/image/Map/Map3.png");
+	m_graphHandle = LoadGraph("data/image/Map/Map.png");
 	// マップデータ読み込み
 	for (int wIndex = 0; wIndex < MapConsts::kMapWidth; wIndex++)
 	{
@@ -69,7 +74,7 @@ void Map::DrawMap(std::weak_ptr<Camera> camera)
 				// カメラの位置に応じて描画位置を補正
 				auto leftTopX = static_cast<int>(mapChip.m_pos.x) + MapConsts::kMapOffsetX;
 				auto leftTopY = static_cast<int>(mapChip.m_pos.y);
-				DrawRectGraph(leftTopX, leftTopY + camera.lock()->GetDrawOffset().y,
+				DrawRectGraph(leftTopX, static_cast<int>(leftTopY + camera.lock()->GetDrawOffset().y),
 					mapChip.posInGraphX, mapChip.posInGraphY,
 					MapConsts::kMapChipSize, MapConsts::kMapChipSize,
 					m_graphHandle, true);

@@ -12,8 +12,12 @@ public:
 
 private:
 	int m_fadeFrameCount = 60;
+	int m_blinkFrameCount;
 
 	int m_handle;
+	int m_fontHandle;
+	int m_seHandle;
+	int m_bgmHandle;
 
 	using UpdateFunc_t = void (GameOverScene::*)(Input& input);
 	using DrawFunc_t   = void (GameOverScene::*)();

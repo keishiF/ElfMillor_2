@@ -11,9 +11,16 @@ public:
 
 private:
 	int m_fadeFrameCount;
+	int m_blinkFrameCount;
 
 	int m_handle;
 	int m_backMovieHandle;
+
+	// フォントハンドル
+	int m_fontHandle;
+
+	// SEハンドル
+	int m_seHandle;
 
 	using UpdateFunc_t = void(TitleScene::*)(Input&);
 	using DrawFunc_t = void(TitleScene::*)();

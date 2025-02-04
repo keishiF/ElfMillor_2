@@ -82,16 +82,8 @@ GameScene::GameScene(SceneController& controller) :
 	m_bgHandle = LoadGraph("data/image/BackGround/BackGround4.png");
 	assert(m_bgHandle != -1);
 
-	m_fogHandle = LoadGraph("data/image/BackGround/Fog2.png");
-	assert(m_fogHandle != -1);
-
-	/*m_leftFogHandle = LoadGraph("data/image/BackGround/Fog3.png");
-	assert(m_leftFogHandle != -1);
-	m_rightFogHandle = LoadGraph("data/image/BackGround/Fog4.png");
-	assert(m_rightFogHandle != -1);*/
-
 	// BGMの読み込み
-	m_bgmHandle = LoadSoundMem("data/sound/BGM3.mp3");
+	m_bgmHandle = LoadSoundMem("data/sound/GameBGM2.mp3");
 	assert(m_bgmHandle != -1);
 
 	// マップの初期化
@@ -211,6 +203,8 @@ void GameScene::FadeOutUpdate(Input& input)
 {
 	if (m_player->m_isClearFlag)
 	{
+		StopSoundMem(m_bgmHandle);
+
 		ClearHpScore();
 
 		int finalScore = (kClearScore + m_player->GetScoreManager().GetScore()) * m_clearHpScore;
@@ -225,6 +219,8 @@ void GameScene::FadeOutUpdate(Input& input)
 	{
 		if (m_frame++ >= 60)
 		{
+			StopSoundMem(m_bgmHandle);
+
 			// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 			m_controller.ChangeScene(std::make_shared<GameOverScene>(m_controller));
 
@@ -237,6 +233,8 @@ void GameScene::FadeOutUpdate(Input& input)
 
 #ifdef _DEBUG
 	int finalScore = 45000;
+
+	StopSoundMem(m_bgmHandle);
 
 	// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 	m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
@@ -253,11 +251,6 @@ void GameScene::Draw()
 
 void GameScene::NormalDraw()
 {
-	// 霧
-	//DrawGraph(0, 0, m_fogHandle, true);
-	//DrawGraph(0, 0, m_leftFogHandle, true);
-	//DrawGraph(1120, 0, m_rightFogHandle, true);
-
 	// 元
 	DrawGraph(-100, -75, m_bgHandle, true);
 	DrawBox(0, 0, 160, 720, 0x000000, true);
