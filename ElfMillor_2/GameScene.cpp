@@ -86,6 +86,9 @@ GameScene::GameScene(SceneController& controller) :
 	m_bgmHandle = LoadSoundMem("data/sound/GameBGM2.mp3");
 	assert(m_bgmHandle != -1);
 
+	m_deadSEHandle = LoadSoundMem("data/sound/deadSE2.mp3");
+	assert(m_deadSEHandle != -1);
+
 	// マップの初期化
 	m_map = std::make_shared<Map>();
 	m_map->InitMap();
@@ -131,6 +134,8 @@ GameScene::GameScene(SceneController& controller) :
 
 GameScene::~GameScene()
 {
+	DeleteGraph(m_lifeHandle);
+	DeleteGraph(m_bgHandle);
 	DeleteSoundMem(m_bgmHandle);
 }
 
@@ -141,9 +146,6 @@ void GameScene::Update(Input& input)
 
 void GameScene::NormalUpdate(Input& input)
 {
-	// 音量を変更
-	ChangeVolumeSoundMem(kVolume, m_bgHandle);
-
 	// 各オブジェクトのアップデート
 	m_camera->Update();
 	m_player->Update(input, m_groundEnemyArray, m_flyingEnemyArray, *m_map);
@@ -173,11 +175,13 @@ void GameScene::NormalUpdate(Input& input)
 
 	if (m_player->GetHp() <= 0)
 	{
-		m_player->DeadUpdate();
-
-		m_update = &GameScene::FadeOutUpdate;
-		m_draw = &GameScene::FadeDraw;
-		m_frame = 0;
+		m_player->m_deadAnim.Update();
+		if (m_player->m_deadAnim.IsEnd())
+		{
+			m_update = &GameScene::FadeOutUpdate;
+			m_draw = &GameScene::FadeDraw;
+			m_frame = 0;
+		}
 	}
 
 #ifdef _DEBUG
@@ -203,8 +207,6 @@ void GameScene::FadeOutUpdate(Input& input)
 {
 	if (m_player->m_isClearFlag)
 	{
-		StopSoundMem(m_bgmHandle);
-
 		ClearHpScore();
 
 		int finalScore = (kClearScore + m_player->GetScoreManager().GetScore()) * m_clearHpScore;
@@ -219,8 +221,6 @@ void GameScene::FadeOutUpdate(Input& input)
 	{
 		if (m_frame++ >= 60)
 		{
-			StopSoundMem(m_bgmHandle);
-
 			// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 			m_controller.ChangeScene(std::make_shared<GameOverScene>(m_controller));
 
@@ -233,8 +233,6 @@ void GameScene::FadeOutUpdate(Input& input)
 
 #ifdef _DEBUG
 	int finalScore = 45000;
-
-	StopSoundMem(m_bgmHandle);
 
 	// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 	m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
@@ -257,7 +255,6 @@ void GameScene::NormalDraw()
 	DrawBox(1120, 0, 1280, 720, 0x000000, true);
 
 	m_map->DrawMap(m_camera);
-	m_player->Draw();
 
 	m_player->GetScoreManager().Draw();
 
@@ -281,6 +278,8 @@ void GameScene::NormalDraw()
 			m_flyingEnemyArray[i]->Draw();
 		}
 	}
+
+	m_player->Draw();
 }
 
 void GameScene::FadeDraw()

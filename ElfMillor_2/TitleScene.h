@@ -5,6 +5,7 @@ class TitleScene :
 {
 public:
 	TitleScene(SceneController& controller);
+	~TitleScene();
 
 	virtual void Update(Input& input)override;
 	virtual void Draw()override;

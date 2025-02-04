@@ -46,6 +46,12 @@ TitleScene::TitleScene(SceneController& controller) :
 	PlayMovieToGraph(m_backMovieHandle);
 }
 
+TitleScene::~TitleScene()
+{
+	//DeleteSoundMem(m_bgmHandle);
+	DeleteGraph(m_backMovieHandle);
+}
+
 void TitleScene::Update(Input& input)
 {
 	(this->*m_update)(input);

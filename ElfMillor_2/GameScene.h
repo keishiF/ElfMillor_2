@@ -33,6 +33,8 @@ private:
 	// BGMハンドル
 	int m_bgmHandle;
 
+	int m_deadSEHandle;
+
 	// クリア時のHPによって変動するスコア
 	float m_clearHpScore;
 

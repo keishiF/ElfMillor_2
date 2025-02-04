@@ -5,6 +5,7 @@ class ClearScene :
 {
 public:
 	ClearScene(SceneController& controller, int finalScore);
+	~ClearScene();
 
 	virtual void Update(Input& input)override;
 	virtual void Draw()override;
@@ -13,7 +14,7 @@ private:
 	int m_fadeFrameCount;
 	int m_blinkFrameCount;
 
-	int m_handle;
+	int m_bgHandle;
 	int m_fontHandle;
 	// SEƒnƒ“ƒhƒ‹
 	int m_seHandle;

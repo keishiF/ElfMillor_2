@@ -28,13 +28,13 @@ GameOverScene::GameOverScene(SceneController& controller) :
 	m_blinkFrameCount(0),
 	m_update(&GameOverScene::FadeInUpdate),
 	m_draw(&GameOverScene::FadeDraw),
-	m_handle(-1),
+	m_bgHandle(-1),
 	m_fontHandle(-1),
 	m_seHandle(-1),
 	m_bgmHandle(-1)
 {
 	m_fadeFrameCount = kFadeInterval;
-	m_handle = LoadGraph("data/image/BackGround/GameOver.png");
+	m_bgHandle = LoadGraph("data/image/BackGround/GameOver.png");
 
 	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	assert(m_fontHandle != -1);
@@ -43,11 +43,19 @@ GameOverScene::GameOverScene(SceneController& controller) :
 	assert(m_seHandle != -1);
 
 	// BGMの読み込み
-	m_bgmHandle = LoadSoundMem("data/sound/GameBGM2.mp3");
+	m_bgmHandle = LoadSoundMem("data/sound/GameOver.mp3");
 	assert(m_bgmHandle != -1);
 
 	// BGMの再生
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+}
+
+GameOverScene::~GameOverScene()
+{
+	DeleteGraph(m_bgHandle);
+	DeleteFontToHandle(m_fontHandle);
+	DeleteSoundMem(m_seHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void GameOverScene::Update(Input& input)
@@ -81,8 +89,6 @@ void GameOverScene::FadeOutUpdate(Input& input)
 {
 	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
-		StopSoundMem(m_bgmHandle);
-
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
 		m_controller.ChangeScene(std::make_shared<GameScene>(m_controller));
@@ -99,7 +105,7 @@ void GameOverScene::Draw()
 
 void GameOverScene::NormalDraw()
 {
-	DrawGraph(0, 0, m_handle, true);
+	DrawGraph(0, 0, m_bgHandle, true);
 
 	// 点滅効果のための条件
 	if ((m_blinkFrameCount / 30) % 2 == 0)
@@ -111,7 +117,7 @@ void GameOverScene::NormalDraw()
 
 void GameOverScene::FadeDraw()
 {
-	DrawGraph(0, 0, m_handle, true);
+	DrawGraph(0, 0, m_bgHandle, true);
 
 	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);

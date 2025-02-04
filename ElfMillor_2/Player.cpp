@@ -33,10 +33,15 @@ namespace
 
 	// アニメーション1コマのフレーム数
 	constexpr int kAnimSingleFrame = 8;
+	constexpr int kEffectAnimSingleFrame = 8;
 
-	// キャラクターのグラフィックのサイズ
+	// キャラクターのグラフィックサイズ
 	constexpr int kGraphWidth = 160;
 	constexpr int kGraphHeight = 128;
+
+	// 死亡時のエフェクトのグラフィックサイズ
+	constexpr int kEffectGraphWidth = 48;
+	constexpr int kEffectGraphHeight = 48;
 
 	// 待機アニメーションのコマ数
 	constexpr int kIdleAnimNum = 8;
@@ -45,10 +50,11 @@ namespace
 	// 攻撃アニメーションのコマ数
 	constexpr int kAtkAnimNum = 13;
 	// 死亡アニメーションのコマ数
-	constexpr int kDeadAnimNum = 10;
+	constexpr int kDeadAnimNum = 18;
 
 	// グラフィックの拡大率
 	constexpr float kExtRate = 1.75f;
+	constexpr float kEffectExtRate = 15.0f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 0.0f;
@@ -70,7 +76,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_handleIdle(-1),
 	m_handleRun(-1),
 	m_handleDead(-1),
-	m_seHandle(-1),
+	m_shotSEHandle(-1),
 	m_loopSEHandle(-1),
 	m_isRun(false),
 	m_isJump(false),
@@ -101,7 +107,7 @@ Player::~Player()
 	DeleteGraph(m_handleDead);
 
 	// SEの解放
-	DeleteSoundMem(m_seHandle);
+	DeleteSoundMem(m_shotSEHandle);
 }
 
 void Player::Init()
@@ -112,12 +118,12 @@ void Player::Init()
 
 	m_handleRun = LoadGraph("data/image/Player/Run.png");
 
-	m_handleDead = LoadGraph("data/image/Player/Dead.png");
+	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
 	assert(m_handleDead != -1);
 
 	// SEの読み込み
-	m_seHandle = LoadSoundMem("data/sound/shotSE3.mp3");
-	assert(m_seHandle != -1);
+	m_shotSEHandle = LoadSoundMem("data/sound/shotSE3.mp3");
+	assert(m_shotSEHandle != -1);
 
 	m_loopSEHandle = LoadSoundMem("data/sound/loopSE1.mp3");
 	assert(m_loopSEHandle != -1);
@@ -133,60 +139,68 @@ void Player::Init()
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
 	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
-	m_deadAnim.Init(m_handleDead, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kDeadAnimNum);
+	m_deadAnim.Init(m_handleDead, kEffectAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kEffectExtRate, kRotaRate, kDeadAnimNum);
 }
 
 void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 	std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map)
 {
-	// 無敵時間の更新
-	UpdateBlinkFrame();
-
-	m_idleAnim.Update();
-
-	m_isRun = false;
-	m_vec.x = 0.0f;
-
-	if (m_isRun)
+	if (!m_isDead)
 	{
-		m_runAnim.Update();
+		// 無敵時間の更新
+		UpdateBlinkFrame();
+
+		m_idleAnim.Update();
+
+		m_isRun = false;
+		m_vec.x = 0.0f;
+
+		if (m_isRun)
+		{
+			m_runAnim.Update();
+		}
+
+		HandleMovement(input, map);
+
+		// 前フレームでジャンプしていたかを確認
+		m_isLastJumpButton = input.IsTrigger(PAD_INPUT_1);
+
+		// 上入力
+		if (input.IsPress(PAD_INPUT_UP))
+		{
+			m_isUp = true;
+		}
+		else
+		{
+			m_isUp = false;
+		}
+
+		// 攻撃
+		HandleAttack(input);
+
+		// 右端に行ったら左端に
+		if (m_pos.x <= kLeftEndWidth)
+		{
+			PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
+			m_pos.x = kRightEndWidth;
+		}
+		// 左端に行ったら右端に
+		else if (m_pos.x >= kRightEndWidth)
+		{
+			PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
+			m_pos.x = kLeftEndWidth;
+		}
+
+		// 弾を発射
+		for (int i = 0; i < kShot; i++)
+		{
+			m_shot[i].Update(groundEnemy, flyingEnemy, m_camera, map);
+		}
 	}
 
-	HandleMovement(input, map);
-
-	// 前フレームでジャンプしていたかを確認
-	m_isLastJumpButton = input.IsTrigger(PAD_INPUT_1);
-
-	// 上入力
-	if (input.IsPress(PAD_INPUT_UP))
+	if (m_hp <= 0)
 	{
-		m_isUp = true;
-	}
-	else
-	{
-		m_isUp = false;
-	}
-
-	// 攻撃
-	HandleAttack(input);
-
-	// 右端に行ったら左端に
-	if (m_pos.x <= kLeftEndWidth)
-	{
-		PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
-		m_pos.x = kRightEndWidth;
-	}
-	// 左端に行ったら右端に
-	else if (m_pos.x >= kRightEndWidth)
-	{
-		PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
-		m_pos.x = kLeftEndWidth;
-	}
-
-	// 弾を発射
-	for (int i = 0; i < kShot; i++)
-	{
-		m_shot[i].Update(groundEnemy, flyingEnemy, m_camera, map);
+		m_isDead = true;
 	}
 }
 
@@ -237,15 +251,6 @@ void Player::Draw()
 	}
 
 	//DrawFormatString(5, 0, 0xffffff, "Hp = %d", m_hp);
-}
-
-void Player::DeadUpdate()
-{
-	m_deadAnim.Update();
-	if (m_deadAnim.IsEnd())
-	{
-		return;
-	}
 }
 
 void Player::OnDamage()
@@ -552,7 +557,7 @@ void Player::HandleAttack(Input& input)
 			if (!m_shot[i].m_isShot)
 			{
 				// ショット時の音の再生
-				PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
+				PlaySoundMem(m_shotSEHandle, DX_PLAYTYPE_BACK, true);
 
 				// 弾の位置をプレイヤーの位置に補正
 				m_shot[i].m_pos.x = m_pos.x;

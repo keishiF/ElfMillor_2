@@ -30,9 +30,6 @@ public:
         std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map);
     void Draw();
 
-    // 死亡時の更新処理
-    void DeadUpdate();
-
     // ダメージを受けた時の処理
     void OnDamage();
 
@@ -54,6 +51,8 @@ public:
     // クリアフラグ
     bool m_isClearFlag;
 
+    Animation m_deadAnim;
+
 private:
     // 無敵時間の更新
     void UpdateBlinkFrame();
@@ -72,7 +71,7 @@ private:
     int m_handleDead;
 
     // SEハンドル
-    int m_seHandle;
+    int m_shotSEHandle;
     int m_loopSEHandle;
 
     // アニメーションフラグ
@@ -108,5 +107,4 @@ private:
     // アニメーション
     Animation m_idleAnim;
     Animation m_runAnim;
-    Animation m_deadAnim;
 };

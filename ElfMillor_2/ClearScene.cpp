@@ -28,7 +28,7 @@ ClearScene::ClearScene(SceneController& controller, int finalScore) :
 	m_finalScore(finalScore),
 	m_update(&ClearScene::FadeInUpdate),
 	m_draw(&ClearScene::FadeDraw),
-	m_handle(-1),
+	m_bgHandle(-1),
 	m_fontHandle(-1),
 	m_seHandle(-1),
 	m_bgmHandle(-1)
@@ -36,8 +36,8 @@ ClearScene::ClearScene(SceneController& controller, int finalScore) :
 	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	assert(m_fontHandle != -1);
 
-	m_handle = LoadGraph("data/image/BackGround/GameClear.png");
-	assert(m_handle != -1);
+	m_bgHandle = LoadGraph("data/image/BackGround/GameClear.png");
+	assert(m_bgHandle != -1);
 
 	m_fadeFrameCount = kFadeInterval;
 
@@ -50,6 +50,14 @@ ClearScene::ClearScene(SceneController& controller, int finalScore) :
 
 	// BGMの再生
 	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+}
+
+ClearScene::~ClearScene()
+{
+	DeleteFontToHandle(m_fontHandle);
+	DeleteGraph(m_bgHandle);
+	DeleteSoundMem(m_seHandle);
+	DeleteSoundMem(m_bgmHandle);
 }
 
 void ClearScene::Update(Input& input)
@@ -83,8 +91,6 @@ void ClearScene::FadeOutUpdate(Input&)
 {
 	if (m_fadeFrameCount++ >= kFadeInterval)
 	{
-		StopSoundMem(m_bgmHandle);
-
 		// このChangeSceneが呼び出された直後はTitleSceneオブジェクトは消滅している
 		// この後に何か書くと、死んだメモリにアクセスしてクラッシュする
 		m_controller.ChangeScene(std::make_shared<TitleScene>(m_controller));
@@ -101,7 +107,7 @@ void ClearScene::Draw()
 
 void ClearScene::NormalDraw()
 {
-	DrawGraph(0, 0, m_handle, true);
+	DrawGraph(0, 0, m_bgHandle, true);
 
 	// 点滅効果のための条件
 	if ((m_blinkFrameCount / 30) % 2 == 0)
@@ -149,7 +155,7 @@ void ClearScene::NormalDraw()
 
 void ClearScene::FadeDraw()
 {
-	DrawGraph(0, 0, m_handle, true);
+	DrawGraph(0, 0, m_bgHandle, true);
 
 	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
