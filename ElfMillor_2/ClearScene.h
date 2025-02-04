@@ -4,7 +4,7 @@ class ClearScene :
     public SceneBase
 {
 public:
-	ClearScene(SceneController& controller, int finalScore);
+	ClearScene(SceneController& controller, float finalScore);
 	~ClearScene();
 
 	virtual void Update(Input& input)override;
@@ -22,7 +22,7 @@ private:
 	// BGMƒnƒ“ƒhƒ‹
 	int m_bgmHandle;
 
-	int m_finalScore;
+	float m_finalScore;
 
 	using UpdateFunc_t = void(ClearScene::*)(Input&);
 	using DrawFunc_t = void(ClearScene::*)();

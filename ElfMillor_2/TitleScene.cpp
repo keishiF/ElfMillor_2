@@ -38,7 +38,7 @@ TitleScene::TitleScene(SceneController& controller) :
 	assert(m_fontHandle != -1);
 
 	// SEÇÃì«Ç›çûÇ›
-	m_seHandle = LoadSoundMem("data/sound/TitleButtonSE.mp3");
+	m_seHandle = LoadSoundMem("data/sound/SE/TitleButtonSE.mp3");
 	assert(m_seHandle != -1);
 
 	m_backMovieHandle = LoadGraph("data/movie/TitleMovie.mp4");

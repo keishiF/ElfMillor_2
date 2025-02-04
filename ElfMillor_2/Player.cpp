@@ -122,10 +122,10 @@ void Player::Init()
 	assert(m_handleDead != -1);
 
 	// SEÇÃì«Ç›çûÇ›
-	m_shotSEHandle = LoadSoundMem("data/sound/shotSE3.mp3");
+	m_shotSEHandle = LoadSoundMem("data/sound/SE/shotSE.mp3");
 	assert(m_shotSEHandle != -1);
 
-	m_loopSEHandle = LoadSoundMem("data/sound/loopSE1.mp3");
+	m_loopSEHandle = LoadSoundMem("data/sound/SE/loopSE.mp3");
 	assert(m_loopSEHandle != -1);
 
 	for (int i = 0; i < kShot; i++)

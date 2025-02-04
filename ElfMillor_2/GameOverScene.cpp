@@ -39,11 +39,11 @@ GameOverScene::GameOverScene(SceneController& controller) :
 	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	assert(m_fontHandle != -1);
 
-	m_seHandle = LoadSoundMem("data/sound/GameOverButtonSE.mp3");
+	m_seHandle = LoadSoundMem("data/sound/SE/GameOverButtonSE.mp3");
 	assert(m_seHandle != -1);
 
 	// BGMÇÃì«Ç›çûÇ›
-	m_bgmHandle = LoadSoundMem("data/sound/GameOver.mp3");
+	m_bgmHandle = LoadSoundMem("data/sound/BGM/GameOverBGM.mp3");
 	assert(m_bgmHandle != -1);
 
 	// BGMÇÃçƒê∂
@@ -120,7 +120,7 @@ void GameOverScene::FadeDraw()
 	DrawGraph(0, 0, m_bgHandle, true);
 
 	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 * rate);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

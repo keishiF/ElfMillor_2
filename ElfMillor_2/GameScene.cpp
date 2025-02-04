@@ -22,7 +22,7 @@ namespace
 	constexpr int kFadeInterval = 60;
 
 	// クリア時に加算されるスコア
-	constexpr int kClearScore = 5000;
+	constexpr float kClearScore = 5000.0f;
 
 	// 音量
 	constexpr int kVolume = 32;
@@ -82,11 +82,7 @@ GameScene::GameScene(SceneController& controller) :
 	m_bgHandle = LoadGraph("data/image/BackGround/BackGround4.png");
 	assert(m_bgHandle != -1);
 
-	// BGMの読み込み
-	m_bgmHandle = LoadSoundMem("data/sound/GameBGM2.mp3");
-	assert(m_bgmHandle != -1);
-
-	m_deadSEHandle = LoadSoundMem("data/sound/deadSE2.mp3");
+	m_deadSEHandle = LoadSoundMem("data/sound/SE/deadSE.mp3");
 	assert(m_deadSEHandle != -1);
 
 	// マップの初期化
@@ -128,8 +124,9 @@ GameScene::GameScene(SceneController& controller) :
 	// カメラの初期化
 	m_camera->Init(m_player);
 
-	// BGMの再生
-	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
+	// BGMの読み込み
+	m_bgmHandle = LoadSoundMem("data/sound/BGM/GameBGM.mp3");
+	assert(m_bgmHandle != -1);
 }
 
 GameScene::~GameScene()
@@ -200,6 +197,9 @@ void GameScene::FadeInUpdate(Input& input)
 	{
 		m_update = &GameScene::NormalUpdate;
 		m_draw   = &GameScene::NormalDraw;
+
+		// BGMの再生
+		PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 	}
 }
 
@@ -209,7 +209,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	{
 		ClearHpScore();
 
-		int finalScore = (kClearScore + m_player->GetScoreManager().GetScore()) * m_clearHpScore;
+		float finalScore = (kClearScore + m_player->GetScoreManager().GetScore()) * m_clearHpScore;
 
 		// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 		m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));
@@ -232,7 +232,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	}
 
 #ifdef _DEBUG
-	int finalScore = 45000;
+	float finalScore = 45000.0f;
 
 	// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 	m_controller.ChangeScene(std::make_shared<ClearScene>(m_controller, finalScore));

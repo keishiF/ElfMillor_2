@@ -82,7 +82,7 @@ void FlyingEnemy::Init(float posX, float posY)
 	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
 	assert(m_handleDead != -1);
 
-	m_seHandle = LoadSoundMem("data/sound/deadSE2.mp3");
+	m_seHandle = LoadSoundMem("data/sound/SE/deadSE.mp3");
 	assert(m_seHandle != -1);
 
 	m_idleAnim.Init(m_handleFly, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kWalkAnimNum);
