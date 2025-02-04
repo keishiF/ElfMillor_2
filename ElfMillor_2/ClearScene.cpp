@@ -20,6 +20,10 @@ namespace
 	// ボタンの座標
 	constexpr int kTitleStringPosX = 330;
 	constexpr int kTitleStringPosY = 560;
+
+	// 背景の表示座標
+	constexpr int kBgDrawWidthOffset = -100;
+	constexpr int kBgDrawHeightOffset = -75;
 }
 
 ClearScene::ClearScene(SceneController& controller, float finalScore) :
@@ -29,15 +33,19 @@ ClearScene::ClearScene(SceneController& controller, float finalScore) :
 	m_update(&ClearScene::FadeInUpdate),
 	m_draw(&ClearScene::FadeDraw),
 	m_bgHandle(-1),
+	m_clearBgHandle(-1),
 	m_fontHandle(-1),
 	m_seHandle(-1),
 	m_bgmHandle(-1)
 {
+	m_bgHandle = LoadGraph("data/image/BackGround/BackGround3.png");
+	assert(m_bgHandle != -1);
+
 	m_fontHandle = CreateFontToHandle("Algerian", 48, -1, DX_FONTTYPE_ANTIALIASING_8X8);
 	assert(m_fontHandle != -1);
 
-	m_bgHandle = LoadGraph("data/image/BackGround/GameClear.png");
-	assert(m_bgHandle != -1);
+	m_clearBgHandle = LoadGraph("data/image/BackGround/GameClear.png");
+	assert(m_clearBgHandle != -1);
 
 	m_fadeFrameCount = kFadeInterval;
 
@@ -45,17 +53,14 @@ ClearScene::ClearScene(SceneController& controller, float finalScore) :
 	assert(m_seHandle != -1);
 
 	// BGMの読み込み
-	m_bgmHandle = LoadSoundMem("data/sound/BGM/ClearBGM.mp3");
+	m_bgmHandle = LoadSoundMem("data/sound/BGM/ClearBGM2.mp3");
 	assert(m_bgmHandle != -1);
-
-	// BGMの再生
-	PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 }
 
 ClearScene::~ClearScene()
 {
 	DeleteFontToHandle(m_fontHandle);
-	DeleteGraph(m_bgHandle);
+	DeleteGraph(m_clearBgHandle);
 	DeleteSoundMem(m_seHandle);
 	DeleteSoundMem(m_bgmHandle);
 }
@@ -69,7 +74,7 @@ void ClearScene::NormalUpdate(Input& input)
 {
 	++m_blinkFrameCount;
 
-	if (input.IsPress(PAD_INPUT_3))
+	if (input.IsPress(CheckHitKeyAll()))
 	{
 		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &ClearScene::FadeOutUpdate;
@@ -84,6 +89,9 @@ void ClearScene::FadeInUpdate(Input&)
 	{
 		m_update = &ClearScene::NormalUpdate;
 		m_draw = &ClearScene::NormalDraw;
+
+		// BGMの再生
+		PlaySoundMem(m_bgmHandle, DX_PLAYTYPE_LOOP);
 	}
 }
 
@@ -107,7 +115,8 @@ void ClearScene::Draw()
 
 void ClearScene::NormalDraw()
 {
-	DrawGraph(0, 0, m_bgHandle, true);
+	DrawGraph(kBgDrawWidthOffset, kBgDrawHeightOffset, m_bgHandle, true);
+	DrawGraph(0, 0, m_clearBgHandle, true);
 
 	// 点滅効果のための条件
 	if ((m_blinkFrameCount / 30) % 2 == 0)
@@ -155,7 +164,8 @@ void ClearScene::NormalDraw()
 
 void ClearScene::FadeDraw()
 {
-	DrawGraph(0, 0, m_bgHandle, true);
+	DrawGraph(kBgDrawWidthOffset, kBgDrawHeightOffset, m_bgHandle, true);
+	DrawGraph(0, 0, m_clearBgHandle, true);
 
 	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));

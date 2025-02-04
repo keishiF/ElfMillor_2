@@ -15,6 +15,7 @@ private:
 	int m_blinkFrameCount;
 
 	int m_bgHandle;
+	int m_clearBgHandle;
 	int m_fontHandle;
 	// SEƒnƒ“ƒhƒ‹
 	int m_seHandle;
