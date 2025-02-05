@@ -43,7 +43,7 @@ TitleScene::TitleScene(SceneController& controller) :
 
 	m_backMovieHandle = LoadGraph("data/movie/TitleMovie.mp4");
 	ChangeMovieVolumeToGraph(0, m_backMovieHandle);
-	PlayMovieToGraph(m_backMovieHandle);
+	PlayMovieToGraph(m_backMovieHandle, DX_PLAYTYPE_LOOP);
 }
 
 TitleScene::~TitleScene()

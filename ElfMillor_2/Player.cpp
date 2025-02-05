@@ -135,6 +135,8 @@ void Player::Init()
 
 	m_hp = kDefaultHp;
 
+	m_isDead = false;
+
 	m_isClearFlag = false;
 
 	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
@@ -216,15 +218,15 @@ void Player::Draw()
 	camOffset.x = 0;
 
 	// プレイヤーのアニメーション切り替え
-	// 走る
-	if (m_isRun)
-	{
-		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
-	}
 	// 死んだ
-	else if (m_isDead)
+	if (m_isDead)
 	{
 		m_deadAnim.Play(m_pos + camOffset, m_isDirLeft);
+	}
+	// 走る
+	else if (m_isRun)
+	{
+		m_runAnim.Play(m_pos + camOffset, m_isDirLeft);
 	}
 	// 待機
 	else

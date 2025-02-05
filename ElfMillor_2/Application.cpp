@@ -76,6 +76,13 @@ void Application::Run()
 		{
 
 		}
+
+		// もしＥＳＣキーが押されていたらループから抜ける
+		if (CheckHitKey(KEY_INPUT_ESCAPE))
+		{
+			break;
+		}
+
 	}
 }
 
