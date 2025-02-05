@@ -60,7 +60,7 @@ namespace
 	constexpr float kRotaRate = 0.0f;
 
 	// ノックバック距離
-	constexpr int kBesideHit = 26;
+	constexpr int kBesideHit = 20;
 	constexpr int kVerticalHit = 1;
 
 	// ダメージ食らった後の無敵時間
@@ -279,12 +279,12 @@ void Player::OnDamage()
 
 float Player::GetLeft()
 {
-	return (m_pos.x - 25);
+	return (m_pos.x - 15);
 }
 
 float Player::GetRight()
 {
-	return (m_pos.x + 25);
+	return (m_pos.x + 15);
 }
 
 float Player::GetTop()
