@@ -20,16 +20,17 @@ public:
 	Shot();
 	~Shot();
 
+	// 初期化、更新、描画
 	void Init();
 	void Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
 		std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, std::weak_ptr<Camera> camera, Map& map);
 	void Draw(std::weak_ptr<Camera> camera);
 
+	// 矩形情報
 	float GetLeft();
 	float GetRight();
 	float GetTop();
 	float GetBottom();
-
 	Rect GetRect();
 
 	// 弾が出ているかどうかのフラグ

@@ -6,6 +6,7 @@
 class Rect
 {
 public:
+	// ‹éŒ`î•ñ
 	float top;
 	float bottom;
 	float left;
@@ -18,7 +19,9 @@ public:
 		right(0)
 	{
 	}
+	// ‰¡•î•ñ
 	float GetWidth() const { return right - left; }
+	// c•î•ñ
 	float GetHeight() const { return bottom - top; }
 
 	// ŠeÀ•Wæ“¾

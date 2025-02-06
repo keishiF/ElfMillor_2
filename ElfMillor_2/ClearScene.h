@@ -11,18 +11,23 @@ public:
 	virtual void Draw()override;
 
 private:
+	// フェード用のフレーム
 	int m_fadeFrameCount;
+	// 文字を点滅させるためのフレーム
 	int m_blinkFrameCount;
 
+	// クリア画面のハンドル
 	int m_bgHandle;
+	// 背景のハンドル
 	int m_clearBgHandle;
+	// フォントハンドル
 	int m_fontHandle;
 	// SEハンドル
 	int m_seHandle;
-
 	// BGMハンドル
 	int m_bgmHandle;
 
+	// ゲームシーンからスコアを受け取り表示するための変数
 	float m_finalScore;
 
 	using UpdateFunc_t = void(ClearScene::*)(Input&);
@@ -33,9 +38,9 @@ private:
 
 	// 通常更新処理
 	void NormalUpdate(Input& input);
-	// フェードイン時の更新処理
+	// フェードイン
 	void FadeInUpdate(Input&);
-	// フェードアウト更新処理
+	// フェードアウト
 	void FadeOutUpdate(Input&);
 
 	// 通常描画

@@ -51,6 +51,7 @@ public:
     // クリアフラグ
     bool m_isClearFlag;
 
+    // 死亡アニメーション
     Animation m_deadAnim;
 
 private:

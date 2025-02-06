@@ -11,10 +11,16 @@ public:
 	virtual void Draw()override;
 
 private:
+	// フェード用のフレーム
 	int m_fadeFrameCount;
+
+	// 文字を点滅させるためのフレーム
 	int m_blinkFrameCount;
 
+	// タイトルのハンドル
 	int m_handle;
+
+	// タイトル画面で流す動画のハンドル
 	int m_backMovieHandle;
 
 	// フォントハンドル
@@ -31,9 +37,9 @@ private:
 
 	// 通常更新処理
 	void NormalUpdate(Input& input);
-	// フェードイン時の更新処理
+	// フェードイン
 	void FadeInUpdate(Input&);
-	// フェードアウト更新処理
+	// フェードアウト
 	void FadeOutUpdate(Input&);
 
 	// 通常描画

@@ -73,15 +73,18 @@ GameScene::GameScene(SceneController& controller) :
 	m_update(&GameScene::FadeInUpdate),
 	m_draw(&GameScene::FadeDraw)
 {
-	// フェード用のカウント変数
-	m_frame = kFadeInterval;
+	// フェード用のフレーム
+	m_fadeFrameCount = kFadeInterval;
 
+	// HPグラフィックのロード
 	m_lifeHandle = LoadGraph("data/image/Player/Life.png");
 	assert(m_lifeHandle != -1);
 
+	// 背景のグラフィックのロード
 	m_bgHandle = LoadGraph("data/image/BackGround/BackGround4.png");
 	assert(m_bgHandle != -1);
 
+	// 死亡時のSEのロード
 	m_deadSEHandle = LoadSoundMem("data/sound/SE/deadSE.mp3");
 	assert(m_deadSEHandle != -1);
 
@@ -89,12 +92,15 @@ GameScene::GameScene(SceneController& controller) :
 	m_map = std::make_shared<Map>();
 	m_map->InitMap();
 
+	// カメラの初期化
 	m_camera = std::make_shared<Camera>();
+	m_camera->Init(m_player);
 
 	// プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_camera);
 	m_player->Init();
 
+	// HP表示の初期化
 	for (int i = 0; i < m_player->GetHp(); i++)
 	{
 		m_life[i].Init();
@@ -120,9 +126,6 @@ GameScene::GameScene(SceneController& controller) :
 	CreateFlyingEnemy(kFlyingEnemyInitPosX6, kFlyingEnemyInitPosY6);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX7, kFlyingEnemyInitPosY7);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX8, kFlyingEnemyInitPosY8);
-
-	// カメラの初期化
-	m_camera->Init(m_player);
 
 	// BGMの読み込み
 	m_bgmHandle = LoadSoundMem("data/sound/BGM/GameBGM.mp3");
@@ -167,7 +170,7 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
-		m_frame = 0;
+		m_fadeFrameCount = 0;
 	}
 
 	if (m_player->GetHp() <= 0)
@@ -177,7 +180,7 @@ void GameScene::NormalUpdate(Input& input)
 		{
 			m_update = &GameScene::FadeOutUpdate;
 			m_draw = &GameScene::FadeDraw;
-			m_frame = 0;
+			m_fadeFrameCount = 0;
 		}
 	}
 
@@ -186,14 +189,14 @@ void GameScene::NormalUpdate(Input& input)
 	{
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
-		m_frame = 0;
+		m_fadeFrameCount = 0;
 	}
 #endif
 }
 
 void GameScene::FadeInUpdate(Input& input)
 {
-	if (m_frame-- <= 0)
+	if (m_fadeFrameCount-- <= 0)
 	{
 		m_update = &GameScene::NormalUpdate;
 		m_draw   = &GameScene::NormalDraw;
@@ -219,7 +222,7 @@ void GameScene::FadeOutUpdate(Input& input)
 	}
 	else
 	{
-		if (m_frame++ >= 60)
+		if (m_fadeFrameCount++ >= 60)
 		{
 			// このChangeSceneが呼び出された直後はGameSceneオブジェクトは消滅している
 			m_controller.ChangeScene(std::make_shared<GameOverScene>(m_controller));
@@ -284,7 +287,7 @@ void GameScene::NormalDraw()
 
 void GameScene::FadeDraw()
 {
-	float rate = static_cast<float>(m_frame) / static_cast<float>(kFadeInterval);
+	float rate = static_cast<float>(m_fadeFrameCount) / static_cast<float>(kFadeInterval);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, static_cast<int>(255 * rate));
 	DrawBox(0, 0, 1280, 720, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

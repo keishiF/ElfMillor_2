@@ -14,8 +14,8 @@ public:
 	void SetIndex(int index) { m_index = index; };
 
 private:
+	// HP‚Ìƒnƒ“ƒhƒ‹
 	int m_handle;
-
 	int m_index;
 };
 

@@ -21,8 +21,8 @@ public:
 	virtual void Draw()override;
 
 private:
-	// フェード用のカウント変数
-    int m_frame;
+	// フェード用のフレーム
+	int m_fadeFrameCount;
 
 	// HP(ハート)のハンドル
 	int m_lifeHandle;
@@ -33,6 +33,7 @@ private:
 	// BGMハンドル
 	int m_bgmHandle;
 
+	// 死亡時のSEハンドル
 	int m_deadSEHandle;
 
 	// クリア時のHPによって変動するスコア
@@ -53,15 +54,23 @@ private:
 
 	Life m_life[10];
 	
+	// 通常更新
 	void NormalUpdate(Input& input);
+	// フェードイン
 	void FadeInUpdate(Input& input);
+	// フェードアウト
 	void FadeOutUpdate(Input& input);
 
+	// 通常描画
 	void NormalDraw();
+	// フェード時の描画
 	void FadeDraw();
 
+	// 地上の敵の生成関数
 	void CreateGroundEnemy(float posX, float posY);
+	// 飛行する敵の生成関数
 	void CreateFlyingEnemy(float posX, float posY);
 
+	// クリア時のHPに応じてスコアに倍率をかける
 	void ClearHpScore();
 };
