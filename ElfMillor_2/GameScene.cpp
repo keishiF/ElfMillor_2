@@ -94,7 +94,6 @@ GameScene::GameScene(SceneController& controller) :
 
 	// カメラの初期化
 	m_camera = std::make_shared<Camera>();
-	m_camera->Init(m_player);
 
 	// プレイヤーの初期化
 	m_player = std::make_shared<Player>(m_camera);
@@ -126,6 +125,8 @@ GameScene::GameScene(SceneController& controller) :
 	CreateFlyingEnemy(kFlyingEnemyInitPosX6, kFlyingEnemyInitPosY6);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX7, kFlyingEnemyInitPosY7);
 	CreateFlyingEnemy(kFlyingEnemyInitPosX8, kFlyingEnemyInitPosY8);
+
+	m_camera->Init(m_player);
 
 	// BGMの読み込み
 	m_bgmHandle = LoadSoundMem("data/sound/BGM/GameBGM.mp3");

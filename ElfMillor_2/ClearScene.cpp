@@ -125,40 +125,33 @@ void ClearScene::NormalDraw()
 		DrawStringToHandle(kTitleStringPosX, kTitleStringPosY, "PRESS ANY BUTTON\n　　　　　　　　　Go Title", 0xa0d8ef, m_fontHandle);
 	}
 
-	if (m_finalScore >= 40000)
+	if (m_finalScore >= 30000)
 	{
 		DrawFormatStringToHandle(458, 400, 0xfdeff2, m_fontHandle, "Rank:");
 		DrawFormatStringToHandle(655, 400, 0xffedab, m_fontHandle, "S");
 		DrawFormatStringToHandle(435, 400, 0xfdeff2, m_fontHandle, "\nScore:");
 		DrawFormatStringToHandle(650, 400, 0xffedab, m_fontHandle, "\n%.0f", m_finalScore);
 	}
-	else if (m_finalScore >= 35000)
+	else if (m_finalScore >= 20000)
 	{
 		DrawFormatStringToHandle(458, 400, 0xfdeff2, m_fontHandle, "Rank:");
 		DrawFormatStringToHandle(655, 400, 0xcc0033, m_fontHandle, "A");
 		DrawFormatStringToHandle(435, 400, 0xfdeff2, m_fontHandle, "\nScore:");
 		DrawFormatStringToHandle(650, 400, 0xcc0033, m_fontHandle, "\n%.0f", m_finalScore);
 	}
-	else if (m_finalScore >= 30000)
+	else if (m_finalScore >= 15000)
 	{
 		DrawFormatStringToHandle(458, 400, 0xfdeff2, m_fontHandle, "Rank:");
 		DrawFormatStringToHandle(655, 400, 0x00ccff, m_fontHandle, "B");
 		DrawFormatStringToHandle(435, 400, 0xfdeff2, m_fontHandle, "\nScore:");
 		DrawFormatStringToHandle(650, 400, 0x00ccff, m_fontHandle, "\n%.0f", m_finalScore);
 	}
-	else if (m_finalScore >= 25000)
+	else/* if (m_finalScore >= 10000)*/
 	{
 		DrawFormatStringToHandle(458, 400, 0xfdeff2, m_fontHandle, "Rank:");
 		DrawFormatStringToHandle(655, 400, 0x99ff99, m_fontHandle, "C");
 		DrawFormatStringToHandle(435, 400, 0xfdeff2, m_fontHandle, "\nScore:");
 		DrawFormatStringToHandle(650, 400, 0x99ff99, m_fontHandle, "\n%.0f", m_finalScore);
-	}
-	else
-	{
-		DrawFormatStringToHandle(458, 400, 0xfdeff2, m_fontHandle, "Rank:");
-		DrawFormatStringToHandle(655, 400, 0xcc33ff, m_fontHandle, "D");
-		DrawFormatStringToHandle(435, 400, 0xfdeff2, m_fontHandle, "\nScore:");
-		DrawFormatStringToHandle(650, 400, 0xcc33ff, m_fontHandle, "\n%.0f", m_finalScore);
 	}
 }
 
