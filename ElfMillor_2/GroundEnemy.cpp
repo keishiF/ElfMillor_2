@@ -25,7 +25,7 @@ namespace
 	constexpr int kRightEndWidth = 1120;
 
 	// ‰ŠúHP
-	constexpr int kDefaultHp = 3;
+	constexpr int kDefaultHp = 2;
 
 	// d—Í
 	constexpr float kGravity = 0.4f;
