@@ -323,19 +323,19 @@ void GameScene::CreateFlyingEnemy(float posX, float posY)
 
 void GameScene::ClearHpScore()
 {
-	if (m_player->GetHp() == 5)
+	if (m_player->GetHp() > 7)
 	{
 		m_clearHpScore = 2.5f;
 	}
-	else if (m_player->GetHp() == 4)
+	else if (m_player->GetHp() > 5)
 	{
 		m_clearHpScore = 2.0f;
 	}
-	else if (m_player->GetHp() == 3)
+	else if (m_player->GetHp() > 3)
 	{
 		m_clearHpScore = 1.75f;
 	}
-	else if (m_player->GetHp() == 2)
+	else if (m_player->GetHp() > 2)
 	{
 		m_clearHpScore = 1.5f;
 	}
