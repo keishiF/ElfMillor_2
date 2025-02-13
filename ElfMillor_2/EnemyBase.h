@@ -32,7 +32,7 @@ public:
 	Vec3 m_vec;
 
 	// HP
-	int m_hp;
+	int  m_hp;
 
 protected:
 	// グラフィック

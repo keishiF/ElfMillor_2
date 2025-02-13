@@ -7,8 +7,8 @@
 #include "game.h"
 
 #include "DxLib.h"
-#include <cassert>
 #include "resource.h"
+#include <cassert>
 
 using namespace std;
 

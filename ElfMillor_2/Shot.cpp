@@ -17,8 +17,6 @@
 namespace
 {
 	// 弾のグラフィックサイズ
-	//constexpr int kGraphWidth   = 127;
-	//constexpr int kGraphHeight  = 123;
 	constexpr int kGraphWidth = 26;
 	constexpr int kGraphHeight = 10;
 
@@ -26,21 +24,20 @@ namespace
 	constexpr int kAnimSingleFrame = 4;
 
 	// グラフィックの拡大率
-	//constexpr float kExtRate = 1.0f;
 	constexpr float kExtRate = 2.5f;
 
 	// グラフィックの回転率
 	constexpr float kRotaRate = 42.5f;
 
 	// 画面端
-	constexpr int kLeftEndWidth  = 160;
-	constexpr int kRightEndWidth = 1120;
+	constexpr int kLeftScreenEdge  = 160;
+	constexpr int kRightScreenEdge = 1120;
 
 	// 弾の半径
 	constexpr int kShotRadius = 15;
 
 	// 弾の速度
-	constexpr float kShotSpeed = 10.0f;
+	constexpr float kSpeed = 10.0f;
 }
 
 Shot::Shot() :
@@ -49,7 +46,7 @@ Shot::Shot() :
 	m_isDirLeft(true),
 	m_isUp(false),
 	m_pos(0,0),
-	m_velocity(kShotSpeed,kShotSpeed)
+	m_velocity(kSpeed, kSpeed)
 {
 }
 
@@ -71,13 +68,13 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 	if (m_isUp)
 	{
 		// されていたら横の力をなくして上にしか進まないようにする
-		m_velocity = { 0.0f, kShotSpeed };
+		m_velocity = { 0.0f, kSpeed };
 		m_pos -= m_velocity;
 	}
 	else
 	{
 		// されていなかったら縦の力をなくして横にしか進まないようにする
-		m_velocity = { kShotSpeed, 0.0f };
+		m_velocity = { kSpeed, 0.0f };
 		// 左向きかどうか
 		if (!m_isDirLeft)
 		{
@@ -92,12 +89,12 @@ void Shot::Update(std::vector<std::shared_ptr<GroundEnemy>> groundEnemy,
 	}
 
 	// 右端に行ったら左端に
-	if (m_pos.x <= kLeftEndWidth)
+	if (m_pos.x <= kLeftScreenEdge)
 	{
 		m_isShot = false;
 	}
 	// 左端に行ったら右端に
-	else if (m_pos.x >= kRightEndWidth)
+	else if (m_pos.x >= kRightScreenEdge)
 	{
 		m_isShot = false;
 	}

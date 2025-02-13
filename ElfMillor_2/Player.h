@@ -13,6 +13,7 @@
 
 namespace
 {
+    // ショットの数
 	constexpr int kShot = 5;
 }
 
@@ -22,10 +23,8 @@ public:
     Player(std::weak_ptr<Camera> camera);
     ~Player();
 
-    // プレイヤーの初期化
+    // 初期化、更新、描画
     void Init();
-
-    // プレイヤーの更新、描画処理
     void Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> groundEnemy, 
         std::vector<std::shared_ptr<FlyingEnemy>> flyingEnemy, Map& map);
     void Draw();
@@ -41,7 +40,7 @@ public:
     float GetRight();
     float GetTop();
     float GetBottom();
-    Rect GetRect();
+    Rect  GetRect();
 
     // プレイヤーの座標を取得
     Vec3 GetPos() { return m_pos; }
@@ -49,7 +48,7 @@ public:
     ScoreManager& GetScoreManager() { return m_scoreManager; }
 
     // クリアフラグ
-    bool m_isClearFlag;
+    bool m_isClear;
 
     // 死亡アニメーション
     Animation m_deadAnim;
@@ -82,7 +81,7 @@ private:
 
     // ジャンプ関連
     float m_jumpSpeed;
-    int m_jumpCount;
+    int   m_jumpCount;
 
     // プレイヤーの向き
     bool m_isDirLeft;

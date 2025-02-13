@@ -35,7 +35,7 @@ public:
 private:
 	// 被弾時の点滅
 	void UpdateBlinkFrame();
-	int m_blinkFrameCount;
+	int  m_blinkFrameCount;
 
 	// 敵の各ハンドル
 	int  m_handleFly;

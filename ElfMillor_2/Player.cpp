@@ -7,6 +7,7 @@
 
 #include "DxLib.h"
 #include <cassert>
+#include <iostream>
 
 #ifdef _DEBUG
 #define DISP_COLLISION
@@ -19,11 +20,11 @@ namespace
 	constexpr int kPlayerInitPosY = 7600;
 
 	// 画面端
-	constexpr int kLeftEndWidth = 160;
-	constexpr int kRightEndWidth = 1120;
+	constexpr int kLeftScreenEdge = 160;
+	constexpr int kRightScreenEdge = 1120;
 
 	// プレイヤーの初期HP
-	constexpr int kDefaultHp = 10;
+	constexpr int kDefaultHp = 1;
 
 	// プレイヤーの移動速度
 	constexpr float kSpeed = 5.0f;
@@ -32,12 +33,12 @@ namespace
 	constexpr float kGravity = 0.4f;
 
 	// アニメーション1コマのフレーム数
-	constexpr int kAnimSingleFrame = 8;
+	constexpr int kPlayerAnimSingleFrame = 8;
 	constexpr int kEffectAnimSingleFrame = 8;
 
 	// キャラクターのグラフィックサイズ
-	constexpr int kGraphWidth = 160;
-	constexpr int kGraphHeight = 128;
+	constexpr int kPlayerGraphWidth = 160;
+	constexpr int kPlayerGraphHeight = 128;
 
 	// 死亡時のエフェクトのグラフィックサイズ
 	constexpr int kEffectGraphWidth = 48;
@@ -53,7 +54,7 @@ namespace
 	constexpr int kDeadAnimNum = 18;
 
 	// グラフィックの拡大率
-	constexpr float kExtRate = 1.75f;
+	constexpr float kPlayerExtRate = 1.75f;
 	constexpr float kEffectExtRate = 15.0f;
 
 	// グラフィックの回転率
@@ -69,6 +70,7 @@ namespace
 	// 死亡時の演出再生時間
 	constexpr int kDeadFrame = 80;
 
+	// ダメージを受けた際に減少するスコア
 	constexpr int kSubScore = 500;
 }
 
@@ -89,7 +91,7 @@ Player::Player(std::weak_ptr<Camera> camera) :
 	m_deadFrameCount(0),
 	m_hp(kDefaultHp),
 	m_isLastJumpButton(false),
-	m_isClearFlag(false),
+	m_isClear(false),
 	m_shot(),
 	m_idleAnim(),
 	m_runAnim(),
@@ -108,6 +110,7 @@ Player::~Player()
 
 	// SEの解放
 	DeleteSoundMem(m_shotSEHandle);
+	DeleteSoundMem(m_loopSEHandle);
 }
 
 void Player::Init()
@@ -117,6 +120,7 @@ void Player::Init()
 	assert(m_handleIdle != -1);
 
 	m_handleRun = LoadGraph("data/image/Player/Run.png");
+	assert(m_handleRun != -1);
 
 	m_handleDead = LoadGraph("data/image/Effect/effect2.png");
 	assert(m_handleDead != -1);
@@ -133,14 +137,8 @@ void Player::Init()
 		m_shot[i].Init();
 	}
 
-	m_hp = kDefaultHp;
-
-	m_isDead = false;
-
-	m_isClearFlag = false;
-
-	m_idleAnim.Init(m_handleIdle, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kIdleAnimNum);
-	m_runAnim.Init(m_handleRun, kAnimSingleFrame, kGraphWidth, kGraphHeight, kExtRate, kRotaRate, kRunAnimNum);
+	m_idleAnim.Init(m_handleIdle, kPlayerAnimSingleFrame, kPlayerGraphWidth, kPlayerGraphHeight, kPlayerExtRate, kRotaRate, kIdleAnimNum);
+	m_runAnim.Init(m_handleRun, kPlayerAnimSingleFrame, kPlayerGraphWidth, kPlayerGraphHeight, kPlayerExtRate, kRotaRate, kRunAnimNum);
 	m_deadAnim.Init(m_handleDead, kEffectAnimSingleFrame, kEffectGraphWidth, kEffectGraphHeight, kEffectExtRate, kRotaRate, kDeadAnimNum);
 }
 
@@ -181,16 +179,16 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 		HandleAttack(input);
 
 		// 右端に行ったら左端に
-		if (m_pos.x <= kLeftEndWidth)
+		if (m_pos.x <= kLeftScreenEdge)
 		{
 			PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
-			m_pos.x = kRightEndWidth;
+			m_pos.x = kRightScreenEdge;
 		}
 		// 左端に行ったら右端に
-		else if (m_pos.x >= kRightEndWidth)
+		else if (m_pos.x >= kRightScreenEdge)
 		{
 			PlaySoundMem(m_loopSEHandle, DX_PLAYTYPE_BACK, true);
-			m_pos.x = kLeftEndWidth;
+			m_pos.x = kLeftScreenEdge;
 		}
 
 		// 弾を発射
@@ -294,7 +292,7 @@ float Player::GetTop()
 
 float Player::GetBottom()
 {
-	return (m_pos.y + kGraphHeight - 35);
+	return (m_pos.y + kPlayerGraphHeight - 35);
 }
 
 Rect Player::GetRect()
@@ -433,7 +431,7 @@ void Player::HandleJump(Map& map)
 	// クリアのフラグとなっている鍵との当たり判定
 	if (map.IsClearCol(GetRect(), chipRect, m_camera))
 	{
-		m_isClearFlag = true;
+		m_isClear = true;
 	}
 }
 
@@ -546,7 +544,7 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 	// クリアのフラグとなっている鍵との当たり判定
 	if (map.IsClearCol(GetRect(), chipRect, m_camera))
 	{
-		m_isClearFlag = true;
+		m_isClear = true;
 	}
 }
 

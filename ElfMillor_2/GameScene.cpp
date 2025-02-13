@@ -167,7 +167,7 @@ void GameScene::NormalUpdate(Input& input)
 		}
 	}
 
-	if (m_player->m_isClearFlag)
+	if (m_player->m_isClear)
 	{
 		m_update = &GameScene::FadeOutUpdate;
 		m_draw = &GameScene::FadeDraw;
@@ -209,7 +209,7 @@ void GameScene::FadeInUpdate(Input& input)
 
 void GameScene::FadeOutUpdate(Input& input)
 {
-	if (m_player->m_isClearFlag)
+	if (m_player->m_isClear)
 	{
 		ClearHpScore();
 
