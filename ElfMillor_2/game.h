@@ -9,5 +9,5 @@ namespace Game
 
 	constexpr int kScreenOffset = 160;
 
-	constexpr bool kDefaultWindowMode = false;
+	constexpr bool kDefaultWindowMode = true;
 }
