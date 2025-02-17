@@ -7,7 +7,6 @@
 #include "game.h"
 
 #include "DxLib.h"
-#include "resource.h"
 #include <cassert>
 
 using namespace std;
@@ -27,8 +26,6 @@ bool Application::Init()
 	ChangeWindowMode(Game::kDefaultWindowMode);
 	// 画面のサイズを変更する
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorBitNum);
-
-	SetWindowIconID(IDI_ICON1);
 
 	SetWindowText("魔法使いの鏡");
 	if (DxLib_Init())		// ＤＸライブラリ初期化処理
