@@ -11,7 +11,7 @@
 *.sln.docstates
 *.pdb
 *.ElfMillor_2\Projects\ElfMillor_2\Log.txt
-*.ElfMillor_2\Release\Log.txt
+*.Release\Log.txt
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
