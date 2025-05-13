@@ -1,0 +1,5 @@
+OS
+→Windows 11 Pro
+
+グラフィックハードウェア
+→Nvidia GeForce RTX 4060 Ti
