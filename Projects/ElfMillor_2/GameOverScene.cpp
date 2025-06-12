@@ -67,7 +67,7 @@ void GameOverScene::NormalUpdate(Input& input)
 {
 	++m_blinkFrameCount;
 
-	if (input.IsPress(CheckHitKeyAll()))
+	if (input.IsPress("OK"))
 	{
 		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &GameOverScene::FadeOutUpdate;

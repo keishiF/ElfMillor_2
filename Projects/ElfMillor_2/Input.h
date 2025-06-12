@@ -1,4 +1,7 @@
 #pragma once
+#include <map>
+#include <string>
+#include <vector>
 
 class Input
 {
@@ -7,10 +10,26 @@ public:
 
 	void Update();
 
-	bool IsPress(int button);
+	bool IsPress(const char* key) const;
 
-	bool IsTrigger(int button);
+	bool IsTrigger(const char* key) const;
+
 private:
-	int m_padInput;
-	int m_lastInput;
+	enum class InputType
+	{
+		keyboard,
+		pad
+	};
+
+	struct InputInfo
+	{
+		InputType type;
+		int buttonId;
+	};
+
+	std::map<std::string, std::vector<InputInfo>> m_inputActionMap;
+
+	std::map<std::string, bool> m_currentInput;
+	std::map<std::string, bool> m_lastInput;
 };
+
