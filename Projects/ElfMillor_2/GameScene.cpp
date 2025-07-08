@@ -184,15 +184,6 @@ void GameScene::NormalUpdate(Input& input)
 			m_fadeFrameCount = 0;
 		}
 	}
-
-#ifdef _DEBUG
-	if (input.IsPress(PAD_INPUT_3))
-	{
-		m_update = &GameScene::FadeOutUpdate;
-		m_draw = &GameScene::FadeDraw;
-		m_fadeFrameCount = 0;
-	}
-#endif
 }
 
 void GameScene::FadeInUpdate(Input& input)

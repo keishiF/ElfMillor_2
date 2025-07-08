@@ -10,26 +10,11 @@ public:
 
 	void Update();
 
-	bool IsPress(const char* key) const;
-
-	bool IsTrigger(const char* key) const;
+	bool IsPress(int button);
+	bool IsTrigger(int button);
 
 private:
-	enum class InputType
-	{
-		keyboard,
-		pad
-	};
-
-	struct InputInfo
-	{
-		InputType type;
-		int buttonId;
-	};
-
-	std::map<std::string, std::vector<InputInfo>> m_inputActionMap;
-
-	std::map<std::string, bool> m_currentInput;
-	std::map<std::string, bool> m_lastInput;
+	int m_padInput;
+	int m_lastPadInput;
 };
 

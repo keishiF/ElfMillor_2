@@ -74,7 +74,7 @@ void ClearScene::NormalUpdate(Input& input)
 {
 	++m_blinkFrameCount;
 
-	if (input.IsPress("OK"))
+	if (input.IsPress(CheckHitKeyAll()))
 	{
 		PlaySoundMem(m_seHandle, DX_PLAYTYPE_BACK, true);
 		m_update = &ClearScene::FadeOutUpdate;

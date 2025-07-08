@@ -163,10 +163,10 @@ void Player::Update(Input& input, std::vector<std::shared_ptr<GroundEnemy>> grou
 		HandleMovement(input, map);
 
 		// 前フレームでジャンプしていたかを確認
-		m_isLastJumpButton = input.IsTrigger("B");
+		m_isLastJumpButton = input.IsTrigger(PAD_INPUT_1);
 
 		// 上入力
-		if (input.IsPress("UP"))
+		if (input.IsPress(PAD_INPUT_UP))
 		{
 			m_isUp = true;
 		}
@@ -318,14 +318,14 @@ void Player::UpdateBlinkFrame()
 void Player::HandleMovement(Input& input, Map& map)
 {
 	// 左走り
-	if (input.IsPress("LEFT"))
+	if (input.IsPress(PAD_INPUT_LEFT))
 	{
 		m_isRun = true;
 		m_isDirLeft = true;
 		m_vec.x -= kSpeed;
 	}
 	// 右走り
-	else if (input.IsPress("RIGHT"))
+	else if (input.IsPress(PAD_INPUT_RIGHT))
 	{
 		m_isRun = true;
 		m_isDirLeft = false;
@@ -438,7 +438,7 @@ void Player::HandleJump(Map& map)
 void Player::HandleGroundMovement(Input& input, Map& map)
 {
 	// ジャンプ
-	if (input.IsPress("B") && !m_isJump)
+	if (input.IsPress(PAD_INPUT_1) && !m_isJump)
 	{
 		m_isJump = true;
 		m_jumpCount++;
@@ -550,7 +550,7 @@ void Player::HandleGroundMovement(Input& input, Map& map)
 
 void Player::HandleAttack(Input& input)
 {
-	if (input.IsTrigger("A"))
+	if (input.IsTrigger(PAD_INPUT_2))
 	{
 		for (int i = 0; i < kShot; ++i)
 		{
